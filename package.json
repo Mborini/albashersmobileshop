@@ -1,0 +1,52 @@
+{
+  "name": "next-commerce-community",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@mantine/core": "^8.0.1",
+    "@mantine/hooks": "^8.0.1",
+    "@mantine/modals": "^8.0.1",
+    "@mui/icons-material": "^7.1.0",
+    "@mui/material": "^7.1.0",
+    "@prisma/client": "^6.8.0",
+    "@reduxjs/toolkit": "^2.6.1",
+    "@tailwindcss/vite": "^4.1.7",
+    "antd": "^5.25.2",
+    "i18next": "^25.2.0",
+    "mapbox-gl": "^3.12.0",
+    "next": "15.2.3",
+    "next-i18next": "^15.4.2",
+    "next-intl": "^4.1.0",
+    "pg": "^8.16.0",
+    "prisma": "^6.8.0",
+    "react": "19.0.0",
+    "react-dom": "19.0.0",
+    "react-hot-toast": "^2.4.1",
+    "react-i18next": "^15.5.1",
+    "react-icons": "^5.5.0",
+    "react-loading-skeleton": "^3.5.0",
+    "react-range-slider-input": "^3.0.7",
+    "react-redux": "^9.2.0",
+    "swiper": "^10.2.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.7",
+    "@types/node": "20.6.2",
+    "@types/react": "19.0.12",
+    "@types/react-dom": "19.0.4",
+    "autoprefixer": "^10.4.21",
+    "eslint": "8.49.0",
+    "eslint-config-next": "15.2.3",
+    "postcss": "^8.5.3",
+    "tailwindcss": "^3.3.3",
+    "typescript": "5.2.2"
+  }
+}
