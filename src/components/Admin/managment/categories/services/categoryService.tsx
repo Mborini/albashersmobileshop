@@ -1,3 +1,5 @@
+import { Category } from "@/types/category";
+
 const API_URL = "/api/Admin/categories";
 
 export async function fetchCategories() {
@@ -6,7 +8,7 @@ export async function fetchCategories() {
   return await res.json();
 }
 
-export async function addCategory(category) {
+export async function addCategory(category :Category) {
   const res = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
