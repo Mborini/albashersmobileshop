@@ -13,7 +13,7 @@ export default async function Dashboard() {
   const cards = [
     { name: "Categories", path: "managment/categories" },
     { name: "Sub Categories", path: "managment/subCategories" },
-    { name: "Products", path: "/products" },
+    { name: "Products", path: "managment/products" },
     { name: "Brands", path: "managment/brands" },
     { name: "Images", path: "/images" },
     { name: "Orders", path: "/orders" },

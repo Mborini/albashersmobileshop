@@ -1,7 +1,7 @@
 import React from "react";
 import BrandsManagement from "@/components/Admin/managment/brands";
 
-const categories = () => {
+const brandsPage = () => {
   return (
     <main>
       <BrandsManagement />
@@ -9,4 +9,4 @@ const categories = () => {
   );
 };
 
-export default categories;
+export default brandsPage;
