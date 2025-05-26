@@ -88,12 +88,12 @@ export default function ProductForm({
     if (discountedPrice! < 0)
       return toast.error("Discount must be non-negative");
 
-    if (!product) {
-      for (const value of Object.values(attributeValues)) {
-        if (!value.trim())
-          return toast.error("All selected attribute values must be filled");
-      }
-    }
+    // if (!product) {
+    //   for (const value of Object.values(attributeValues)) {
+    //     if (!value.trim())
+    //       return toast.error("All selected attribute values must be filled");
+    //   }
+    // }
 
     const formData: any = {
       title: productName.trim(),
@@ -105,12 +105,18 @@ export default function ProductForm({
 
     if (!product) {
       formData.subcategory_id = Number(selectedSubcategoryId);
-      formData.attributes = Object.entries(attributeValues).map(
-        ([id, value]) => ({
-          attribute_id: Number(id),
-          value,
-        })
-      );
+      formData.attributes = attributes
+        .filter((attr) => attributeValues[attr.id] !== undefined)
+        .map((attr) => {
+          let value = attributeValues[attr.id];
+          if (attr.input_type === "boolean") {
+            value = value === "true" ? "true" : "false"; // Force "false" if not selected
+          }
+          return {
+            attribute_id: attr.id,
+            value,
+          };
+        });
     }
 
     try {
@@ -234,20 +240,35 @@ export default function ProductForm({
                     });
                   }}
                 />
-                {attributeValues[attr.id] !== undefined && (
-                  <TextInput
+                {attributeValues[attr.id] !== undefined &&
+                  (attr.input_type === "boolean" ? (
+                    <Checkbox
                     radius="xl"
                     size="xs"
-                    value={attributeValues[attr.id]}
+                    checked={attributeValues[attr.id] === "true"}
                     onChange={(e) =>
                       setAttributeValues((prev) => ({
                         ...prev,
-                        [attr.id]: e.target.value,
+                        [attr.id]: e.target.checked ? "true" : "false",
                       }))
                     }
-                    placeholder={`Value for ${attr.name}`}
+                    label={`Is ${attr.name}?`}
                   />
-                )}
+                  
+                  ) : (
+                    <TextInput
+                      radius="xl"
+                      size="xs"
+                      value={attributeValues[attr.id]}
+                      onChange={(e) =>
+                        setAttributeValues((prev) => ({
+                          ...prev,
+                          [attr.id]: e.target.value,
+                        }))
+                      }
+                      placeholder={`Value for ${attr.name}`}
+                    />
+                  ))}
               </Group>
             ))}
           </Box>

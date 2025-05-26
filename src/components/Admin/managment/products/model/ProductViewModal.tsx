@@ -1,6 +1,7 @@
 import React from "react";
 import { Modal, Image, Text, Group, List } from "@mantine/core";
-
+import { FaCheckCircle } from "react-icons/fa";
+import { VscError } from "react-icons/vsc";
 export default function ProductViewModal({ opened, onClose, product }) {
   if (!product) return null;
   const attributesArray = product.attributes
@@ -23,7 +24,7 @@ export default function ProductViewModal({ opened, onClose, product }) {
     >
       <Group style={{ marginBottom: 15 }}>
         <Image
-          src={`/images/products/${product.product_images[0].trim()}`}
+          src={`/images/products/${product.product_images[0]}`}
           alt={product.product_name}
           height={150}
           width={150}
@@ -52,18 +53,34 @@ export default function ProductViewModal({ opened, onClose, product }) {
         Attributes
       </Text>
       {attributesArray.length > 0 ? (
-        <List spacing="xs" size="sm" withPadding>
-          {attributesArray.map((attr, index) => (
-            <List.Item key={index}>
-              <strong>{attr.name}:</strong> <p>{attr.value} </p>
-            </List.Item>
-          ))}
-        </List>
-      ) : (
-        <Text size="sm" c="dimmed">
-          No attributes available.
-        </Text>
-      )}
+  <List spacing="xs" size="sm" withPadding>
+    {attributesArray.map((attr, index) => (
+      <List.Item key={index}>
+        <div className="flex items-center gap-2">
+          <strong>{attr.name}:</strong>{" "}
+          {attr.value === "true" ? (
+            <>
+              <FaCheckCircle size={18} color="green" />
+              <span>Yes</span>
+            </>
+          ) : attr.value === "false" ? (
+            <>
+              <VscError size={18} color="red" />
+              <span>No</span>
+            </>
+          ) : (
+            <span>{attr.value}</span>
+          )}
+        </div>
+      </List.Item>
+    ))}
+  </List>
+) : (
+  <Text size="sm" c="dimmed">
+    No attributes available.
+  </Text>
+)}
+
     </Modal>
   );
 }

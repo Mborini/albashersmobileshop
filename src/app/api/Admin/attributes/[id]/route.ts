@@ -11,7 +11,7 @@ export async function GET(
 
     const client = await pool.connect();
     const result = await client.query(
-      "SELECT id, name FROM attributes WHERE subcategory_id = $1 ORDER BY id ASC;",
+      "SELECT id, name,input_type FROM attributes WHERE subcategory_id = $1 ORDER BY id ASC;",
       [id]
     );
     client.release();

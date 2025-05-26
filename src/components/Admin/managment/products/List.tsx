@@ -8,28 +8,43 @@ import {
   Tooltip,
   Timeline,
   Badge,
-  Button,
 } from "@mantine/core";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { FaEye, FaMinusCircle, FaPlusCircle } from "react-icons/fa";
-import { useDisclosure } from "@mantine/hooks";
-import ProductViewModal from "./ProductViewModal";
+import { FaEye, FaMinusCircle, FaPlusCircle, FaRegImages } from "react-icons/fa";
+import ProductViewModal from "./model/ProductViewModal";
+import EditSubCategoryModal from "./model/EditSubCategoryModal";
+import { LuFolderTree } from "react-icons/lu";
+import EditImegesModal from "./model/EditImegesModal";
 
 export default function List({ product, onEdit, onDelete }) {
-  const [opened, { open, close }] = useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-console.log(product);
+  const [modalType, setModalType] = useState(null); // "view" or "edit-sub"
+
   const handleView = (product) => {
     setSelectedProduct(product);
-    open();
+    setModalType("view");
   };
-  product;
+
+  const handleEditSubCategory = (product) => {
+    setSelectedProduct(product);
+    setModalType("edit-sub");
+  };
+  const handleEditImgs = (product) => {
+    setSelectedProduct(product);
+    setModalType("edit-imgs");
+  };
+
+  const closeModal = () => {
+    setModalType(null);
+    setSelectedProduct(null);
+  };
+
   return (
     <>
       {product.map((product) => (
-        <Card key={product.product_id}
-
+        <Card
+          key={product.product_id}
           shadow="sm"
           padding="md"
           radius="lg"
@@ -92,8 +107,8 @@ console.log(product);
               </Badge>
               {product.product_images?.[0] ? (
                 <Image
-                src={`/images/products/${product.product_images[0].trim()}`}
-                alt={product.product_name}
+                  src={`/images/products/${product.product_images[0].trim()}`}
+                  alt={product.product_name}
                   height={180}
                   width={180}
                   radius="md"
@@ -108,6 +123,27 @@ console.log(product);
           </div>
 
           <Group justify="center" mt="md">
+            <Tooltip label="Edit SubCategory" withArrow radius={5}>
+              <ActionIcon
+                variant="light"
+                radius="xl"
+                color="blue"
+                size="md"
+                onClick={() => handleEditSubCategory(product)}
+              >
+                <LuFolderTree style={{ fontSize: 22 }} />
+              </ActionIcon>
+            </Tooltip>
+            <Tooltip label="Edit Images" withArrow radius={5}>
+              <ActionIcon
+                variant="light"
+                radius="xl"
+                color="blue"
+                size="md"
+                onClick={() => handleEditImgs(product)}>
+                <FaRegImages  style={{ fontSize: 22 }} />
+              </ActionIcon>
+            </Tooltip>
             <Tooltip label="View" withArrow radius={5}>
               <ActionIcon
                 variant="light"
@@ -155,8 +191,19 @@ console.log(product);
       ))}
 
       <ProductViewModal
-        opened={opened}
-        onClose={close}
+        opened={modalType === "view"}
+        onClose={closeModal}
+        product={selectedProduct}
+      />
+
+      <EditSubCategoryModal
+        opened={modalType === "edit-sub"}
+        onClose={closeModal}
+        product={selectedProduct}
+      />
+      <EditImegesModal
+        opened={modalType === "edit-imgs"}
+        onClose={closeModal}
         product={selectedProduct}
       />
     </>
