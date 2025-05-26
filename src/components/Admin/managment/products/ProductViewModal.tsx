@@ -3,7 +3,12 @@ import { Modal, Image, Text, Group, List } from "@mantine/core";
 
 export default function ProductViewModal({ opened, onClose, product }) {
   if (!product) return null;
-
+  const attributesArray = product.attributes
+    ? Object.entries(product.attributes).map(([key, value]) => ({
+        name: key,
+        value: value,
+      }))
+    : [];
   return (
     <Modal
       opened={opened}
@@ -18,7 +23,7 @@ export default function ProductViewModal({ opened, onClose, product }) {
     >
       <Group style={{ marginBottom: 15 }}>
         <Image
-          src={product.image || "/images/products/product-2-bg-2.png"}
+          src={`/images/products/${product.product_images[0].trim()}`}
           alt={product.product_name}
           height={150}
           width={150}
@@ -46,11 +51,11 @@ export default function ProductViewModal({ opened, onClose, product }) {
       <Text mb="xs" fw={500}>
         Attributes
       </Text>
-      {product.attributes && product.attributes.length > 0 ? (
+      {attributesArray.length > 0 ? (
         <List spacing="xs" size="sm" withPadding>
-          {product.attributes.map((attr, index) => (
+          {attributesArray.map((attr, index) => (
             <List.Item key={index}>
-              <strong>{attr.name}:</strong> {attr.value}
+              <strong>{attr.name}:</strong> <p>{attr.value} </p>
             </List.Item>
           ))}
         </List>

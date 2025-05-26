@@ -5,38 +5,8 @@ const API_URL = "/api/Admin/products";
 export async function fetchProducts() {
   const res = await fetch(API_URL);
   if (!res.ok) throw new Error("Failed to fetch products");
-
-  const flatData = await res.json();
-
-  const grouped = new Map();
-
-  for (const item of flatData) {
-    const id = item.product_id;
-
-    if (!grouped.has(id)) {
-      grouped.set(id, {
-        id: item.product_id,
-        product_name: item.product_name,
-        description: item.description,
-        brand_name: item.brand_name,
-        subcategory_name: item.subcategory_name,
-        category_name: item.category_name,
-        price: item.price,
-        discountedPrice: item.discountedPrice,
-        image: item.image,
-        attributes: [],
-      });
-    }
-
-    if (item.attribute_name && item.attribute_value) {
-      grouped.get(id).attributes.push({
-        name: item.attribute_name,
-        value: item.attribute_value,
-      });
-    }
-  }
-
-  return Array.from(grouped.values());
+  return await res.json();
+  
 }
 
 export async function addProduct(product: Product) {

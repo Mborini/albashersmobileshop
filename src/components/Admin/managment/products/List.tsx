@@ -19,17 +19,17 @@ import ProductViewModal from "./ProductViewModal";
 export default function List({ product, onEdit, onDelete }) {
   const [opened, { open, close }] = useDisclosure(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
-
+console.log(product);
   const handleView = (product) => {
     setSelectedProduct(product);
     open();
   };
-
+  product;
   return (
     <>
       {product.map((product) => (
-        <Card
-          key={product.id}
+        <Card key={product.product_id}
+
           shadow="sm"
           padding="md"
           radius="lg"
@@ -90,14 +90,20 @@ export default function List({ product, onEdit, onDelete }) {
               >
                 {product.brand_name}
               </Badge>
-              <Image
-                src={product.image || "/images/products/product-2-bg-2.png"}
+              {product.product_images?.[0] ? (
+                <Image
+                src={`/images/products/${product.product_images[0].trim()}`}
                 alt={product.product_name}
-                height={180}
-                width={180}
-                radius="md"
-                fit="cover"
-              />
+                  height={180}
+                  width={180}
+                  radius="md"
+                  fit="cover"
+                />
+              ) : (
+                <Text size="sm" color="red">
+                  No image available
+                </Text>
+              )}
             </div>
           </div>
 

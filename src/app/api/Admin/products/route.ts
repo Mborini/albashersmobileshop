@@ -7,28 +7,36 @@ export async function GET() {
     console.log("Connected to DB");
 
     const query = `
- SELECT 
-        p.id AS product_id,
-        p.title AS product_name,
-        p.description,
-        p.price,
-        p."discountedPrice",
-        b.name AS brand_name,
-        sc.name AS subcategory_name,
-        c.name AS category_name,
-        a.name AS attribute_name,
-        pa.value AS attribute_value
-      FROM products p
-      LEFT JOIN brands b ON p.brand_id = b.id
-      LEFT JOIN "subCategories" sc ON p."subcategory_id" = sc.id
-      LEFT JOIN categories c ON sc.category_id = c.id
-      LEFT JOIN product_attributes pa ON p.id = pa.product_id
-      LEFT JOIN attributes a ON pa.attribute_id = a.id
-      ORDER BY p.id;
+SELECT 
+    p.id AS product_id,
+    p.title AS product_name,
+    p.description,
+    p.price,
+    p."discountedPrice",
+    b.name AS brand_name,
+    sc.name AS subcategory_name,
+    c.name AS category_name,
+    -- تجميع الصفات مع قيمها ككائن JSON
+    COALESCE(jsonb_object_agg(a.name, pa.value) FILTER (WHERE a.name IS NOT NULL), '{}'::jsonb) AS attributes,
+    -- تجميع الصور كمصفوفة نصوص
+    ARRAY_AGG(DISTINCT pi.image_url) AS product_images
+FROM products p
+LEFT JOIN brands b ON p.brand_id = b.id
+LEFT JOIN "subCategories" sc ON p."subcategory_id" = sc.id
+LEFT JOIN categories c ON sc.category_id = c.id
+LEFT JOIN product_attributes pa ON p.id = pa.product_id
+LEFT JOIN attributes a ON pa.attribute_id = a.id
+LEFT JOIN product_images pi ON p.id = pi.product_id
+GROUP BY 
+    p.id, p.title, p.description, p.price, p."discountedPrice",
+    b.name, sc.name, c.name
+ORDER BY p.id;
+
     `;
 
     const res = await client.query(query);
     
+    console.log(res.rows);
     return new Response(JSON.stringify(res.rows), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -53,7 +61,6 @@ export async function POST(req: Request) {
     const body = await req.json();
     const {
       title,
-      image,
       brand_id,
       subcategory_id,
       description,
@@ -64,7 +71,6 @@ export async function POST(req: Request) {
 
     if (
       !title ||
-      !image ||
       !brand_id ||
       !subcategory_id ||
       !description ||
@@ -96,14 +102,6 @@ export async function POST(req: Request) {
     ]);
 
     const product = productResult.rows[0];
-
-    // ✅ Insert image into product_image table
-    const insertImageQuery = `
-      INSERT INTO product_images (product_id, image_url)
-      VALUES ($1, $2);
-    `;
-
-    await client.query(insertImageQuery, [product.id, image]);
 
     // ✅ Insert attributes if provided
     if (Array.isArray(attributes) && attributes.length > 0) {
