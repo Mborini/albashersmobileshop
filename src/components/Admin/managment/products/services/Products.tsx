@@ -45,3 +45,22 @@ export async function fetchAttributes(id) {
   if (!res.ok) throw new Error("Failed to fetch attributes");
   return await res.json();
 }
+
+// services/Products.js (or wherever you keep it)
+
+
+export async function updateAttributes(id, data) {
+  const res = await fetch(`${API_URL}/subCatProductAttr/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!res.ok) {
+    const errorText = await res.text();
+    throw new Error(`Failed to update product: ${errorText}`);
+  }
+
+  return await res.json();
+}
+
