@@ -15,8 +15,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Empty } from "antd";
 import Pagination from "../Common/pagination";
-
-const Product = () => {
+const NewArrivalProduct = () => {
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
   const [product, setProduct] = useState([]);
@@ -32,10 +31,7 @@ const Product = () => {
 
   const [stickyMenu, setStickyMenu] = useState(false);
   const searchParams = useSearchParams();
-  const subCategoryId = searchParams.get("subCategoryId");
-  const selectedName = useSelector(
-    (state: RootState) => state.subCategory.selectedSubCategoryName
-  );
+
   const [loading, setLoading] = useState(true);
   const handleStickyMenu = () => {
     if (window.scrollY >= 80) {
@@ -57,11 +53,12 @@ const Product = () => {
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
-        const response = await fetch(`/api/products/${subCategoryId}`);
+        const response = await fetch(`/api/products/allNewArrivalProducts`);
         if (!response.ok) {
           throw new Error("Failed to fetch product");
         }
         const data = await response.json();
+        
         setProduct(data.products);
         setBrands(data.brands);
         
@@ -122,8 +119,8 @@ const Product = () => {
   return (
     <>
       <Breadcrumb
-        title={`Explore ${selectedName} Categories`}
-        pages={["categories", "/", selectedName]}
+        title={`Explore New Arrivals Products`}
+        pages={["New Arrivals Products"]}
       />
       <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -371,6 +368,7 @@ const Product = () => {
                 ""
               )}
             </div>
+            {/* // <!-- Content End --> */}
           </div>
         </div>
       </section>
@@ -378,4 +376,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default NewArrivalProduct;

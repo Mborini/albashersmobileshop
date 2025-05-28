@@ -6,7 +6,7 @@ export type Attribute = {
 
 export type Product = {
   id?: number;
-  product_name: string;
+  title: string;
   description?: string;
   price: number;
   discountedPrice?: number;
@@ -15,6 +15,6 @@ export type Product = {
   category_name?: string;
   subcategory_name?: string;
   brand_name?: string;
-  image?: string;
+  images?: string;
   attributes?: Attribute[];
 };
