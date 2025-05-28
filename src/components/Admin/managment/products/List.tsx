@@ -181,7 +181,7 @@ export default function List({ product, onEdit, onDelete }) {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                onClick={() => onDelete(product.id)}
+                onClick={() => onDelete(product.product_id)}
               >
                 <DeleteForeverIcon style={{ fontSize: 22 }} />
               </ActionIcon>

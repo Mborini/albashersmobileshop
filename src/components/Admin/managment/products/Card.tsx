@@ -72,47 +72,46 @@ function ProductsCard() {
   const handleFormSubmit = async (formData) => {
     try {
       if (editingProduct) {
-        const updated = await updateProduct(editingProduct.id, formData);
-        setProducts((prev) =>
-          prev.map((p) => (p.id === updated.id ? updated : p))
-        );
+        await updateProduct(editingProduct.product_id, formData);
       } else {
         await addProduct(formData);
-        const newList = await fetchProducts(); 
-        setProducts(newList);
       }
+      // Fetch the latest list of products regardless of the operation
+      const newList = await fetchProducts();
+      setProducts(newList);
       close();
     } catch (error) {
       console.error(error);
       toast.error("Something went wrong");
     }
   };
+  
 
   async function handleDeleteProduct(id: number) {
-    const toastId = toast.loading("Deleting Brand...");
-
+    const toastId = toast.loading("Deleting Product...");
+  
     try {
       await deleteProduct(id);
-
-      setProducts((prev) => prev.filter((brand) => brand.id !== id));
-      toast.success("Brand deleted successfully", { id: toastId });
+      // Re-fetch the updated product list from the backend
+      const updatedList = await fetchProducts();
+      setProducts(updatedList);
+  
+      toast.success("Product deleted successfully", { id: toastId });
     } catch (error: any) {
-      console.error("Delete Brand error:", error);
-
-      if (error.message && error.message.includes("existing products")) {
-        toast.error(
-          "Cannot delete brand because there are products linked to it.",
-          {
-            id: toastId,
-          }
-        );
+      console.error("Delete Product error:", error);
+  
+      if (error.message?.includes("existing products")) {
+        toast.error("Cannot delete brand because there are products linked to it.", {
+          id: toastId,
+        });
       } else {
-        toast.error(error.message || "Failed to delete Brand", {
+        toast.error(error.message || "Failed to delete Product", {
           id: toastId,
         });
       }
     }
   }
+  
 
   return (
     <div className="p-8">

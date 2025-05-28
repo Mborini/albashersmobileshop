@@ -1,62 +1,93 @@
 import { NextResponse } from 'next/server';
 import pool from '../../../../lib/db';
 
-export async function PUT(req: Request, context: { params: { id: string } }) {
-  const { id } = context.params;
+export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   const body = await req.json();
-  const { name, image, isCommon } = body;
-
+  const {
+    title,
+    brand_id,
+    description,
+    price,
+    discountedPrice,
+    is_new_arrival,
+  } = body;
+  const client = await pool.connect();
   try {
-    const client = await pool.connect();
-    const result = await client.query(
-      'UPDATE brands SET name = $1, image = $2, "isCommon" = $3 WHERE id = $4 RETURNING *',
-      [name, image, isCommon, id]
-    );
-    client.release();
+    await client.query('BEGIN'); 
 
+    const updateProductQuery = `
+      UPDATE products
+      SET title = $1, brand_id = $2, description = $3, price = $4, "discountedPrice" = $5, "is_new_arrival" = $6
+      WHERE id = $7
+      RETURNING *;
+    `;
+    const result = await client.query(updateProductQuery, [
+      title,
+      brand_id,
+      description,
+      price,
+      discountedPrice,
+      is_new_arrival,
+      id,
+
+    ]);
+
+    if (result.rows.length === 0) {
+      return new Response(JSON.stringify({ error: 'Product not found.' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' },
+      });
+    }
+
+    await client.query('COMMIT'); 
     return new Response(JSON.stringify(result.rows[0]), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error('Update Error:', error);
-    return new Response(JSON.stringify({ error: 'Failed to update brand' }), {
+    await client.query('ROLLBACK'); 
+    console.error('Error updating product:', error);
+    return new Response(JSON.stringify({ error: 'Failed to update product.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
+  } finally {
+    client.release(); 
   }
 }
-
 
 export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
 
+
+  const client = await pool.connect();
   try {
-    const client = await pool.connect();
+    await client.query('BEGIN'); // نبدأ المعاملة
 
-    // أولاً نتأكد إذا في منتجات بنفس الـ brand id
-    const result = await client.query('SELECT COUNT(*) FROM "products" WHERE brand_id = $1', [id]);
-    const count = parseInt(result.rows[0].count, 10);
+    // حذف الصور المرتبطة بالمنتج
+    await client.query('DELETE FROM product_images WHERE product_id = $1', [id]);
 
-    if (count > 0) {
-      client.release();
-      return new Response(JSON.stringify({ error: 'Cannot delete brand with existing products' }), {
-        status: 400,
-        headers: { 'Content-Type': 'application/json' },
-      });
-    }
+    // حذف الخصائص المرتبطة بالمنتج
+    await client.query('DELETE FROM product_attributes WHERE product_id = $1', [id]);
 
-    // إذا ما في منتجات، نمسح البراند
-    await client.query('DELETE FROM "brands" WHERE id = $1', [id]);
-    client.release();
+    // حذف المنتج نفسه
+    await client.query('DELETE FROM products WHERE id = $1', [id]);
 
-    return new Response(null, { status: 204 }); // No Content
+    await client.query('COMMIT'); // نثبت التغييرات
+
+    return new Response(JSON.stringify({ message: 'Product deleted successfully.' }), {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
-    console.error('Delete Error:', error);
-    return new Response(JSON.stringify({ error: 'Cannot delete brand' }), {
+    await client.query('ROLLBACK'); // في حال وجود خطأ، نلغي التغييرات
+    console.error('Error deleting product:', error);
+    return new Response(JSON.stringify({ error: 'Failed to delete product.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
+  } finally {
+    client.release(); // نحرر الاتصال بقاعدة البيانات
   }
 }
-

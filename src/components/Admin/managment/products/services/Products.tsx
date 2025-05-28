@@ -29,7 +29,7 @@ export async function updateProduct(id: number, product: Product) {
   return await res.json();
 }
 export async function deleteProduct(id: number) {
-  const response = await fetch(`/api/Admin/products/${id}`, {
+  const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",
   });
   if (!response.ok) {

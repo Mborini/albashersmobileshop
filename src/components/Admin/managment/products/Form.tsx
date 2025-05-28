@@ -40,6 +40,7 @@ export default function ProductForm({
   const [selectedBrandId, setSelectedBrandId] = useState<string | null>(null);
   const [price, setPrice] = useState<number | null>(0);
   const [discountedPrice, setDiscountedPrice] = useState<number | null>(0);
+  const [isArrival, setIsArrival] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -52,7 +53,7 @@ export default function ProductForm({
         (s) => s.name === product.subcategory_name
       );
       const brand = brands.find((b) => b.name === product.brand_name);
-
+      setIsArrival(product.is_new_arrival || false);
       setSelectedSubcategoryId(subcat?.id?.toString() || null);
       setSelectedBrandId(brand?.id?.toString() || null);
     } else {
@@ -62,6 +63,7 @@ export default function ProductForm({
       setDiscountedPrice(0);
       setSelectedSubcategoryId(null);
       setSelectedBrandId(null);
+      setIsArrival(false);
     }
   }, [product]);
 
@@ -88,19 +90,13 @@ export default function ProductForm({
     if (discountedPrice! < 0)
       return toast.error("Discount must be non-negative");
 
-    // if (!product) {
-    //   for (const value of Object.values(attributeValues)) {
-    //     if (!value.trim())
-    //       return toast.error("All selected attribute values must be filled");
-    //   }
-    // }
-
     const formData: any = {
       title: productName.trim(),
       brand_id: Number(selectedBrandId),
       description: description.trim(),
       price,
       discountedPrice,
+      is_new_arrival: isArrival,
     };
 
     if (!product) {
@@ -213,6 +209,15 @@ export default function ProductForm({
           withAsterisk
         />
 
+        <Checkbox
+          label="Is New Arrival?"
+          radius="lg"
+          mb="sm"
+          size="sm"
+          checked={isArrival}
+          onChange={(e) => setIsArrival(e.currentTarget.checked)}
+        />
+
         {!product && attributes.length > 0 && (
           <Box mt="md">
             <Text mb="xs" size="md">
@@ -243,18 +248,17 @@ export default function ProductForm({
                 {attributeValues[attr.id] !== undefined &&
                   (attr.input_type === "boolean" ? (
                     <Checkbox
-                    radius="xl"
-                    size="xs"
-                    checked={attributeValues[attr.id] === "true"}
-                    onChange={(e) =>
-                      setAttributeValues((prev) => ({
-                        ...prev,
-                        [attr.id]: e.target.checked ? "true" : "false",
-                      }))
-                    }
-                    label={`Is ${attr.name}?`}
-                  />
-                  
+                      radius="xl"
+                      size="xs"
+                      checked={attributeValues[attr.id] === "true"}
+                      onChange={(e) =>
+                        setAttributeValues((prev) => ({
+                          ...prev,
+                          [attr.id]: e.target.checked ? "true" : "false",
+                        }))
+                      }
+                      label={`Is ${attr.name}?`}
+                    />
                   ) : (
                     <TextInput
                       radius="xl"
