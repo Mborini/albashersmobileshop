@@ -41,7 +41,7 @@ const ProductItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group">
-      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-white shadow-1 min-h-[270px] mb-4">
+      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-gray shadow-1 min-h-[270px] mb-4">
         <Image src={`/images/products/${item.images[0]}`} 
          alt="" width={250} height={250} />
 

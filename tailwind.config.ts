@@ -3,6 +3,7 @@ import type { Config } from "tailwindcss";
 const defaultTheme = require("tailwindcss/defaultTheme");
 
 const config: Config = {
+  
   content: [
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -10,6 +11,15 @@ const config: Config = {
   ],
   darkMode: "class",
   theme: {
+    keyframes: {
+      textWave: {
+        '0%, 100%': { color: '#ffffff' },       // white text
+        '50%': { color: '#facc15' },            // yellow-400
+      },
+    },
+    animation: {
+      textWave: 'textWave 1s infinite ease-in-out',
+    },
     fontFamily: {
       "euclid-circular-a": ["Euclid Circular A"],
     },
