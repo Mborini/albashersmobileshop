@@ -41,6 +41,7 @@ export default function ProductForm({
   const [price, setPrice] = useState<number | null>(0);
   const [discountedPrice, setDiscountedPrice] = useState<number | null>(0);
   const [isArrival, setIsArrival] = useState(false);
+  const [isBestOffer, setIsBestOffer] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -54,6 +55,7 @@ export default function ProductForm({
       );
       const brand = brands.find((b) => b.name === product.brand_name);
       setIsArrival(product.is_new_arrival || false);
+      setIsBestOffer(product.is_best_offer || false);
       setSelectedSubcategoryId(subcat?.id?.toString() || null);
       setSelectedBrandId(brand?.id?.toString() || null);
     } else {
@@ -64,6 +66,7 @@ export default function ProductForm({
       setSelectedSubcategoryId(null);
       setSelectedBrandId(null);
       setIsArrival(false);
+      setIsBestOffer(false);
     }
   }, [product]);
 
@@ -97,6 +100,7 @@ export default function ProductForm({
       price,
       discountedPrice,
       is_new_arrival: isArrival,
+      is_best_offer: isBestOffer,
     };
 
     if (!product) {
@@ -216,6 +220,15 @@ export default function ProductForm({
           size="sm"
           checked={isArrival}
           onChange={(e) => setIsArrival(e.currentTarget.checked)}
+        />
+
+        <Checkbox
+          label="Is Best Offer?"
+          radius="lg"
+          mb="sm"
+          size="sm"
+          checked={isBestOffer}
+          onChange={(e) => setIsBestOffer(e.currentTarget.checked)}
         />
 
         {!product && attributes.length > 0 && (

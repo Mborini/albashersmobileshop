@@ -12,7 +12,7 @@ export async function GET() {
       FROM products p
       INNER JOIN brands b ON p.brand_id = b.id
       LEFT JOIN product_images pi ON pi.product_id = p.id
-      WHERE p.is_best_seller = true
+      WHERE p.is_best_offer = true
       GROUP BY p.id, b.name
     `);
 

@@ -15,7 +15,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Empty } from "antd";
 import Pagination from "../Common/pagination";
-const BestSellerProduct = () => {
+const BestOffersProducts = () => {
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
   const [product, setProduct] = useState([]);
@@ -53,7 +53,7 @@ const BestSellerProduct = () => {
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
-        const response = await fetch(`/api/products/allBestSellerProducts`);
+        const response = await fetch(`/api/products/allBestOffersProducts`);
         if (!response.ok) {
           throw new Error("Failed to fetch product");
         }
@@ -119,8 +119,8 @@ const BestSellerProduct = () => {
   return (
     <>
       <Breadcrumb
-        title={`Explore Best Seller Products`}
-        pages={["Best Seller Products"]}
+        title={`Explore Best Offers Products`}
+        pages={["Best Offers Products"]}
       />
       <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
@@ -376,4 +376,4 @@ const BestSellerProduct = () => {
   );
 };
 
-export default BestSellerProduct;
+export default BestOffersProducts;

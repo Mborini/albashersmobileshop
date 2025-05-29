@@ -11,6 +11,7 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
     price,
     discountedPrice,
     is_new_arrival,
+    is_best_offer,
   } = body;
   const client = await pool.connect();
   try {
@@ -18,8 +19,8 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
 
     const updateProductQuery = `
       UPDATE products
-      SET title = $1, brand_id = $2, description = $3, price = $4, "discountedPrice" = $5, "is_new_arrival" = $6
-      WHERE id = $7
+      SET title = $1, brand_id = $2, description = $3, price = $4, "discountedPrice" = $5, "is_new_arrival" = $6, "is_best_offer" = $7
+      WHERE id = $8
       RETURNING *;
     `;
     const result = await client.query(updateProductQuery, [
@@ -29,6 +30,7 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
       price,
       discountedPrice,
       is_new_arrival,
+      is_best_offer, 
       id,
 
     ]);

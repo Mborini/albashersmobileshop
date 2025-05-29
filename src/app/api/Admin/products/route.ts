@@ -14,6 +14,7 @@ SELECT
     p.price,
     p."discountedPrice",
     p."is_new_arrival" AS is_new_arrival,
+    p."is_best_offer" AS is_best_offer,
     b.name AS brand_name,
     sc.name AS subcategory_name,
     c.name AS category_name,
@@ -68,7 +69,8 @@ export async function POST(req: Request) {
       price,
       discountedPrice,
       attributes,
-      is_new_arrival
+      is_new_arrival,
+      is_best_offer
     } = body;
 
     if (
@@ -88,9 +90,9 @@ export async function POST(req: Request) {
     const insertProductQuery = `
       INSERT INTO products (
         title, brand_id, subcategory_id,
-        description, price, "discountedPrice","is_new_arrival"
+        description, price, "discountedPrice","is_new_arrival", "is_best_offer"
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
       RETURNING *;
     `;
 
@@ -101,7 +103,8 @@ export async function POST(req: Request) {
       description,
       price,
       discountedPrice,
-      is_new_arrival
+      is_new_arrival,
+      is_best_offer
     ]);
 
     const product = productResult.rows[0];
