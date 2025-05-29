@@ -309,7 +309,7 @@ const Product = () => {
                         />
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Image
-                            src="/images/logo/logo.png"
+                            src="/images/logo/AlbsherLOGO.png"
                             alt=""
                             className="opacity-25"
                             width={130}
