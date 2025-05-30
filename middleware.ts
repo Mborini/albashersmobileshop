@@ -1,9 +1,10 @@
+// middleware.ts
 import { NextRequest, NextResponse } from 'next/server';
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // إذا المستخدم دخل على / مباشرة
+  // فقط عندما يدخل المستخدم على المسار /
   if (pathname === '/') {
     return NextResponse.redirect(new URL('/en', request.url));
   }
@@ -11,7 +12,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
-// تشغيل الميدل وير فقط على الصفحات
+// شغّل الميدل وير على المسار الجذر فقط
 export const config = {
   matcher: ['/'],
 };

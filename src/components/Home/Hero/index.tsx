@@ -9,6 +9,7 @@ const Hero = () => {
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         <div className="flex flex-wrap gap-5">
           <div className="xl:max-w-[757px] w-full">
+            
             <div className="relative z-1 rounded-[10px] bg-white overflow-hidden">
               {/* <!-- bg shapes --> */}
               <Image

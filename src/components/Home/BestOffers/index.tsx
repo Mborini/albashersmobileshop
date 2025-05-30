@@ -52,7 +52,7 @@ const BestSaller = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden ">
+    <section className="overflow-hidden mt-24">
       {newArrivalProduct.length === 0 ? (
         <div className="relative justify-center flex w-full h-[300px] sm:h-[400px] md:h-[500px] my-10 max-w-[1170px] mx-auto overflow-hidden rounded-xl">
         <Image

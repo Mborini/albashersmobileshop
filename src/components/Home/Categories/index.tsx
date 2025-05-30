@@ -8,11 +8,14 @@ import { BiCategory } from "react-icons/bi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 const Categories = () => {
   const sliderRef = useRef(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t, i18n } = useTranslation();
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -51,7 +54,7 @@ const Categories = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden pt-17.5">
+    <section className="overflow-hidden pt-17.5"lang={i18n.language} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 pb-15 border-b border-gray-3">
         <div className="swiper categories-carousel common-carousel">
           {/* <!-- section title --> */}
@@ -59,10 +62,11 @@ const Categories = () => {
             <div>
               <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
                 <BiCategory className="text-2xl text-blue" size={20} />
-                Product Categories
+                {t('product_categories')}
               </span>
               <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-                Explore our wide range of categories
+               
+                {t('categories_description')}
               </h2>
             </div>
             {loading ? (
@@ -77,7 +81,7 @@ const Categories = () => {
                   <FaChevronRight />
                 </button>
               </div>
-              
+
             )}
           </div>
 

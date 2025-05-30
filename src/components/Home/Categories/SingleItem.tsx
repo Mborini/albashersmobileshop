@@ -13,8 +13,8 @@ const SingleItem = ({ item }: { item: Category }) => {
       onClick={() => dispatch(setSelectedCategoryName(item.name))}
       className="group flex flex-col items-center"
     >
-      <div className="max-w-[130px] w-50 bg-[#F2F3F8] h-50 max-h-[130px] border-2 border-blue-light rounded-full flex items-center justify-center mb-4">
-        <Image src={item.image.trim()} alt="Category" width={82} height={62} />
+      <div className="max-w-[150px] w-75 bg-[#F2F3F8] h-75 max-h-[150px] border-2 border-blue-light rounded-full flex items-center justify-center mb-4">
+        <Image src={item.image.trim()} alt="Category" width={90} height={90} />
       </div>
 
       <div className="flex justify-center">

@@ -12,7 +12,11 @@ import Image from "next/image";
 import { BiSolidPhoneCall } from "react-icons/bi";
 import { BsCartPlus } from "react-icons/bs";
 import { MdFavorite } from "react-icons/md";
+import { useTranslation } from "react-i18next";
+import "../../app/lib/i18n"; // تأكد من المسار الصحيح
+import { GrLanguage } from "react-icons/gr";
 
+// إضافة i18n
 const Header = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [navigationOpen, setNavigationOpen] = useState(false);
@@ -21,7 +25,10 @@ const Header = () => {
 
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useSelector(selectTotalPrice);
-
+  const { t, i18n } = useTranslation();
+  const changeLanguage = (lng) => {
+    i18n.changeLanguage(lng);
+  };
   const handleOpenCartModal = () => {
     openCartModal();
   };
@@ -134,7 +141,7 @@ const Header = () => {
                 </p>
               </div>
             </div>
-
+            
             {/* <!-- divider --> */}
             <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
             <div>
@@ -143,7 +150,7 @@ const Header = () => {
                 className="flex items-center gap-1.5 font-medium text-custom-sm text-dark hover:text-blue"
               >
                 <MdFavorite color="red" size={20} />
-                Favorit
+                {t("favorit")}
               </Link>
             </div>
             <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
@@ -164,7 +171,7 @@ const Header = () => {
 
                   <div>
                     <span className="block text-2xs text-dark-4 uppercase">
-                      cart
+                      {t("cart")}
                     </span>
                     <p className="font-medium text-custom-sm text-dark">
                       ${totalPrice}
@@ -215,12 +222,25 @@ const Header = () => {
               </button>
               {/* //   <!-- Hamburger Toggle BTN --> */}
             </div>
+
+
+            <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
+
+            <button
+              onClick={() =>
+                changeLanguage(i18n.language === "en" ? "ar" : "en")
+              }
+              className="font-medium flex gap-2 text-custom-sm text-dark hover:text-blue"
+            >
+              <GrLanguage color="green" size={20} />{" "}
+              {i18n.language === "en" ? "AR" : "EN"}
+            </button>
           </div>
         </div>
         {/* <!-- header top end --> */}
       </div>
 
-      <div className="border-t border-gray-3">
+      <div  dir={i18n.language === "ar" ? "rtl" : "ltr"} className="border-t border-gray-3 ">
         <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
           <div className="flex items-center justify-between">
             {/* <!--=== Main Nav Start ===--> */}
@@ -232,7 +252,7 @@ const Header = () => {
             >
               {/* <!-- Main Nav Start --> */}
               <nav>
-                <ul className="flex xl:items-center flex-col xl:flex-row gap-5 xl:gap-6">
+                             <ul className="flex xl:items-center flex-col xl:flex-row gap-5 xl:gap-6">
                   {menuData.map((menuItem, i) =>
                     menuItem.submenu ? (
                       <Dropdown
@@ -251,7 +271,7 @@ const Header = () => {
                             stickyMenu ? "xl:py-4" : "xl:py-6"
                           }`}
                         >
-                          {menuItem.title}
+                          {t(menuItem.title)}
                         </Link>
                       </li>
                     )
