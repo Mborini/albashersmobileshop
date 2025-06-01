@@ -8,7 +8,6 @@ import { BiCategory } from "react-icons/bi";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
 const Categories = () => {

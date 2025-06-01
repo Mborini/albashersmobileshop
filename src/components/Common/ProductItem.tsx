@@ -9,8 +9,10 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 const ProductItem = ({ item }: { item: Product }) => {
+  const { t } = useTranslation();
   const { openModal } = useModalContext();
 
   const dispatch = useDispatch<AppDispatch>();
@@ -82,7 +84,7 @@ const ProductItem = ({ item }: { item: Product }) => {
             onClick={() => handleAddToCart()}
             className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 hover:bg-blue-dark"
           >
-            Add to cart
+           {t('add_to_cart')}
           </button>
 
           <button

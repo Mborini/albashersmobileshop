@@ -16,20 +16,20 @@ export default function List({ subCategories, onEdit, onDelete }) {
           radius="lg"
           withBorder
           style={{
-            maxWidth: 260,
-            height: 250,
+            maxWidth: 350,
+            height: 350,
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
           }}
         >
           {subCategory.image && (
-            <Card.Section style={{ height: 200, overflow: "hidden" }}>
+            <Card.Section style={{ height: 500, overflow: "hidden" }}>
               <div className="p-8">
                 <Image
                   src={subCategory.image}
                   alt={subCategory.name}
-                  height={150}
+                  height={500}
                   width="50%"
                   fit="cover"
                 />

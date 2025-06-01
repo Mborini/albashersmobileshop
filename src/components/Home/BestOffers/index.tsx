@@ -8,6 +8,8 @@ import { MdOutlineStarOutline } from "react-icons/md";
 import { BiSolidOffer } from "react-icons/bi";
 import Image from "next/image";
 
+import { useTranslation } from "react-i18next";
+
 const SkeletonProductItem = () => {
   return (
     <div className="flex flex-col items-center gap-3">
@@ -31,6 +33,7 @@ const SkeletonProductItem = () => {
 const BestSaller = () => {
   const [newArrivalProduct, setNewArrival] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const fetchNewArrivalProduct = async () => {
@@ -52,9 +55,9 @@ const BestSaller = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden mt-24">
+    <section className="overflow-hidden mt-24" >
       {newArrivalProduct.length === 0 ? (
-        <div className="relative justify-center flex w-full h-[300px] sm:h-[400px] md:h-[500px] my-10 max-w-[1170px] mx-auto overflow-hidden rounded-xl">
+        <div lang={i18n.language} dir={i18n.language === "ar" ? "rtl" : "ltr"} className="relative justify-center flex w-full h-[300px] sm:h-[400px] md:h-[500px] my-10 max-w-[1170px] mx-auto overflow-hidden rounded-xl">
         <Image
             src="/images/shapes/commingSoon.jpg"
             alt="No products found"
@@ -87,17 +90,18 @@ const BestSaller = () => {
               <div>
                 <span className="flex items-center gap-2.5 font-medium text-white mb-1.5">
                   <BiSolidOffer color="white" size={25} />
-                  Just For You
+                 {t('jsut_for_you')}
                 </span>
                 <h2 className="font-semibold text-xl xl:text-heading-5 text-white">
-                  BEST OFFERS
+                 {t('best_offer')}
                 </h2>
               </div>
               <Link
                 href="/best-offers-products"
                 className="inline-flex font-medium text-custom-sm py-2.5 px-7 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
               >
-                View All
+                {t('view_all')}
+          
               </Link>
             </div>
           </motion.div>
