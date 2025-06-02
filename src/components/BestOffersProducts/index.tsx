@@ -15,6 +15,9 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Empty } from "antd";
 import Pagination from "../Common/pagination";
+import { TextInput } from "@mantine/core";
+import { IoGridOutline } from "react-icons/io5";
+import { TbLayoutList } from "react-icons/tb";
 const BestOffersProducts = () => {
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
@@ -28,6 +31,7 @@ const BestOffersProducts = () => {
   } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const [searchTerm, setSearchTerm] = useState("");
 
   const [stickyMenu, setStickyMenu] = useState(false);
   const searchParams = useSearchParams();
@@ -85,19 +89,26 @@ const BestOffersProducts = () => {
 
   useEffect(() => {
     let filtered = [...product];
-
+  
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand_name));
     }
-
+  
     if (selectedPrice) {
       filtered = filtered.filter(
         (p) => p.price >= selectedPrice.min && p.price <= selectedPrice.max
       );
     }
-
+  
+    if (searchTerm.trim() !== "") {
+      filtered = filtered.filter((p) =>
+        (p.title || "").toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    }
+  
     setFilteredProducts(filtered);
-  }, [selectedBrands, selectedPrice, product]);
+  }, [selectedBrands, selectedPrice, searchTerm, product]);
+  
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
 
@@ -168,14 +179,7 @@ const BestOffersProducts = () => {
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="flex flex-col gap-6">
                   {/* <!-- filter box --> */}
-                  <div className="bg-white shadow-1 rounded-lg py-4 px-5">
-                    <div className="flex items-center justify-between">
-                      <p>Filters:</p>
-                      <button className="text-blue" onClick={clearAllFilters}>
-                        Clean All
-                      </button>
-                    </div>
-                  </div>
+                  
 
                   {/* <!-- category box --> */}
                   <BrandDropdown
@@ -200,13 +204,14 @@ const BestOffersProducts = () => {
                 <div className="flex items-center justify-between">
                   {/* <!-- top bar left --> */}
                   <div className="flex flex-wrap items-center gap-4">
-                    <CustomSelect options={options} />
-
-                    <p>
-                      Showing <span className="text-dark">9 of 50</span>{" "}
-                      Products
-                    </p>
-                  </div>
+                <TextInput
+  variant="filled"
+  radius="md"
+  placeholder="Search products"
+  value={searchTerm}
+  onChange={(e) => setSearchTerm(e.currentTarget.value)}
+/>                   
+</div>
 
                   {/* <!-- top bar right --> */}
                   <div className="flex items-center gap-2.5">

@@ -155,7 +155,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
               />
             </div>
 
-            <p className="text-custom-sm">({item.reviews})</p>
+        
           </div>
         </div>
       </div>
