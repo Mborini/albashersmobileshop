@@ -163,7 +163,7 @@ const Checkout = () => {
         ) : (
           <>
           <div className="text-center mt-8  ">
-            <div className="mx-auto pb-1">
+            <div className="mx-auto pb-5">
               <svg
                 className="mx-auto"
                 width="100"

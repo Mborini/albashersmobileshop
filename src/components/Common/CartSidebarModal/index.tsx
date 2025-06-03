@@ -125,6 +125,7 @@ const CartSidebarModal = () => {
               </Link>
             </div>
           </div>
+          
         </div>
       </div>
     </div>
