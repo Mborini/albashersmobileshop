@@ -103,8 +103,8 @@ const Cart = () => {
             <p className="pb-6">Your cart is empty!</p>
 
             <Link
-              href="/shop-with-sidebar"
-              className="w-96 mx-auto flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
+              href={{ pathname: "/", query: { focus: "categories" } }}
+              className="inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
             >
               Continue Shopping
             </Link>

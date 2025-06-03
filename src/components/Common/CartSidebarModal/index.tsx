@@ -106,10 +106,20 @@ const CartSidebarModal = () => {
               >
                 View Cart
               </Link>
-
               <Link
-                href="/checkout"
-                className="w-full flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
+                href={cartItems.length === 0 ? "#" : "/checkout"}
+                onClick={(e) => {
+                  if (cartItems.length === 0) {
+                    e.preventDefault(); // منع الانتقال إذا لم يكن هناك عناصر
+                    return;
+                  }
+                  closeCartModal();
+                }}
+                className={`w-full flex justify-center font-medium text-white py-[13px] px-6 rounded-md ease-out duration-200 ${
+                  cartItems.length === 0
+                    ? "bg-gray-400 cursor-not-allowed pointer-events-none"
+                    : "bg-dark hover:bg-opacity-95"
+                }`}
               >
                 Checkout
               </Link>

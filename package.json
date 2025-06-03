@@ -20,6 +20,7 @@
     "@reduxjs/toolkit": "^2.6.1",
     "@tailwindcss/vite": "^4.1.7",
     "antd": "^5.25.2",
+    "clsx": "^2.1.1",
     "framer-motion": "^12.15.0",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.1.0",
@@ -38,7 +39,8 @@
     "react-loading-skeleton": "^3.5.0",
     "react-range-slider-input": "^3.0.7",
     "react-redux": "^9.2.0",
-    "swiper": "^10.2.0"
+    "swiper": "^10.2.0",
+    "twilio": "^5.7.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.7",
