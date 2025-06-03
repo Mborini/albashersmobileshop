@@ -15,6 +15,10 @@ export type Product = {
   category_name?: string;
   subcategory_name?: string;
   brand_name?: string;
-  images?: string;
+  images?: [];
   attributes?: Attribute[];
+  is_new_arrival?: string;
+  is_best_offer?: string;
+  name?: string;
+  value: string;
 };
