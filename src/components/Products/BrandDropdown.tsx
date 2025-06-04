@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
+import { useTranslation } from "react-i18next";
 const BrandItem = ({ brand, isSelected, onSelect }) => {
   return (
     <button
@@ -51,6 +51,7 @@ const BrandItem = ({ brand, isSelected, onSelect }) => {
 const BrandDropdown = ({ brands, onBrandChange }) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
   const [selectedBrands, setSelectedBrands] = useState([]);
+  const { t ,i18n } = useTranslation();
 
   const handleSelect = (brand) => {
     setSelectedBrands((prev) => {
@@ -77,7 +78,9 @@ const BrandDropdown = ({ brands, onBrandChange }) => {
           toggleDropdown ? "shadow-filter" : ""
         }`}
       >
-        <p className="text-dark">Brands</p>
+        <p className="text-dark">
+          {t("brands")}
+        </p>
         <button
           aria-label="button for category dropdown"
           className={`text-dark ease-out duration-200 ${
@@ -105,6 +108,7 @@ const BrandDropdown = ({ brands, onBrandChange }) => {
         className={`flex-col gap-3 py-6 pl-6 pr-5.5 ${
           toggleDropdown ? "flex" : "hidden"
         }`}
+        dir="ltr"
       >
         {brands.map((brand, index) => (
           <BrandItem

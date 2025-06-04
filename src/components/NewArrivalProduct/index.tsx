@@ -62,10 +62,9 @@ const NewArrivalProduct = () => {
           throw new Error("Failed to fetch product");
         }
         const data = await response.json();
-        
+
         setProduct(data.products);
         setBrands(data.brands);
-        
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -88,26 +87,26 @@ const NewArrivalProduct = () => {
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   useEffect(() => {
     let filtered = [...product];
-  
+
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand_name));
     }
-  
+
     if (selectedPrice) {
       filtered = filtered.filter(
         (p) => p.price >= selectedPrice.min && p.price <= selectedPrice.max
       );
     }
-  
+
     if (searchTerm.trim() !== "") {
       filtered = filtered.filter((p) =>
         (p.title || "").toLowerCase().includes(searchTerm.toLowerCase())
-    );
+      );
     }
-  
+
     setFilteredProducts(filtered);
   }, [selectedBrands, selectedPrice, searchTerm, product]);
-  
+
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
 
@@ -177,8 +176,6 @@ const NewArrivalProduct = () => {
 
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="flex flex-col gap-6">
-                 
-
                   {/* <!-- category box --> */}
                   <BrandDropdown
                     brands={brands}
@@ -197,19 +194,19 @@ const NewArrivalProduct = () => {
             {/* // <!-- Sidebar End --> */}
 
             {/* // <!-- Content Start --> */}
-             <div className="xl:max-w-[870px] w-full">
+            <div className="xl:max-w-[870px] w-full">
               <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
                 <div className="flex items-center justify-between">
                   {/* <!-- top bar left --> */}
                   <div className="flex flex-wrap items-center gap-4">
-                <TextInput
-  variant="filled"
-  radius="md"
-  placeholder="Search products"
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.currentTarget.value)}
-/>                   
-</div>
+                    <TextInput
+                      variant="filled"
+                      radius="md"
+                      placeholder="Search products"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    />
+                  </div>
                   {/* <!-- top bar right --> */}
                   <div className="flex items-center gap-2.5">
                     <button
@@ -221,7 +218,7 @@ const NewArrivalProduct = () => {
                           : "text-dark bg-gray-1 border-gray-3"
                       } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
                     >
-                       <IoGridOutline size={20} />
+                      <IoGridOutline size={20} />
                     </button>
 
                     <button
@@ -233,8 +230,7 @@ const NewArrivalProduct = () => {
                           : "text-dark bg-gray-1 border-gray-3"
                       } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
                     >
-                                           <TbLayoutList size={20} />
-
+                      <TbLayoutList size={20} />
                     </button>
                   </div>
                 </div>

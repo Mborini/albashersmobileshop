@@ -9,10 +9,10 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import Image from "next/image";
-
+import { useTranslation } from "react-i18next";
 const SingleGridItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
-
+const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   // update the QuickView state
@@ -82,7 +82,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
             onClick={() => handleAddToCart()}
             className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 hover:bg-blue-dark"
           >
-            Add to cart
+            {t("add_to_cart")}
           </button>
 
           <button
@@ -110,7 +110,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         </div>
       </div>
 
-      <div className="flex items-center gap-2.5 mb-2">
+      <div dir="ltr" className="flex items-center gap-2.5 mb-2">
         <div className="flex items-center gap-1">
           <Image
             src="/images/icons/icon-star.svg"
@@ -147,13 +147,13 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         <p className="text-custom-sm">({item.brand_name})</p>
       </div>
 
-      <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
-        <Link href="/shop-details"> {item.title} </Link>
+      <h3 dir="ltr" className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
+        {item.title}
       </h3>
 
-      <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">${item.price}</span>
-        <span className="text-dark-4 line-through">${item.discountedPrice}</span>
+      <span dir="ltr" className="flex items-center gap-2 font-medium text-lg">
+        <span className="text-dark">JOD {item.price}</span>
+        <span className="text-dark-4 line-through">JOD {item.discountedPrice}</span>
       </span>
     </div>
   );

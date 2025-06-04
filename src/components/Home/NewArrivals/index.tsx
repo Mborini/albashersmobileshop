@@ -53,7 +53,6 @@ const NewArrival = () => {
   return (
     <section className="overflow-hidden pt-15">
       <div
-        dir={i18n?.language === "ar" ? "rtl" : "ltr"}
         className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0"
       >
         {/* Section title with animated gradient + background image */}

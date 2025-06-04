@@ -1,12 +1,12 @@
 "use client";
 import React, { useState } from "react";
-
+import { useTranslation } from "react-i18next";
 const ColorsDropdwon = () => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
   const [activeColor, setActiveColor] = useState("blue");
 
   const colors = ["red", "blue", "orange", "pink", "purple"];
-
+const {t, i18n} = useTranslation();
   return (
     <div className="bg-white shadow-1 rounded-lg">
       <div
@@ -15,7 +15,9 @@ const ColorsDropdwon = () => {
           toggleDropdown && "shadow-filter"
         }`}
       >
-        <p className="text-dark">Colors</p>
+        <p className="text-dark">
+          {t("colors")}
+        </p>
         <button
           aria-label="button for colors dropdown"
           className={`text-dark ease-out duration-200 ${
@@ -42,6 +44,7 @@ const ColorsDropdwon = () => {
 
       {/* <!-- dropdown menu --> */}
       <div
+      dir="ltr"
         className={`flex-wrap gap-2.5 p-6 ${
           toggleDropdown ? "flex" : "hidden"
         }`}
@@ -51,6 +54,7 @@ const ColorsDropdwon = () => {
             key={key}
             htmlFor={color}
             className="cursor-pointer select-none flex items-center"
+            
           >
             <div className="relative">
               <input

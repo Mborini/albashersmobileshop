@@ -61,6 +61,7 @@ const Pagination: React.FC<PaginationProps> = ({
 
   return (
     <nav
+    dir="ltr"
       aria-label="Pagination"
       className="flex justify-center mt-6 space-x-1 select-none"
     >

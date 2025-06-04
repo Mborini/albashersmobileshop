@@ -18,6 +18,7 @@ import Pagination from "../Common/pagination";
 import { TextInput } from "@mantine/core";
 import { TbLayoutList } from "react-icons/tb";
 import { IoGridOutline } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 const Product = () => {
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
@@ -31,7 +32,7 @@ const Product = () => {
   } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-
+ const { t, i18n } = useTranslation();
   const itemsPerPage = 6;
 
   const [stickyMenu, setStickyMenu] = useState(false);
@@ -90,26 +91,26 @@ const Product = () => {
 
   useEffect(() => {
     let filtered = [...product];
-  
+
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand_name));
     }
-  
+
     if (selectedPrice) {
       filtered = filtered.filter(
         (p) => p.price >= selectedPrice.min && p.price <= selectedPrice.max
       );
     }
-  
+
     if (searchTerm.trim() !== "") {
       filtered = filtered.filter((p) =>
         (p.title || "").toLowerCase().includes(searchTerm.toLowerCase())
-    );
+      );
     }
-  
+
     setFilteredProducts(filtered);
   }, [selectedBrands, selectedPrice, searchTerm, product]);
-  
+
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
 
@@ -131,11 +132,12 @@ const Product = () => {
   return (
     <>
       <Breadcrumb
-        title={`Explore ${selectedName} Categories`}
-        pages={["categories", "/", selectedName]}
+       
+        title={`${t("explore_products_of")} ${selectedName}`}
+        pages={[selectedName, "/", "products"]}
       />
-      <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]">
-        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+      <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+              <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex gap-7.5">
             {/* <!-- Sidebar Start --> */}
             <div
@@ -197,15 +199,14 @@ const Product = () => {
               <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
                 <div className="flex items-center justify-between">
                   {/* <!-- top bar left --> */}
-                  <div className="flex flex-wrap items-center gap-4">
-                  <TextInput
-  variant="filled"
-  radius="md"
-  placeholder="Search products"
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.currentTarget.value)}
-/>
-
+                  <div dir="ltr" className="flex flex-wrap items-center gap-4">
+                    <TextInput
+                      variant="filled"
+                      radius="md"
+                      placeholder={t("search_products")}
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    />
                   </div>
 
                   {/* <!-- top bar right --> */}

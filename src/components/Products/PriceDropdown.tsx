@@ -1,12 +1,15 @@
-import { useState } from 'react';
-import RangeSlider from 'react-range-slider-input';
-import 'react-range-slider-input/dist/style.css';
+import { useState } from "react";
+import RangeSlider from "react-range-slider-input";
+import "react-range-slider-input/dist/style.css";
+import { useTranslation } from "react-i18next";
 
 const PriceDropdown = ({ onPriceChange }) => {
+  const { t, i18n } = useTranslation();
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
-  // نستخدم مصفوفة بدل كائن هنا
-  const [selectedPrice, setSelectedPrice] = useState<[number, number]>([1, 2000]);
+  const [selectedPrice, setSelectedPrice] = useState<[number, number]>([
+    1, 2000,
+  ]);
 
   const handlePriceChange = (values) => {
     const newPrice = {
@@ -23,13 +26,13 @@ const PriceDropdown = ({ onPriceChange }) => {
         onClick={() => setToggleDropdown(!toggleDropdown)}
         className="cursor-pointer flex items-center justify-between py-3 pl-6 pr-5.5"
       >
-        <p className="text-dark">Price</p>
+        <p className="text-dark">{t("price")}</p>
         <button
           onClick={() => setToggleDropdown(!toggleDropdown)}
           id="price-dropdown-btn"
           aria-label="button for price dropdown"
           className={`text-dark ease-out duration-200 ${
-            toggleDropdown && 'rotate-180'
+            toggleDropdown && "rotate-180"
           }`}
         >
           <svg
@@ -51,7 +54,10 @@ const PriceDropdown = ({ onPriceChange }) => {
       </div>
 
       {/* // <!-- dropdown menu --> */}
-      <div className={`p-6 ${toggleDropdown ? 'block' : 'hidden'}`}>
+      <div
+        dir="ltr"
+        className={`p-6 ${toggleDropdown ? "block" : "hidden"}`}
+      >
         <div id="pricingOne">
           <div className="price-range">
             <RangeSlider
@@ -60,14 +66,14 @@ const PriceDropdown = ({ onPriceChange }) => {
               step={1}
               min={1}
               max={2000}
-              value={selectedPrice}      
+              value={selectedPrice}
               onInput={handlePriceChange}
             />
 
             <div className="price-amount flex items-center justify-between pt-4">
               <div className="text-custom-xs text-dark-4 flex rounded border border-gray-3/80">
                 <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                  $
+                 JOD
                 </span>
                 <span id="minAmount" className="block px-3 py-1.5">
                   {selectedPrice[0]}
@@ -76,7 +82,7 @@ const PriceDropdown = ({ onPriceChange }) => {
 
               <div className="text-custom-xs text-dark-4 flex rounded border border-gray-3/80">
                 <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                  $
+                  JOD
                 </span>
                 <span id="maxAmount" className="block px-3 py-1.5">
                   {selectedPrice[1]}
