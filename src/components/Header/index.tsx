@@ -131,11 +131,11 @@ const Header = () => {
               </div>
             </div>
             <span className="hidden xl:block w-px h-7.5 bg-gray-4"></span>
-            <div>
-              <span className="block text-2xs text-dark-4 uppercase">
-                24/7 SUPPORT
+            <div dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+              <span className="block text-xs text-dark-4 uppercase" >
+                {t("support")}
               </span>
-              <p className="font-medium text-custom-sm text-dark">
+              <p className="font-medium text-custom-sm text-dark"dir="ltr">
                 (+965) 79744-0729
               </p>
             </div>

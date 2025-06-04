@@ -71,7 +71,7 @@ const Categories = () => {
             {loading ? (
             ""
             ) : (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3" dir="ltr">
                 <button onClick={handlePrev} className="swiper-button-prev">
                   <FaChevronLeft />
                 </button>

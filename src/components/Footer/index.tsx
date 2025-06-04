@@ -1,18 +1,20 @@
 import React from "react";
 import Image from "next/image";
 import { FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const Footer = () => {
   const year = new Date().getFullYear();
+  const { t, i18n } = useTranslation();
 
   return (
     <footer className="overflow-hidden">
       <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
         {/* <!-- footer menu start --> */}
         <div className="flex flex-wrap xl:flex-nowrap gap-10 xl:gap-19 xl:justify-between pt-17.5 xl:pt-22.5 pb-10 xl:pb-15">
-          <div className="max-w-[330px] w-full">
+          <div className="max-w-[330px] w-full" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
-              Help & Support
+              {t("Help_and_Support")}
             </h2>
 
             <ul className="flex flex-col gap-3">
@@ -33,7 +35,7 @@ const Footer = () => {
                     />
                   </svg>
                 </span>
-                Qupa Circle, Irbid, Jordan{" "}
+                {t("Qupa_Circle_Irbid_Jordan")}
               </li>
 
               <li>
@@ -62,7 +64,8 @@ const Footer = () => {
                       fill="#3C50E0"
                     />
                   </svg>
-                  (+965) 7 9685-5578
+                  <span dir="ltr">(+965) 79744-0729</span>
+                  
                 </div>
               </li>
 
@@ -88,9 +91,9 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="w-full sm:w-auto">
+          <div className="w-full sm:w-auto"dir={i18n.language === "ar" ? "rtl" : "ltr"}>
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
-              Social Media
+              {t("social_media")}
             </h2>
 
             <ul className="flex flex-col gap-3.5">
@@ -99,6 +102,7 @@ const Footer = () => {
                   href="https://www.facebook.com/AlbasherShop/"
                   aria-label="Facebook Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-blue"
+                  dir="ltr"
                 >
                   <FaFacebook />
                   <span>Facebook</span>
@@ -110,6 +114,8 @@ const Footer = () => {
                   href="https://www.instagram.com/albasher.jo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw%3D%3D"
                   aria-label="Instagram Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-orange"
+                  dir="ltr"
+
                 >
                   <FaInstagram />
                   <span>Instagram</span>
@@ -121,6 +127,8 @@ const Footer = () => {
                   href="https://api.whatsapp.com/send?phone=%2B962796855578&context=AffBft21GKovicFAmDVyUobbJSKgoFY_mKRzHwQkoRatO-3aXnjDeMOeBMnHPOl1my9Br6AkHUqNpVFlsGcvI-1nuWn8vBw-5bhvIv40x1YFVr0yNElt1kRHQ3G_VdN6VbazRr4XwakUDXYNYwEwmIh-OQ&source=FB_Page&app=facebook&entry_point=page_cta&fbclid=IwY2xjawKmyv9leHRuA2FlbQIxMABicmlkETFXaDVlZ040NFdMY05pOVRZAR7Okbmf6z6u3jERV8n0vVwZkA2_VvQ6Qv6Mv6DvWoRaINFFEvpmhMUwvuidHg_aem__njuoxiBAiwe17ajvov-ZA"
                   aria-label="WhatsApp Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-green"
+                  dir="ltr"
+
                 >
                   <FaWhatsapp />
                   <span>WhatsApp</span>
@@ -129,18 +137,17 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="w-full sm:w-auto">
+          <div className="w-full sm:w-auto" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
-            Just For You
+              {t("just_for_you")}
             </h2>
-
             <ul className="flex flex-col gap-3">
               <li>
                 <a
                   className="ease-out duration-200 hover:text-blue"
                   href="/new-arrivals-products"
                 >
-                  New Arrivals
+                  {t("new_arrivals")}
                 </a>
               </li>
               <li>
@@ -148,7 +155,7 @@ const Footer = () => {
                   className="ease-out duration-200 hover:text-blue"
                   href="/best-offers-products"
                 >
-                  Best Offers
+                  {t("best_offers")}
                 </a>
               </li>
               <li>
@@ -156,7 +163,7 @@ const Footer = () => {
                   className="ease-out duration-200 hover:text-blue"
                   href="AllCommon-Brands-Grid"
                 >
-                  Common Brands
+                  {t("common_Brands")}
                 </a>
               </li>
             </ul>

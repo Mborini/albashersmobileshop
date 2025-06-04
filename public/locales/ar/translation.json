@@ -4,15 +4,20 @@
   "common_Brands": "ماركة شائعة",
   "favorit": "المفضلة",
   "cart": "عربة التسوق",
+  "support": "الدعم",
   "product_categories": "فئات المنتجات",
   "categories_description": "استكشف مجموعتنا الواسعة من الفئات",
   "this_week": "هذا الأسبوع",
-  "new_arrivals": "وصل حديثًا",  
+  "add_to_cart": "أضف إلى السلة",
+  "new_arrivals": "وصل حديثًا",
   "view_all": "عرض الكل",
   "jsut_for_you": "فقط من أجلك",
-  "best_offer": "أفضل العروض",
+  "best_offers": "أفضل عرض",
   "Help_and_Support": "المساعدة والدعم",
   "Qupa_Circle_Irbid_Jordan": "دوار قبة - إربد - الأردن",
-  "add_to_cart": "أضف إلى السلة"
+  "social_media": "تواصل معنا ",
+  "just_for_you": "فقط من أجلك",
 
+  "explore_subcategories_of": "استكشف الفئات الفرعية لـ"
+  
 }

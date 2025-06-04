@@ -4,15 +4,20 @@
     "common_Brands": "Common Brand",
     "favorit": "Favorit",
     "cart": "Cart",
+    "support": "Support",
     "product_categories": "Product Categories",
     "categories_description": "Explore our wide range of categories",
     "this_week": "This Week",
+    "add_to_cart": "Add to Cart",
     "new_arrivals": "New Arrivals",
     "view_all": "View All",
     "jsut_for_you": "Just For You",
-    "best_offer": "BEST OFFER",
+    "best_offers": "BEST OFFER",
     "Help_and_Support": "Help & Support",
     "Qupa_Circle_Irbid_Jordan": "Qupa Circle Irbid Jordan",
-    "add_to_cart": "Add to Cart"
+    "social_media": "Social Media",
+    "just_for_you": "Just For You"
+    
+    ,"explore_subcategories_of": "Explore Subcategories of"
   }
   
