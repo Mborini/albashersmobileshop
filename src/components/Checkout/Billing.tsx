@@ -83,14 +83,14 @@ const Billing = () => {
             />
           </div>
           <div className="w-full mb-5">
-            <label htmlFor="town" className="block mb-2.5">
+            <label htmlFor="city" className="block mb-2.5">
               City <span className="text-red">*</span>
             </label>
 
             <input
               type="text"
-              name="town"
-              id="town"
+              name="city"
+              id="city"
               required
               className="rounded-md border border-gray-3 bg-gray-1 placeholder:text-dark-5 w-full py-2.5 px-5 outline-none duration-200 focus:border-transparent focus:shadow-input focus:ring-2 focus:ring-blue/20"
             />
