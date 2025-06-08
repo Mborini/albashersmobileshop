@@ -12,12 +12,15 @@ import {
 } from "@mantine/core";
 import dayjs from "dayjs";
 import { FaInfo } from "react-icons/fa";
-import { completeOrder } from "./services/orders";
+import { completeOrder, declineOrder } from "./services/orders";
+import ConfirmDeclineModal from "./ConfirmDeclineModal";
 
 function OrderTable({ orders }) {
   const [openedPopoverId, setOpenedPopoverId] = useState(null);
   const [orderList, setOrderList] = useState(orders);
-
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  
   useEffect(() => {
     setOrderList(orders);
   }, [orders]);
@@ -35,9 +38,34 @@ function OrderTable({ orders }) {
       console.error("Failed to update order:", error);
     }
   };
+
+  const handleConfirmDecline = async () => {
+    if (!selectedOrderId) return;
+    try {
+      await declineOrder(selectedOrderId);
+      setOrderList((prevOrders) =>
+        prevOrders.map((order) =>
+          order.id === selectedOrderId ? { ...order, isdeclined: true } : order
+        )
+      );
+      setModalOpen(false);
+      setSelectedOrderId(null);
+    } catch (error) {
+      console.error("Failed to decline order:", error);
+    }
+  };
   
+  
+
   const rows = orderList.map((order) => (
-    <Table.Tr key={order.id}>
+    <Table.Tr key={order.id}
+    style={{
+      backgroundColor: order.isdeclined ? "#f8d7da" : "white",
+      opacity: order.isdeclined ? 0.5 : 1,
+      pointerEvents: order.isdeclined ? "none" : "auto",
+    }}
+
+    >
       <Table.Td>{order.id}</Table.Td>
       <Table.Td>{`${order.firstname}`}</Table.Td>
       <Table.Td>
@@ -136,12 +164,36 @@ function OrderTable({ orders }) {
         <Group gap={4}>
           <Button
             size="xs"
-            color={order.isCompleted ? "yellow" : "green"}
+            color={order.isdeclined ? "gray" : order.isCompleted ? "yellow" : "green"}
             variant="light"
             onClick={() => handleComplete(order.id)}
+            style={{
+              pointerEvents: order.isdeclined ? "none" : "auto",
+              opacity: order.isdeclined ? 0.5 : 1,
+              desable: order.isdeclined ? true : false,
+            }}
           >
-            {order.isCompleted ? "Mark Pending" : "Complete"}
+            {
+            !order.isdeclined ? ( order.isCompleted ? "Mark Pending" : "Complete") : "Declined"
+           }
           </Button>
+        </Group>
+      </Table.Td>
+      <Table.Td 
+      >
+        <Group gap={4}>
+        <Button
+  size="xs"
+  color="red"
+  variant="light"
+  onClick={() => {
+    setSelectedOrderId(order.id);
+    setModalOpen(true);
+  }}
+>
+  Decline
+</Button>
+
         </Group>
       </Table.Td>
     </Table.Tr>
@@ -161,11 +213,18 @@ function OrderTable({ orders }) {
               <Table.Th>Date</Table.Th>
               <Table.Th>Status</Table.Th>
               <Table.Th>Action</Table.Th>
+              <Table.Th>Decline</Table.Th>
             </Table.Tr>
           </Table.Thead>
           <Table.Tbody>{rows}</Table.Tbody>
         </Table>
       </ScrollArea>
+      <ConfirmDeclineModal
+  opened={modalOpen}
+  onClose={() => setModalOpen(false)}
+  onConfirm={handleConfirmDecline}
+/>
+
     </Paper>
   );
 }

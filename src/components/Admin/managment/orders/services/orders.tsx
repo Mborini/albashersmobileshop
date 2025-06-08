@@ -11,4 +11,9 @@ export const completeOrder = async (orderId) => {
       method: 'PUT',
     });
   };
+export const declineOrder = async (orderId) => {
+  return fetch(`/api/Admin/orders/${orderId}/decline`, {
+    method: 'PUT',
+  });
+}
   

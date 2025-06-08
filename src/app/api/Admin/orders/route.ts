@@ -5,7 +5,7 @@ export async function GET() {
       const client = await pool.connect();
       console.log('Connected to DB');
   
-      const res = await client.query('SELECT * FROM checkouts ORDER BY id ASC');
+      const res = await client.query('SELECT * FROM checkouts ORDER BY id desc');
       client.release();
   
       return new Response(JSON.stringify(res.rows), {
