@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { TextInput, Button, FileInput, Checkbox } from "@mantine/core";
 import { toast } from "react-hot-toast";
+import { uploadImage } from "./services/BrandsService";
 
 export default function BrandForm({ brand, onSubmit, onCancel }) {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCommon, setIsCommon] = useState(false); 
-
+  const [file, setFile] = useState(null);
   useEffect(() => {
     if (brand) {
       setName(brand.name || "");
@@ -25,7 +26,11 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
     setIsSubmitting(true);
 
     try {
-      await onSubmit({ name, image, isCommon }); 
+      const uploadedUrl = file
+      ? await uploadImage(file, brand?.image)
+      : image;
+
+      await onSubmit({ name, image: uploadedUrl, isCommon }); 
       toast.success(brand ? "Brand updated" : "Brand added"),
         {
           position: "top-center",
@@ -52,18 +57,13 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
         mb="sm"
         required
       />
-      <TextInput
+      <FileInput
         variant="filled"
         radius="xl"
-        label="Image URL"
-        labelProps={{ className: "mb-2" }}
-
-        value={image}
-        onChange={(e) => setImage(e.currentTarget.value)}
-        placeholder="Enter image URL"
-        required
-        mt="lg"
-        
+        label="Image"
+        placeholder="Upload image"
+        onChange={setFile}
+        accept="image/*"
       />
       <Checkbox
   label="Is Common"

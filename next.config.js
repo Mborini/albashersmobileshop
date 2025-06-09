@@ -3,10 +3,13 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     i18n: {
-      locales: ['en', 'ar'],       // اللغات التي يدعمها الموقع
-      defaultLocale: 'en',         // اللغة الافتراضية
-      localeDetection: false        // لتفعيل كشف لغة المتصفح تلقائيًا
+      locales: ['en', 'ar'],        
+      defaultLocale: 'en',         
+      localeDetection: false        
     },
+    images: {
+    domains: ['res.cloudinary.com'],
+  }
   };
   
   module.exports = nextConfig;

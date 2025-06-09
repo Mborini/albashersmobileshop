@@ -14,7 +14,7 @@ const SingleItem = ({ item }: { item: Category }) => {
       className="group flex flex-col items-center"
     >
       <div className="max-w-[150px] w-75 bg-[#F2F3F8] h-75 max-h-[150px] border-2 border-blue-light rounded-full flex items-center justify-center mb-4">
-        <Image src={item.image.trim()} alt="Category" width={90} height={90} />
+        <Image src={item.image} alt="Category" width={90} height={90} />
       </div>
 
       <div className="flex justify-center">
