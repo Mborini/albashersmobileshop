@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { TextInput, Button, FileInput, NativeSelect } from "@mantine/core";
 import { toast } from "react-hot-toast";
+import { uploadImage } from "./services/SubCategoryService";
+
 export default function SubCategoryForm({
   subCategory,
   onSubmit,
@@ -10,6 +12,7 @@ export default function SubCategoryForm({
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [categoryId, setCategoryId] = useState("");
+  const [file, setFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -29,7 +32,15 @@ export default function SubCategoryForm({
     setIsSubmitting(true);
 
     try {
-      await onSubmit({ name, image, category_id: Number(categoryId) });
+      const uploadedUrl = file
+        ? await uploadImage(file, subCategory?.image)
+        : image;
+
+      await onSubmit({
+        name,
+        image: uploadedUrl,
+        category_id: Number(categoryId),
+      });
       toast.success(subCategory ? "SubCategory updated" : "SubCategory added");
     } catch (error) {
       console.error(error);
@@ -45,43 +56,40 @@ export default function SubCategoryForm({
         variant="filled"
         radius="xl"
         label="SubCategory Name"
-        labelProps={{ className: "mb-2 " }}
+        labelProps={{ className: "mb-2" }}
         value={name}
         onChange={(e) => setName(e.currentTarget.value)}
         placeholder="Enter subCategory name"
         mb="sm"
         required
       />
-     <NativeSelect
-  variant="filled"
-  radius="xl"
-  label="Category"
-  labelProps={{ className: "mb-2" }}
-  value={categoryId}
-  onChange={(e) => setCategoryId(e.currentTarget.value)}
-  withAsterisk
-  data={[
-    { value: "", label: "Select Category", disabled: true }, 
-    ...categories.map((cat) => ({
-      value: cat.id.toString(),
-      label: cat.name,
-    })),
-  ]}
-  
-  required
-/>
-
-
-      <TextInput
+      <NativeSelect
         variant="filled"
         radius="xl"
-        label="Image URL"
-        value={image}
-        onChange={(e) => setImage(e.currentTarget.value)}
-        placeholder="Enter image URL"
+        label="Category"
+        labelProps={{ className: "mb-2" }}
+        value={categoryId}
+        onChange={(e) => setCategoryId(e.currentTarget.value)}
+        withAsterisk
+        data={[
+          { value: "", label: "Select Category", disabled: true },
+          ...categories.map((cat) => ({
+            value: cat.id.toString(),
+            label: cat.name,
+          })),
+        ]}
         required
-        mt="lg"
       />
+
+      <FileInput
+        variant="filled"
+        radius="xl"
+        label="Image"
+        placeholder="Upload image"
+        onChange={setFile}
+        accept="image/*"
+      />
+
       <div className="flex items-center justify-around">
         <Button
           type="submit"

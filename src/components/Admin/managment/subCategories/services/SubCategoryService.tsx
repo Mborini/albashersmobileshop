@@ -41,3 +41,22 @@ export async function deleteSubCategory(id: number) {
   return true;
 }
 
+
+export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
+  const formData = new FormData();
+  formData.append("file", file);
+  if (oldImageUrl) {
+    formData.append("oldImageUrl", oldImageUrl);
+    formData.append("folder", "subCategories");
+  }
+
+  const res = await fetch("/api/Admin/uploadImage", {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!res.ok) throw new Error("Upload failed");
+
+  const data = await res.json();
+  return data.url;
+}

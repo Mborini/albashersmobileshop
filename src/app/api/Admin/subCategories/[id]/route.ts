@@ -1,3 +1,4 @@
+import { v2 as cloudinary } from 'cloudinary';
 import pool from '../../../../lib/db';
 
 export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
@@ -25,14 +26,27 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
     });
   }
 }
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+function extractPublicId(imageUrl: string) {
+  const parts = imageUrl.split('/');
+  const folderAndId = parts.slice(-2).join('/').split('.')[0];
+  return folderAndId;
+}
+
 export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
-
   const client = await pool.connect();
 
   try {
-    const result = await client.query('SELECT COUNT(*) FROM "products" WHERE subcategory_id = $1', [id]);
-    const count = parseInt(result.rows[0].count, 10);
+    // 1. تحقق من وجود منتجات مرتبطة
+    const productResult = await client.query('SELECT COUNT(*) FROM "products" WHERE subcategory_id = $1', [id]);
+    const count = parseInt(productResult.rows[0].count, 10);
 
     if (count > 0) {
       return new Response(
@@ -40,10 +54,23 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
+    const subcategoryResult = await client.query('SELECT image FROM "subCategories" WHERE id = $1', [id]);
+    const imageUrl = subcategoryResult.rows[0]?.image;
 
+    if (imageUrl) {
+      const publicId = extractPublicId(imageUrl);
+      try {
+        await cloudinary.uploader.destroy(publicId);
+        console.log(`Deleted image from Cloudinary: ${publicId}`);
+      } catch (cloudErr) {
+        console.error('Cloudinary Deletion Error:', cloudErr);
+      }
+    }
+
+    // 3. حذف السبكاتيجوري من قاعدة البيانات
     await client.query('DELETE FROM "subCategories" WHERE id = $1', [id]);
 
-    return new Response(null, { status: 204 }); 
+    return new Response(null, { status: 204 });
   } catch (error) {
     console.error('Delete Error:', error);
     return new Response(
@@ -51,7 +78,7 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   } finally {
-    client.release(); 
+    client.release();
   }
 }
 
