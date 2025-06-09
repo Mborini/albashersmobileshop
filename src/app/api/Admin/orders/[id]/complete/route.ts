@@ -1,8 +1,9 @@
 import { NextResponse } from "next/server";
 import pool from "../../../../../lib/db";
 
-export async function PUT(req: Request, context: { params: { id: string } }) {
-  const orderId = Number(context.params.id);
+export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
+  const params = await context.params;
+  const orderId = Number(params.id);
 
   if (isNaN(orderId)) {
     return new Response(JSON.stringify({ error: "Invalid order ID" }), {
