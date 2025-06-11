@@ -44,8 +44,16 @@ const ProductItem = ({ item }: { item: Product }) => {
   return (
     <div className="group">
       <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-gray shadow-1 min-h-[270px] mb-4">
-        <Image src={`/images/products/${item.images[0]}`} 
-         alt="" width={250} height={250} />
+      {item.images[0] && (
+  <Image
+    src={item.images[0]}
+    className="object-cover"
+    width={250}
+    height={250}
+    alt="Product image"
+  />
+)}
+
 
         <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
           <button
@@ -84,7 +92,7 @@ const ProductItem = ({ item }: { item: Product }) => {
             onClick={() => handleAddToCart()}
             className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 hover:bg-blue-dark"
           >
-           {t('add_to_cart')}
+            {t("add_to_cart")}
           </button>
 
           <button
@@ -155,7 +163,9 @@ const ProductItem = ({ item }: { item: Product }) => {
 
       <span className="flex items-center gap-2 font-medium text-lg">
         <span className="text-dark">${item.price}</span>
-        <span className="text-dark-4 line-through">${item.discountedPrice}</span>
+        <span className="text-dark-4 line-through">
+          ${item.discountedPrice}
+        </span>
       </span>
     </div>
   );

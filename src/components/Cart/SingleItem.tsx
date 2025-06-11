@@ -37,12 +37,20 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
-              <Image width={200} height={200} src={item.imgs?.thumbnails[0]} alt="product" />
+            {item.images[0] && (
+            <Image
+              src={item.images[0]}
+              className="object-cover"
+              width={90}
+              height={90}
+              alt="Product image"
+            />
+          )}
             </div>
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-blue">
-                <a href="#"> {item.title} </a>
+                 {item.title} 
               </h3>
             </div>
           </div>

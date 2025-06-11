@@ -62,10 +62,9 @@ const BestOffersProducts = () => {
           throw new Error("Failed to fetch product");
         }
         const data = await response.json();
-        
+
         setProduct(data.products);
         setBrands(data.brands);
-        
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -89,26 +88,26 @@ const BestOffersProducts = () => {
 
   useEffect(() => {
     let filtered = [...product];
-  
+
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand_name));
     }
-  
+
     if (selectedPrice) {
       filtered = filtered.filter(
         (p) => p.price >= selectedPrice.min && p.price <= selectedPrice.max
       );
     }
-  
+
     if (searchTerm.trim() !== "") {
       filtered = filtered.filter((p) =>
         (p.title || "").toLowerCase().includes(searchTerm.toLowerCase())
-    );
+      );
     }
-  
+
     setFilteredProducts(filtered);
   }, [selectedBrands, selectedPrice, searchTerm, product]);
-  
+
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
 
@@ -179,7 +178,6 @@ const BestOffersProducts = () => {
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="flex flex-col gap-6">
                   {/* <!-- filter box --> */}
-                  
 
                   {/* <!-- category box --> */}
                   <BrandDropdown
@@ -204,14 +202,14 @@ const BestOffersProducts = () => {
                 <div className="flex items-center justify-between">
                   {/* <!-- top bar left --> */}
                   <div className="flex flex-wrap items-center gap-4">
-                <TextInput
-  variant="filled"
-  radius="md"
-  placeholder="Search products"
-  value={searchTerm}
-  onChange={(e) => setSearchTerm(e.currentTarget.value)}
-/>                   
-</div>
+                    <TextInput
+                      variant="filled"
+                      radius="md"
+                      placeholder="Search products"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    />
+                  </div>
 
                   {/* <!-- top bar right --> */}
                   <div className="flex items-center gap-2.5">
@@ -311,7 +309,7 @@ const BestOffersProducts = () => {
                         />
                         <div className="absolute inset-0 flex items-center justify-center">
                           <Image
-                            src="/images/logo/logo.png"
+                            src="/images/logo/AlbsherLOGO.png"
                             alt=""
                             className="opacity-25"
                             width={130}

@@ -22,7 +22,7 @@ const QuickViewModal = () => {
 
   // get the product data
   const product = useAppSelector((state) => state.quickViewReducer.value);
-  
+
   const [activePreview, setActivePreview] = useState(0);
 
   // preview modal
@@ -31,7 +31,6 @@ const QuickViewModal = () => {
 
     openPreviewModal();
   };
-
   // add to cart
   const handleAddToCart = () => {
     dispatch(
@@ -97,32 +96,41 @@ const QuickViewModal = () => {
             <div className="max-w-[526px] w-full">
               <div className="flex gap-5">
                 <div className="flex flex-col gap-5">
-                  {product.images.map((image, index) => (
-                    <Image
-                      key={index}
-                      src={`/images/products/${image}`}
-                      alt={`thumbnail-${index}`}
-                      width={61}
-                      height={61}
-                      className={`aspect-square cursor-pointer ${
-                        activePreview === index
-                          ? "border-2 border-blue-light rounded-lg"
-                          : ""
-                      }`}
-                      onClick={() => setActivePreview(index)}
-                      onMouseOver={() => setActivePreview(index)}
-                    />
-                  ))}
+                  {product.images
+                    ?.filter(
+                      (image) =>
+                        typeof image === "string" && image.startsWith("http")
+                    )
+                    .map((image, index) => (
+                      <Image
+                        key={index}
+                        src={image}
+                        alt={`thumbnail-${index}`}
+                        width={61}
+                        height={61}
+                        className={`aspect-square cursor-pointer ${
+                          activePreview === index
+                            ? "border-2 border-blue-light rounded-lg"
+                            : ""
+                        }`}
+                        onClick={() => setActivePreview(index)}
+                        onMouseOver={() => setActivePreview(index)}
+                      />
+                    ))}
                 </div>
 
                 <div className="relative z-1 overflow-hidden flex items-center justify-center w-full sm:min-h-[508px] bg-gray-1 rounded-lg border border-gray-3">
                   <div>
-                    <Image
-                      src={`/images/products/${product.images[activePreview]}`}
-                      alt="products-details"
-                      width={400}
-                      height={400}
-                    />
+                    {product.images?.[activePreview] &&
+                      typeof product.images[activePreview] === "string" &&
+                      product.images[activePreview].startsWith("http") && (
+                        <Image
+                          src={product.images[activePreview]}
+                          alt="products-details"
+                          width={400}
+                          height={400}
+                        />
+                      )}
                   </div>
                 </div>
               </div>

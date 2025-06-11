@@ -19,6 +19,7 @@ const { t } = useTranslation();
   const handleQuickViewUpdate = () => {
     dispatch(updateQuickView({ ...item }));
   };
+  
   // add to cart
   const handleAddToCart = () => {
     dispatch(
@@ -42,9 +43,15 @@ const { t } = useTranslation();
   return (
     <div className="group">
       <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-white shadow-1 min-h-[270px] mb-4">
-        <Image src={`/images/products/${item.images[0]}`} 
-         alt="" width={250} height={250} />
-
+        {item.images[0] && (
+          <Image
+            src={item.images[0]}
+                          className="object-cover"
+            width={250}
+            height={250}
+            alt="Product image"
+          />
+        )}
         <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
           <button
             onClick={() => {
