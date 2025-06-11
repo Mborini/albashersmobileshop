@@ -1,12 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import {
-  Drawer,
-  Center,
-  Loader,
-  Button,
-} from "@mantine/core";
+import { Drawer, Center, Loader, Button } from "@mantine/core";
 import { Toaster, toast } from "react-hot-toast";
 import ProductForm from "./Form";
 import List from "./List";
@@ -109,30 +104,43 @@ function ProductsCard() {
       toast.success("Product deleted successfully", { id: toastId });
     } catch (error) {
       if (error.message?.includes("existing products")) {
-        toast.error("Cannot delete brand because there are products linked to it.", {
+        toast.error(
+          "Cannot delete brand because there are products linked to it.",
+          {
+            id: toastId,
+          }
+        );
+      } else {
+        toast.error(error.message || "Failed to delete Product", {
           id: toastId,
         });
-      } else {
-        toast.error(error.message || "Failed to delete Product", { id: toastId });
       }
     }
   }
 
   // Extract unique values for filters
-  const categories = Array.from(new Set(products.map(p => p.category_name))).filter(Boolean);
+  const categories = Array.from(
+    new Set(products.map((p) => p.category_name))
+  ).filter(Boolean);
   const filteredSubcategories = Array.from(
     new Set(
       products
-        .filter(p => !filters.category || p.category_name === filters.category)
-        .map(p => p.subcategory_name)
+        .filter(
+          (p) => !filters.category || p.category_name === filters.category
+        )
+        .map((p) => p.subcategory_name)
     )
   ).filter(Boolean);
-  const brandsList = Array.from(new Set(products.map(p => p.brand_name))).filter(Boolean);
+  const brandsList = Array.from(
+    new Set(products.map((p) => p.brand_name))
+  ).filter(Boolean);
 
   // Filtering logic
-  const filteredProducts = products.filter(p => {
+  const filteredProducts = products.filter((p) => {
     return (
-      (p.product_name?.toLowerCase() || "").includes(filters.name.toLowerCase()) &&
+      (p.product_name?.toLowerCase() || "").includes(
+        filters.name.toLowerCase()
+      ) &&
       (!filters.category || p.category_name === filters.category) &&
       (!filters.subcategory || p.subcategory_name === filters.subcategory) &&
       (!filters.brand || p.brand_name === filters.brand)
@@ -141,7 +149,10 @@ function ProductsCard() {
 
   const indexOfLastProduct = currentPage * itemsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstProduct, indexOfLastProduct);
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
 
   // Reset filters handler
   const resetFilters = () => {
@@ -201,6 +212,10 @@ function ProductsCard() {
               product={currentProducts}
               onEdit={handleEditClick}
               onDelete={handleDeleteProduct}
+              onProductUpdate={async () => {
+                const updated = await fetchProducts();
+                setProducts(updated);
+              }}
             />
           </div>
         </Center>

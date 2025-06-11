@@ -9,7 +9,7 @@ export async function GET(
     const { brand } = await context.params;
 
     const client = await pool.connect();
-    console.log("Connected to DB");
+   
     const res = await client.query(
      `SELECT p.id, p.title, p.description, p.price, p.subcategory_id, p.brand_id, p.created_at, p."discountedPrice",
        COALESCE(json_agg(pi.image_url) FILTER (WHERE pi.image_url IS NOT NULL), '[]') AS images
@@ -21,7 +21,7 @@ GROUP BY p.id;
       [brand]
     );
     client.release();
-    console.log(res.rows);
+   
     return new Response(JSON.stringify(res.rows), {
       status: 200,
       headers: { "Content-Type": "application/json" },

@@ -24,7 +24,7 @@ export async function POST(request: Request) {
   const formData = await request.formData();
   const file = formData.get('file') as Blob;
   const oldImageUrl = formData.get('oldImageUrl') as string | null;
-    const folder = formData.get('folder') as string || 'subcategories'; // Default to 'subcategories' if not provided
+    const folder = formData.get('folder') as string ; // Default to 'subcategories' if not provided
   if (!file) {
     return NextResponse.json({ message: 'No file provided' }, { status: 400 });
   }
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
     const publicId = extractPublicId(oldImageUrl);
     try {
       await cloudinary.uploader.destroy(publicId);
-      console.log(`Deleted old image: ${publicId}`);
+     
     } catch (error) {
       console.error('Error deleting old image:', error);
     }

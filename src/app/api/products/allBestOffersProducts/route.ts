@@ -3,7 +3,7 @@ import pool from "../../../lib/db";
 export async function GET() {
   try {
     const client = await pool.connect();
-    console.log("Connected to DB");
+   
 
     // 1. Get new arrival products
     const productRes = await client.query(`

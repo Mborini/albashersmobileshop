@@ -99,7 +99,7 @@ export default function EditSubCategoryModal({ opened, onClose, product }) {
   }
 
   const handleSelectChange = (value) => {
-    console.log("Selected subcategory:", value);
+   
     setSelectedSubcategory(value);
     if (value) {
       loadAttributes(value);

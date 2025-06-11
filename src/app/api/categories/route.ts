@@ -3,7 +3,7 @@ import pool from '../../lib/db'; // if using relative path
 export async function GET() {
     try {
       const client = await pool.connect();
-      console.log('Connected to DB');
+      
   
       const res = await client.query('SELECT * FROM categories');
       client.release();

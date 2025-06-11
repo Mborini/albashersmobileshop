@@ -6,9 +6,6 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
     const body = await req.json();
     const { attributes, subCategoryId } = body;
 
-    console.log("Updating attributes for product:", id);
-    console.log("New subcategory:", subCategoryId);
-    console.log("Attributes:", attributes);
 
     const client = await pool.connect();
 

@@ -17,9 +17,9 @@ import EditSubCategoryModal from "./model/EditSubCategoryModal";
 import { LuFolderTree } from "react-icons/lu";
 import EditImegesModal from "./model/EditImegesModal";
 
-export default function List({ product, onEdit, onDelete }) {
+export default function List({ product, onEdit, onDelete, onProductUpdate }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
-  const [modalType, setModalType] = useState(null); // "view" or "edit-sub"
+  const [modalType, setModalType] = useState(null);
 
   const handleView = (product) => {
     setSelectedProduct(product);
@@ -30,9 +30,17 @@ export default function List({ product, onEdit, onDelete }) {
     setSelectedProduct(product);
     setModalType("edit-sub");
   };
+
   const handleEditImgs = (product) => {
     setSelectedProduct(product);
     setModalType("edit-imgs");
+  };
+
+  const handleProductUpdate = (updatedProduct) => {
+    if (onProductUpdate) {
+      onProductUpdate(updatedProduct);
+    }
+    closeModal();
   };
 
   const closeModal = () => {
@@ -64,25 +72,19 @@ export default function List({ product, onEdit, onDelete }) {
                   title={product.category_name}
                   bullet={<FaPlusCircle size={18} color="green" />}
                 >
-                  <Text c="dimmed" size="sm">
-                    Category
-                  </Text>
+                  <Text c="dimmed" size="sm">Category</Text>
                 </Timeline.Item>
                 <Timeline.Item
                   title={product.subcategory_name}
                   bullet={<FaPlusCircle size={18} color="green" />}
                 >
-                  <Text c="dimmed" size="sm">
-                    Sub Category
-                  </Text>
+                  <Text c="dimmed" size="sm">Sub Category</Text>
                 </Timeline.Item>
                 <Timeline.Item
                   title={product.product_name}
                   bullet={<FaMinusCircle size={18} color="red" />}
                 >
-                  <Text c="dimmed" size="sm">
-                    Product
-                  </Text>
+                  <Text c="dimmed" size="sm">Product</Text>
                 </Timeline.Item>
               </Timeline>
             </div>
@@ -107,7 +109,8 @@ export default function List({ product, onEdit, onDelete }) {
               </Badge>
               {product.product_images?.[0] ? (
                 <Image
-                  src={`/images/products/${product.product_images[0].trim()}`}
+                  key={product.product_images[0].id}
+                  src={`${product.product_images[0].image_url}`}
                   alt={product.product_name}
                   height={180}
                   width={180}
@@ -134,16 +137,19 @@ export default function List({ product, onEdit, onDelete }) {
                 <LuFolderTree style={{ fontSize: 22 }} />
               </ActionIcon>
             </Tooltip>
+
             <Tooltip label="Edit Images" withArrow radius={5}>
               <ActionIcon
                 variant="light"
                 radius="xl"
                 color="blue"
                 size="md"
-                onClick={() => handleEditImgs(product)}>
-                <FaRegImages  style={{ fontSize: 22 }} />
+                onClick={() => handleEditImgs(product)}
+              >
+                <FaRegImages style={{ fontSize: 22 }} />
               </ActionIcon>
             </Tooltip>
+
             <Tooltip label="View" withArrow radius={5}>
               <ActionIcon
                 variant="light"
@@ -201,10 +207,12 @@ export default function List({ product, onEdit, onDelete }) {
         onClose={closeModal}
         product={selectedProduct}
       />
+
       <EditImegesModal
         opened={modalType === "edit-imgs"}
         onClose={closeModal}
         product={selectedProduct}
+        onProductUpdate={handleProductUpdate} // ✅ أضفناها هنا
       />
     </>
   );

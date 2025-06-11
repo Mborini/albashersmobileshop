@@ -33,7 +33,7 @@ const Signin = () => {
 
       if (res.ok) {
         // Handle successful login (e.g. redirect, save token, etc.)
-        console.log("Login success", data);
+      
         // Redirect to dashboard
         window.location.href = "/dashboard";
       } else {

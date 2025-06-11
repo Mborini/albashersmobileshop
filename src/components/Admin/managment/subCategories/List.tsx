@@ -4,7 +4,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
 
 export default function List({ subCategories, onEdit, onDelete }) {
-  console.log("subCategories", subCategories);
+  
 
   return (
     <>

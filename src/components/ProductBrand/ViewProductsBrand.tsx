@@ -35,7 +35,6 @@ interface Props {
 }
 
 const ViewProductBrand: React.FC<Props> = ({ products }) => {
-  console.log("Products to pass:", products);
   const [productStyle, setProductStyle] = useState<"grid" | "list">("grid");
   const [productSidebar, setProductSidebar] = useState(false);
   const [productList, setProductList] = useState<Product[]>(products || []);

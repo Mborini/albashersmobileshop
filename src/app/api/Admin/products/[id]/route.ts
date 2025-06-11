@@ -58,38 +58,66 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
     client.release(); 
   }
 }
+import { v2 as cloudinary } from 'cloudinary';
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+function extractPublicId(imageUrl: string) {
+  const parts = imageUrl.split('/');
+  const folderAndId = parts.slice(-2).join('/').split('.')[0];
+  return folderAndId;
+}
 export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
 
-
   const client = await pool.connect();
   try {
-    await client.query('BEGIN'); // نبدأ المعاملة
+    await client.query('BEGIN');
 
-    // حذف الصور المرتبطة بالمنتج
+    // 1. جلب روابط الصور قبل حذفها
+    const imagesResult = await client.query(
+      'SELECT image_url FROM product_images WHERE product_id = $1',
+      [id]
+    );
+    const imageUrls: string[] = imagesResult.rows.map((row) => row.image_url);
+
+    // 2. حذف الصور من Cloudinary
+    for (const url of imageUrls) {
+      const publicId = extractPublicId(url);
+      try {
+        await cloudinary.uploader.destroy(publicId);
+      } catch (cloudErr) {
+        console.error('Cloudinary Deletion Error:', cloudErr);
+      }
+    }
+
+    // 3. حذف الصور من قاعدة البيانات
     await client.query('DELETE FROM product_images WHERE product_id = $1', [id]);
 
-    // حذف الخصائص المرتبطة بالمنتج
+    // 4. حذف الخصائص المرتبطة
     await client.query('DELETE FROM product_attributes WHERE product_id = $1', [id]);
 
-    // حذف المنتج نفسه
+    // 5. حذف المنتج نفسه
     await client.query('DELETE FROM products WHERE id = $1', [id]);
 
-    await client.query('COMMIT'); // نثبت التغييرات
+    await client.query('COMMIT');
 
-    return new Response(JSON.stringify({ message: 'Product deleted successfully.' }), {
+    return new Response(JSON.stringify({ message: 'Product and images deleted successfully.' }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    await client.query('ROLLBACK'); // في حال وجود خطأ، نلغي التغييرات
+    await client.query('ROLLBACK');
     console.error('Error deleting product:', error);
     return new Response(JSON.stringify({ error: 'Failed to delete product.' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });
   } finally {
-    client.release(); // نحرر الاتصال بقاعدة البيانات
+    client.release();
   }
 }

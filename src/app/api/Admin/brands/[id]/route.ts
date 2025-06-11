@@ -68,7 +68,7 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
       const publicId = extractPublicId(imageUrl);
       try {
         await cloudinary.uploader.destroy(publicId);
-        console.log(`Deleted image from Cloudinary: ${publicId}`);
+        
       } catch (cloudErr) {
         console.error('Cloudinary Deletion Error:', cloudErr);
       }

@@ -4,7 +4,7 @@ export async function GET() {
   let client;
   try {
     client = await pool.connect();
-    console.log("Connected to DB");
+  
 
     const query = `
 SELECT 
@@ -18,10 +18,13 @@ SELECT
     b.name AS brand_name,
     sc.name AS subcategory_name,
     c.name AS category_name,
-    -- تجميع الصفات مع قيمها ككائن JSON
     COALESCE(jsonb_object_agg(a.name, pa.value) FILTER (WHERE a.name IS NOT NULL), '{}'::jsonb) AS attributes,
-    -- تجميع الصور كمصفوفة نصوص
-    ARRAY_AGG(DISTINCT pi.image_url) AS product_images
+    COALESCE(
+      JSONB_AGG(
+        DISTINCT JSONB_BUILD_OBJECT('id', pi.id, 'image_url', pi.image_url)
+      ) FILTER (WHERE pi.id IS NOT NULL),
+      '[]'::jsonb
+    ) AS product_images
 FROM products p
 LEFT JOIN brands b ON p.brand_id = b.id
 LEFT JOIN "subCategories" sc ON p."subcategory_id" = sc.id
@@ -38,7 +41,7 @@ ORDER BY p.id;
 
     const res = await client.query(query);
     
-    console.log(res.rows);
+  
     return new Response(JSON.stringify(res.rows), {
       status: 200,
       headers: { "Content-Type": "application/json" },

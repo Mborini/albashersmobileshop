@@ -22,7 +22,7 @@ const ProductBrand = ({ brandId }) => {
 
     fetchProducts();
   }, [brandId]);
-  console.log(products);
+  
   const categories = [
     {
       name: "Desktop",
