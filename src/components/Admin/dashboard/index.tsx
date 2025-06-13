@@ -15,7 +15,7 @@ export default async function Dashboard() {
     { name: "Sub Categories", path: "managment/subCategories" },
     { name: "Products", path: "managment/products" },
     { name: "Brands", path: "managment/brands" },
-    { name: "Images", path: "/images" },
+    { name: "Images", path: "managment/images" },
     { name: "Orders", path: "managment/orders" },
     { name: "Clients", path: "/clients" },
   ];

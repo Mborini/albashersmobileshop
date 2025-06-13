@@ -72,7 +72,7 @@ const BestSaller = () => {
           </div>
         </div>
       ) : (
-        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mb-15">
+        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mb-15" >
           <motion.div
             className="relative w-full min-h-[80px] rounded-xl p-5 mb-8 overflow-hidden"
             style={{
@@ -86,14 +86,14 @@ const BestSaller = () => {
             }}
           >
             <div className="absolute inset-0 bg-black/30 z-0 rounded-xl" />
-            <div className="relative z-10 flex items-center justify-between">
+            <div className="relative z-10 flex items-center justify-between" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
               <div>
                 <span className="flex items-center gap-2.5 font-medium text-white mb-1.5">
                   <BiSolidOffer color="white" size={25} />
                  {t('jsut_for_you')}
                 </span>
                 <h2 className="font-semibold text-xl xl:text-heading-5 text-white">
-                 {t('best_offer')}
+                 {t('best_offers')}
                 </h2>
               </div>
               <Link

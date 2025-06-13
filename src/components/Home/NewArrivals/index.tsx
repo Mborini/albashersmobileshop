@@ -72,7 +72,7 @@ const NewArrival = () => {
           <div className="absolute inset-0 bg-black/30 z-0 rounded-xl" />
 
           {/* Content */}
-          <div className="relative z-10 flex items-center justify-between">
+          <div className="relative z-10 flex items-center justify-between" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
             <div>
               <span className="flex items-center gap-2.5 font-medium text-white mb-1.5">
                 <MdOutlineStarOutline color="orange" size={25} />
