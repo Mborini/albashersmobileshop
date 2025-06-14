@@ -50,23 +50,22 @@ export default function GridImages({ onEditImage }) {
 
   return (
     <Grid gutter="md" align="stretch">
-      {/* Left side: slider with Carousel */}
-      <Grid.Col span={8}>
+      {/* Left side: Carousel */}
+      <Grid.Col span={{ base: 12, md: 8 }}>
         {sliderImages.length > 0 ? (
-        <Carousel
-        withIndicators
-        slideSize="100%"
-        slideGap="md"
-        sx={{
-          ".mantine-Carousel-indicator": {
-            backgroundColor: "#999",
-            '&[data-active="true"]': {
-              backgroundColor: "#000",
-            },
-          },
-        }}
-      >
-      
+          <Carousel
+            withIndicators
+            slideSize="100%"
+            slideGap="md"
+            sx={{
+              ".mantine-Carousel-indicator": {
+                backgroundColor: "#999",
+                '&[data-active="true"]': {
+                  backgroundColor: "#000",
+                },
+              },
+            }}
+          >
             {sliderImages.map((item, index) => (
               <Carousel.Slide key={index}>
                 <Card
@@ -88,11 +87,10 @@ export default function GridImages({ onEditImage }) {
                   style={{ cursor: "pointer" }}
                 >
                   <Grid align="center">
-                    <Grid.Col span={6}>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
                       <Text size="xl" fw={700} color="blue">
                         {Math.floor(
-                          ((item.price - item.discounted_Price) / item.price) *
-                            100
+                          ((item.price - item.discounted_Price) / item.price) * 100
                         )}
                         % Sale Off
                       </Text>
@@ -106,7 +104,7 @@ export default function GridImages({ onEditImage }) {
                         <FaEdit />
                       </Button>
                     </Grid.Col>
-                    <Grid.Col span={6}>
+                    <Grid.Col span={{ base: 12, sm: 6 }}>
                       <Image
                         src={item.image_Url}
                         alt={item.title}
@@ -124,10 +122,10 @@ export default function GridImages({ onEditImage }) {
           <Text>No slider image available</Text>
         )}
       </Grid.Col>
-
-      {/* Right side: is_slider === false */}
-      <Grid.Col span={4}>
-        <Stack h="100%" justify="space-between">
+  
+      {/* Right side: other images */}
+      <Grid.Col span={{ base: 12, md: 4 }}>
+        <Stack h="100%" gap="md">
           {otherImages.map((img) => (
             <Card
               key={img.id}
@@ -148,7 +146,7 @@ export default function GridImages({ onEditImage }) {
               style={{ cursor: "pointer" }}
             >
               <Grid align="center">
-                <Grid.Col span={6}>
+                <Grid.Col span={{ base: 12, sm: 6 }}>
                   <Text fw={500}>{img.title}</Text>
                   <Text size="xs" c="dimmed">
                     {img.description}
@@ -163,7 +161,7 @@ export default function GridImages({ onEditImage }) {
                     <FaEdit />
                   </Button>
                 </Grid.Col>
-                <Grid.Col span={6}>
+                <Grid.Col span={{ base: 12, sm: 6 }}>
                   <Image src={img.image_Url} alt={img.title} fit="contain" />
                 </Grid.Col>
               </Grid>
@@ -173,4 +171,5 @@ export default function GridImages({ onEditImage }) {
       </Grid.Col>
     </Grid>
   );
+  
 }

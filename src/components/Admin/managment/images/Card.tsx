@@ -1,46 +1,74 @@
 "use client";
 
 import { useDisclosure } from "@mantine/hooks";
-import { Center, Drawer } from "@mantine/core";
-import { useState } from "react";
+import { Center, Drawer, Container } from "@mantine/core";
+import { useState, useEffect } from "react";
 import { toast } from "react-hot-toast";
 import GridImages from "./List";
 import ImagesForm from "./Form";
-import { updateAdsImages } from "./services/adsServices";
+import { updateAdsImages, fetchAdsImages } from "./services/adsServices";
 
 export default function ImagesCard() {
   const [opened, { open, close }] = useDisclosure(false);
   const [editingImage, setEditingImage] = useState(null);
-  
-  const handleSubmit = async (data) => {
-    if (!editingImage?.id) {
-      throw new Error("No image ID to update");
+  const [adsImages, setAdsImages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadAdsImages = async () => {
+    setLoading(true);
+    try {
+      const data = await fetchAdsImages();
+      setAdsImages(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
-    await updateAdsImages(editingImage.id, data);
   };
-  
-  
+
+  useEffect(() => {
+    loadAdsImages();
+  }, []);
+
+  const handleSubmit = async (data) => {
+    if (!editingImage?.id) return;
+
+    try {
+      await updateAdsImages(editingImage.id, data);
+      await loadAdsImages(); // refetch updated list
+      setEditingImage(null);
+      close();
+      toast.success("Image updated successfully!");
+    } catch (err) {
+      console.error(err);
+      toast.error("Failed to update image.");
+    }
+  };
+
   return (
     <>
       <Center>
-        <div
+        <Container
+          size="xl"
+          px="md"
+          py="lg"
           style={{
-            width: "100%",
-            maxWidth: "1200px",
-            padding: "20px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             marginTop: "20px",
+            width: "100%",
           }}
         >
           <GridImages
+            adsImages={adsImages}
+            loading={loading}
             onEditImage={(image) => {
               setEditingImage(image);
               open();
             }}
           />
-        </div>
+        </Container>
       </Center>
 
       <Drawer
@@ -49,23 +77,20 @@ export default function ImagesCard() {
           setEditingImage(null);
           close();
         }}
-        title={editingImage ? "Edit Image" : "Add Image"}
+        title="Edit Image"
         position="right"
-        size="sm"
+        size="100%" // full screen on mobile
+        styles={{
+          drawer: {
+            [`@media (min-width: 768px)`]: {
+              width: "400px !important", // override size on larger screens
+            },
+          },
+        }}
       >
         <ImagesForm
           image={editingImage}
-          onSubmit={async (data) => {
-            try {
-              await handleSubmit(data);
-              setEditingImage(null);
-              close();
-              toast.success("Image saved successfully!");
-            } catch (error) {
-              console.error("Error saving image:", error);
-              toast.error("Failed to save image.");
-            }
-          }}
+          onSubmit={handleSubmit}
           onCancel={() => {
             setEditingImage(null);
             close();
