@@ -11,7 +11,7 @@ export const menuData: Menu[] = [
     id: 2,
     title: "common_Brands",
     newTab: false,
-        path: "/Brands/AllCommon-Brands-Grid",
+    path: "/Brands/AllCommon-Brands-Grid",
   },
   {
     id: 3,
@@ -20,23 +20,15 @@ export const menuData: Menu[] = [
     path: "/contact",
   },
   {
-    id: 6,
-    title: "pages",
+    id: 4,
+    title: "new_arrivals",
     newTab: false,
-    path: "/",
-    submenu: [
-      {
-        id: 62,
-        title: "Error",
-        newTab: false,
-        path: "/error",
-      },
-      {
-        id: 63,
-        title: "Mail Success",
-        newTab: false,
-        path: "/mail-success",
-      },
-    ],
-  }
+    path: "/products/new-arrivals",
+  },
+  {
+    id: 5,
+    title: "best_offers",
+    newTab: false,
+    path: "/products/best-offers",
+  },
 ];

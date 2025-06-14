@@ -1,60 +1,121 @@
-import React, { useState, useEffect } from "react";
+"use client";
 
-const CustomSelect = ({ options }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState(options[0]);
+import { useState, useEffect } from "react";
+import { useDisclosure, useDebouncedValue } from "@mantine/hooks";
+import { Modal, Button, TextInput, Loader, Stack, Center, Group, Text, Badge, Box } from "@mantine/core";
+import { fetchAllProducts } from "./services/Products";
+import { FaSearch } from "react-icons/fa";
+import i18n from "@/app/lib/i18n";
+import { t } from "i18next";
+import Image from "next/image";
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-  };
-
-  const handleOptionClick = (option) => {
-    setSelectedOption(option);
-    toggleDropdown();
-  };
+export default function Search() {
+  const [opened, { open, close }] = useDisclosure(false);
+  const [query, setQuery] = useState("");
+  const [debouncedQuery] = useDebouncedValue(query, 300);
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    // closing modal while clicking outside
-    function handleClickOutside(event) {
-      if (!event.target.closest(".dropdown-content")) {
-        toggleDropdown();
+    const fetchResults = async () => {
+      if (!debouncedQuery.trim()) return setResults([]);
+
+      setLoading(true);
+      try {
+        const products = await fetchAllProducts(debouncedQuery);
+        setResults(products);
+      } catch (err) {
+        console.error("Error fetching:", err);
+        setResults([]);
+      } finally {
+        setLoading(false);
       }
-    }
-
-    if (isOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
 
+    fetchResults();
+  }, [debouncedQuery]);
+  const handelClose = () => {
+    setQuery("");
+    close();
+  };
   return (
-    <div className="dropdown-content custom-select relative" style={{ width: "200px" }}>
-      <div
-        className={`select-selected whitespace-nowrap ${
-          isOpen ? "select-arrow-active" : ""
-        }`}
-        onClick={toggleDropdown}
+    <>
+      <Modal
+        opened={opened}
+        onClose={handelClose}
+        title={t("search_products")}
+        centered
+        radius="md"
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
       >
-        {selectedOption.label}
-      </div>
-      <div className={`select-items ${isOpen ? "" : "select-hide"}`}>
-        {options.slice(1, -1).map((option, index) => (
-          <div
-            key={index}
-            onClick={() => handleOptionClick(option)}
-            className={`select-item ${
-              selectedOption === option ? "same-as-selected" : ""
-            }`}
-          >
-            {option.label}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+        <Stack dir="ltr" >
+          <TextInput
+            autoFocus
+            radius={"md"}
+            variant="filled"
+            placeholder="Search for a product..."
+            value={query}
+            onChange={(e) => setQuery(e.currentTarget.value)}
+            dir="ltr"
+          />
 
-export default CustomSelect;
+{loading ? (
+  <Center>
+    <Loader size="sm" />
+  </Center>
+) : (
+
+  results.map((product: any) => (
+    <Box
+      key={product.id}
+      p="xs"
+      style={{ borderRadius: 8, transition: "0.2s" }}
+      className="hover:bg-blue-light-5 cursor-pointer"
+      dir={"ltr"}
+      
+    >
+      <Group align="center" spacing="md" noWrap>
+        <Image
+          src={product.image_url}
+          alt={product.title}
+          width={50}
+          height={50}
+          radius="md"
+          fit="cover"
+        />
+        <Stack spacing={2} style={{ flex: 1 }}>
+          <Group position="apart" spacing="xs">
+            <Text fw={500} size="sm">
+              {product.title}
+            </Text>
+            <Badge color="blue" variant="light" size="xs">
+              {product.brand_name}
+            </Badge>
+          </Group>
+  
+          <Text size="xs" c="dimmed">
+            {product.category_name} / {product.subcategory_name}
+          </Text>
+        </Stack>
+      </Group>
+    </Box>
+  ))
+  
+)}
+
+        </Stack>
+      </Modal>
+
+      <Button variant="outline" radius={"lg"} onClick={open}>
+        <span
+          className="flex items-center gap-2"
+          dir={i18n.language === "ar" ? "rtl" : "ltr"}
+        >
+          <FaSearch size={16} />
+          
+          {t("search_products")}
+        </span>
+      </Button>
+    </>
+  );
+}
