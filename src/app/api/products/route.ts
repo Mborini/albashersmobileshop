@@ -1,33 +1,39 @@
-import pool from "../../lib/db"; // Adjust path if needed
+import pool from "../../lib/db"; // Adjust if needed
 import { NextRequest } from "next/server";
 
 export async function GET(req: NextRequest) {
+  const search = req.nextUrl.searchParams.get("search") || "";
+  const client = await pool.connect();
+
   try {
-    const search = req.nextUrl.searchParams.get("search") || "";
-    const client = await pool.connect();
-
-    const res = await client.query(
-      `SELECT DISTINCT ON (p.id) 
-           p.id, 
-           p.title, 
-           pi.image_url,
-           s.name AS subcategory_name,
+    const query = `
+      SELECT 
+        p.*, 
+        s.name AS subcategory_name,
            c.name AS category_name,
-           b.name AS brand_name
-       FROM products p
-       LEFT JOIN product_images pi ON p.id = pi.product_id
-       INNER JOIN brands b ON p.brand_id = b.id
-       INNER JOIN "subCategories" s ON p.subcategory_id = s.id
+        b.name AS brand_name,
+        COALESCE(
+          jsonb_object_agg(a.name, pa.value) FILTER (WHERE a.name IS NOT NULL), 
+          '{}'::jsonb
+        ) AS attributes,
+        COALESCE(
+          array_agg(DISTINCT pi.image_url) FILTER (WHERE pi.image_url IS NOT NULL), 
+          '{}'::text[]
+        ) AS images
+      FROM products p
+      INNER JOIN brands b ON p.brand_id = b.id
+      INNER JOIN "subCategories" s ON p.subcategory_id = s.id
        INNER JOIN categories c ON s.category_id = c.id
-       WHERE p.title ILIKE $1
-       ORDER BY p.id, pi.id
-       `,
-      [`%${search}%`]
-    );
+      LEFT JOIN product_images pi ON pi.product_id = p.id
+      LEFT JOIN product_attributes pa ON pa.product_id = p.id
+      LEFT JOIN attributes a ON pa.attribute_id = a.id
+      WHERE p.title ILIKE $1
+      GROUP BY p.id, b.name, s.name, c.name
+    `;
 
-    client.release();
+    const result = await client.query(query, [`%${search}%`]);
 
-    return new Response(JSON.stringify(res.rows), {
+    return new Response(JSON.stringify(result.rows), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
@@ -37,5 +43,7 @@ export async function GET(req: NextRequest) {
       status: 500,
       headers: { "Content-Type": "application/json" },
     });
+  } finally {
+    client.release();
   }
 }
