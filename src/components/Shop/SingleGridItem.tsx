@@ -12,14 +12,14 @@ import Image from "next/image";
 import { useTranslation } from "react-i18next";
 const SingleGridItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
-const { t } = useTranslation();
+  const { t } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
     dispatch(updateQuickView({ ...item }));
   };
-  
+
   // add to cart
   const handleAddToCart = () => {
     dispatch(
@@ -46,7 +46,7 @@ const { t } = useTranslation();
         {item.images[0] && (
           <Image
             src={item.images[0]}
-                          className="object-cover"
+            className="object-cover"
             width={250}
             height={250}
             alt="Product image"
@@ -154,13 +154,18 @@ const { t } = useTranslation();
         <p className="text-custom-sm">({item.brand_name})</p>
       </div>
 
-      <h3 dir="ltr" className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
+      <h3
+        dir="ltr"
+        className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5"
+      >
         {item.title}
       </h3>
 
       <span dir="ltr" className="flex items-center gap-2 font-medium text-lg">
         <span className="text-dark">JOD {item.price}</span>
-        <span className="text-dark-4 line-through">JOD {item.discountedPrice}</span>
+        <span className="text-dark-4 line-through">
+          JOD {item.discountedPrice}
+        </span>
       </span>
     </div>
   );
