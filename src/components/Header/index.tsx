@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { Drawer, Button } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 
-import CustomSelect from "./CustomSelect";
+import Search from "./Search";
 import Dropdown from "./Dropdown";
 import { menuData } from "./menuData";
 import { useAppSelector } from "@/redux/store";
@@ -18,11 +18,13 @@ import { selectTotalPrice } from "@/redux/features/cart-slice";
 import { useCartModalContext } from "@/app/context/CartSidebarModalContext";
 
 import "../../app/lib/i18n";
-import { FaBars } from "react-icons/fa";
 import { CiMenuBurger } from "react-icons/ci";
 
 const Header = () => {
   const [stickyMenu, setStickyMenu] = useState(false);
+  const [showNavBar, setShowNavBar] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
+
   const { openCartModal } = useCartModalContext();
   const product = useAppSelector((state) => state.cartReducer.items);
   const totalPrice = useAppSelector(selectTotalPrice);
@@ -31,11 +33,23 @@ const Header = () => {
   const changeLanguage = (lng: string) => i18n.changeLanguage(lng);
   const [opened, { open, close }] = useDisclosure(false);
 
-  useEffect(() => {
-    const handleStickyMenu = () => setStickyMenu(window.scrollY >= 80);
-    window.addEventListener("scroll", handleStickyMenu);
-    return () => window.removeEventListener("scroll", handleStickyMenu);
-  }, []);
+
+useEffect(() => {
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      setShowNavBar(false); // Scroll down -> hide nav
+    } else {
+      setShowNavBar(true); // Scroll up -> show nav
+    }
+
+    setLastScrollY(currentScrollY);
+  };
+
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, [lastScrollY]);
 
   return (
     <header
@@ -44,8 +58,8 @@ const Header = () => {
       }`}
     >
       <div className="max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div className="flex items-center justify-between py-4 lg:py-6 gap-2 flex-nowrap overflow-x-auto">
-      <Link href="/">
+        <div className="flex items-center justify-between py-4 lg:py-6 gap-2 flex-nowrap overflow-x-auto">
+          <Link href="/">
             <Image
               src="/images/logo/AlbsherLOGO.png"
               alt="Albsher Logo"
@@ -58,7 +72,7 @@ const Header = () => {
 
           <div className="flex items-center gap-4">
             <div className="w-full sm:w-auto">
-              <CustomSelect />
+              <Search />
             </div>
 
             <span className="xl:block w-px h-7.5 bg-gray-4" />
@@ -101,37 +115,39 @@ const Header = () => {
               onClick={open}
               aria-label="Open Navigation Drawer"
             >
-             <CiMenuBurger color="blue" size={24} />
+              <CiMenuBurger color="blue" size={24} />
             </button>
           </div>
         </div>
 
-        {/* Navigation bar */}
-        <div dir={i18n.language === "ar" ? "rtl" : "ltr"} className="border-t border-gray-3">
-          <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
-            <nav className="hidden xl:flex items-center gap-6 py-4">
-              <ul className="flex items-center gap-6">
-                {menuData.map((menuItem, i) =>
-                  menuItem.submenu ? (
-                    <Dropdown key={i} menuItem={menuItem} stickyMenu={stickyMenu} />
-                  ) : (
-                    <li
-                      key={i}
-                      className="group relative before:w-0 before:h-[3px] before:bg-blue before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full"
-                    >
-                      <Link
-                        href={menuItem.path}
-                        className="hover:text-blue text-custom-sm font-medium text-dark"
-                      >
-                        {t(menuItem.title)}
-                      </Link>
-                    </li>
-                  )
-                )}
-              </ul>
-            </nav>
-          </div>
-        </div>
+        {showNavBar && (
+  <div dir={i18n.language === "ar" ? "rtl" : "ltr"} className="border-t border-gray-3">
+    <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
+      <nav className="hidden xl:flex items-center gap-6 py-4">
+        <ul className="flex items-center gap-6">
+          {menuData.map((menuItem, i) =>
+            menuItem.submenu ? (
+              <Dropdown key={i} menuItem={menuItem} stickyMenu={stickyMenu} />
+            ) : (
+              <li
+                key={i}
+                className="group relative before:w-0 before:h-[3px] before:bg-blue before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full"
+              >
+                <Link
+                  href={menuItem.path}
+                  className="hover:text-blue text-custom-sm font-medium text-dark"
+                >
+                  {t(menuItem.title)}
+                </Link>
+              </li>
+            )
+          )}
+        </ul>
+      </nav>
+    </div>
+  </div>
+)}
+
       </div>
 
       {/* Drawer for mobile */}

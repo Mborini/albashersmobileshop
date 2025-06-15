@@ -16,7 +16,7 @@ import Pagination from "../Common/pagination";
 import BrandDropdown from "../Products/BrandDropdown";
 import ColorsDropdwon from "../Products/ColorsDropdwon";
 import PriceDropdown from "../Products/PriceDropdown";
-import CustomSelect from "../Header/CustomSelect";
+import CustomSelect from "../Header/Search";
 import SingleListProductBrand from "./SingleListProductBrand";
 
 interface Product {
