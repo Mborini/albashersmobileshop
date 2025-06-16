@@ -84,17 +84,18 @@ const NewArrival = () => {
             </div>
 
             <Link
-              href="/new-arrivals-products"
-              className="inline-flex font-medium text-custom-sm py-2.5 px-7 rounded-md border-gray-3 border bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
-            >
-              {t("view_all")}
-            </Link>
+  href="/new-arrivals-products"
+  className="inline-flex font-medium text-custom-sm px-4 py-1 sm:py-2.5 sm:px-4 md:px-6 xl:px-7 rounded-md border border-gray-3 bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
+>
+  {t("view_all")}
+</Link>
+
           </div>
         </motion.div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-7.5 gap-y-9">
-          {loading
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
+        {loading
             ? Array.from({ length: 8 }).map((_, i) => (
                 <SkeletonProductItem key={i} />
               ))

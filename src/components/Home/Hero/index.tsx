@@ -71,41 +71,44 @@ const Hero = () => {
 
           <div className="xl:max-w-[393px] w-full">
             <div className="flex flex-col sm:flex-row xl:flex-col gap-5">
-              {otherImages.map((item) => (
-                <div
-                  key={item.id}
-                  className="w-full relative rounded-[10px] bg-white p-4 sm:p-7.5"
-                >
-                  <div className="flex items-center gap-14">
-                    <div>
-                      <h2 className="max-w-[153px] font-semibold text-dark text-xl mb-5">
-                        {item.title}
-                      </h2>
+              {otherImages
+                .filter((item) => item.is_video === false)
+
+                .map((item) => (
+                  <div
+                    key={item.id}
+                    className="w-full relative rounded-[10px] bg-white p-4 sm:p-7.5"
+                  >
+                    <div className="flex items-center gap-14">
                       <div>
-                        <p className="font-medium text-dark-4 text-custom-sm mb-1.5">
-                          {item.description}
-                        </p>
-                        <span className="flex items-center gap-3">
-                          <span className="font-medium text-heading-5 text-red">
-                            ${item.discounted_Price}
+                        <h2 className="max-w-[153px] font-semibold text-dark text-xl mb-5">
+                          {item.title}
+                        </h2>
+                        <div>
+                          <p className="font-medium text-dark-4 text-custom-sm mb-1.5">
+                            {item.description}
+                          </p>
+                          <span className="flex items-center gap-3">
+                            <span className="font-medium text-heading-5 text-red">
+                              ${item.discounted_Price}
+                            </span>
+                            <span className="font-medium text-2xl text-dark-4 line-through">
+                              ${item.price}
+                            </span>
                           </span>
-                          <span className="font-medium text-2xl text-dark-4 line-through">
-                            ${item.price}
-                          </span>
-                        </span>
+                        </div>
+                      </div>
+                      <div>
+                        <Image
+                          src={item.image_Url.trim()}
+                          alt={item.title}
+                          width={175}
+                          height={175}
+                        />
                       </div>
                     </div>
-                    <div>
-                      <Image
-                        src={item.image_Url.trim()}
-                        alt={item.title}
-                        width={175}
-                        height={175}
-                      />
-                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>

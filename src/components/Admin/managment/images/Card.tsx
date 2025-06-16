@@ -77,12 +77,12 @@ export default function ImagesCard() {
           setEditingImage(null);
           close();
         }}
-        title="Edit Image"
+        title="Edit Add Image"
         position="right"
-        size="100%" // full screen on mobile
+        
         styles={{
           drawer: {
-            [`@media (min-width: 768px)`]: {
+            [`@media (min-width: 400px)`]: {
               width: "400px !important", // override size on larger screens
             },
           },

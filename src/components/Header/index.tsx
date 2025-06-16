@@ -33,23 +33,22 @@ const Header = () => {
   const changeLanguage = (lng: string) => i18n.changeLanguage(lng);
   const [opened, { open, close }] = useDisclosure(false);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
 
-useEffect(() => {
-  const handleScroll = () => {
-    const currentScrollY = window.scrollY;
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        setShowNavBar(false); // Scroll down -> hide nav
+      } else {
+        setShowNavBar(true); // Scroll up -> show nav
+      }
 
-    if (currentScrollY > lastScrollY && currentScrollY > 100) {
-      setShowNavBar(false); // Scroll down -> hide nav
-    } else {
-      setShowNavBar(true); // Scroll up -> show nav
-    }
+      setLastScrollY(currentScrollY);
+    };
 
-    setLastScrollY(currentScrollY);
-  };
-
-  window.addEventListener("scroll", handleScroll);
-  return () => window.removeEventListener("scroll", handleScroll);
-}, [lastScrollY]);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [lastScrollY]);
 
   return (
     <header
@@ -119,36 +118,36 @@ useEffect(() => {
             </button>
           </div>
         </div>
-
+ </div>
+        {/* ✅ هذا الجزء يظهر فقط إذا showNavBar = true */}
         {showNavBar && (
-  <div dir={i18n.language === "ar" ? "rtl" : "ltr"} className="border-t border-gray-3">
-    <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
-      <nav className="hidden xl:flex items-center gap-6 py-4">
-        <ul className="flex items-center gap-6">
-          {menuData.map((menuItem, i) =>
-            menuItem.submenu ? (
-              <Dropdown key={i} menuItem={menuItem} stickyMenu={stickyMenu} />
-            ) : (
-              <li
-                key={i}
-                className="group relative before:w-0 before:h-[3px] before:bg-blue before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full"
-              >
-                <Link
-                  href={menuItem.path}
-                  className="hover:text-blue text-custom-sm font-medium text-dark"
-                >
-                  {t(menuItem.title)}
-                </Link>
-              </li>
-            )
-          )}
-        </ul>
-      </nav>
-    </div>
-  </div>
-)}
-
-      </div>
+          <div dir={i18n.language === "ar" ? "rtl" : "ltr"} className="border-t border-gray-3">
+            <div className="max-w-[1170px] mx-auto px-4 sm:px-7.5 xl:px-0">
+              <nav className="hidden xl:flex items-center gap-6 py-4">
+                <ul className="flex items-center gap-6">
+                  {menuData.map((menuItem, i) =>
+                    menuItem.submenu ? (
+                      <Dropdown key={i} menuItem={menuItem} stickyMenu={stickyMenu} />
+                    ) : (
+                      <li
+                        key={i}
+                        className="group relative before:w-0 before:h-[3px] before:bg-blue before:absolute before:left-0 before:top-0 before:rounded-b-[3px] before:ease-out before:duration-200 hover:before:w-full"
+                      >
+                        <Link
+                          href={menuItem.path}
+                          className="hover:text-blue text-custom-sm font-medium text-dark"
+                        >
+                          {t(menuItem.title)}
+                        </Link>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </nav>
+            </div>
+          </div>
+        )}
+     
 
       {/* Drawer for mobile */}
       <Drawer opened={opened} onClose={close} size="230px" position="right">

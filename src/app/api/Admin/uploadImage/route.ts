@@ -1,5 +1,11 @@
-import { NextResponse } from 'next/server';
-import { v2 as cloudinary } from 'cloudinary';
+import { NextResponse } from "next/server";
+import { v2 as cloudinary } from "cloudinary";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
+  api_key: process.env.CLOUDINARY_API_KEY!,
+  api_secret: process.env.CLOUDINARY_API_SECRET!,
+});
 
 export const config = {
   api: {
@@ -7,55 +13,59 @@ export const config = {
   },
 };
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
 function extractPublicId(imageUrl: string) {
-  // مثال URL: https://res.cloudinary.com/demo/image/upload/v1234567890/subcategories/abc123.jpg
-  const parts = imageUrl.split('/');
-  const folderAndId = parts.slice(-2).join('/').split('.')[0]; // subcategories/abc123
-  return folderAndId;
+  const afterUpload = imageUrl.split("/upload/")[1];
+  const withoutVersion = afterUpload.replace(/^v\d+\//, "");
+  const publicId = withoutVersion.split(".")[0];
+  return publicId;
+}
+
+async function deleteOldMedia(oldMediaUrl: string | null) {
+  if (!oldMediaUrl) return null;
+
+  const publicId = extractPublicId(oldMediaUrl);
+
+  // تحديد نوع المورد بناءً على امتداد الملف
+  let resourceType: "image" | "video" = "image";
+  if (oldMediaUrl.match(/\.(mp4|mov|avi|wmv|flv|mkv)$/i)) {
+    resourceType = "video";
+  }
+
+  try {
+    const result = await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
+    console.log("Deleted old media:", result);
+    return result;
+  } catch (error) {
+    console.error("Error deleting old media:", error);
+    return null;
+  }
 }
 
 export async function POST(request: Request) {
   const formData = await request.formData();
-  const file = formData.get('file') as Blob;
-  const oldImageUrl = formData.get('oldImageUrl') as string | null;
-    const folder = formData.get('folder') as string ; // Default to 'subcategories' if not provided
-  if (!file) {
-    return NextResponse.json({ message: 'No file provided' }, { status: 400 });
-  }
+  const oldImageUrl = formData.get("oldImageUrl") as string | null;
+  const folder = (formData.get("folder") as string) || "Ads";
 
-  // إذا في صورة قديمة، نحذفها أولاً
+  console.log("Received oldImageUrl:", oldImageUrl);
+
   if (oldImageUrl) {
-    const publicId = extractPublicId(oldImageUrl);
-    try {
-      await cloudinary.uploader.destroy(publicId);
-     
-    } catch (error) {
-      console.error('Error deleting old image:', error);
-    }
+    await deleteOldMedia(oldImageUrl);
   }
 
-  // رفع الصورة الجديدة
-  const arrayBuffer = await file.arrayBuffer();
-  const buffer = Buffer.from(arrayBuffer);
+  const timestamp = Math.floor(Date.now() / 1000);
+  const signature = cloudinary.utils.api_sign_request(
+    {
+      timestamp,
+      folder,
+    },
+    cloudinary.config().api_secret!
+  );
 
-  return new Promise((resolve, reject) => {
-    const stream = cloudinary.uploader.upload_stream(
-      { folder: folder },
-      (error, result) => {
-        if (error || !result) {
-          console.error(error);
-          resolve(NextResponse.json({ message: 'Upload failed' }, { status: 500 }));
-        } else {
-          resolve(NextResponse.json({ url: result.secure_url }));
-        }
-      }
-    );
-    stream.end(buffer);
+  return NextResponse.json({
+    timestamp,
+    signature,
+    apiKey: cloudinary.config().api_key,
+    cloudName: cloudinary.config().cloud_name,
+    folder,
   });
 }

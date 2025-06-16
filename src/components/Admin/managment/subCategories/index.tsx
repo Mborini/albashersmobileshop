@@ -11,5 +11,5 @@ export default async function SubCategoriesManagement() {
     redirect("/signin");
   }
 
-  return <SubCategoriesCard />;
+  return <SubCategoriesCard />
 }
