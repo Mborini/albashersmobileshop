@@ -12,7 +12,10 @@ const Footer = () => {
       <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
         {/* <!-- footer menu start --> */}
         <div className="flex flex-wrap xl:flex-nowrap gap-10 xl:gap-19 xl:justify-between pt-17.5 xl:pt-22.5 pb-10 xl:pb-15">
-          <div className="max-w-[330px] w-full" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+          <div
+            className="max-w-[330px] w-full"
+            dir={i18n.language === "ar" ? "rtl" : "ltr"}
+          >
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
               {t("Help_and_Support")}
             </h2>
@@ -65,7 +68,6 @@ const Footer = () => {
                     />
                   </svg>
                   <span dir="ltr">(+965) 79744-0729</span>
-                  
                 </div>
               </li>
 
@@ -85,13 +87,16 @@ const Footer = () => {
                       fill="#3C50E0"
                     />
                   </svg>
-                  support@example.com
+                  albasheermbl@gmail.com{" "}
                 </div>
               </li>
             </ul>
           </div>
 
-          <div className="w-full sm:w-auto"dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+          <div
+            className="w-full sm:w-auto"
+            dir={i18n.language === "ar" ? "rtl" : "ltr"}
+          >
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
               {t("social_media")}
             </h2>
@@ -115,7 +120,6 @@ const Footer = () => {
                   aria-label="Instagram Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-orange"
                   dir="ltr"
-
                 >
                   <FaInstagram />
                   <span>Instagram</span>
@@ -128,7 +132,6 @@ const Footer = () => {
                   aria-label="WhatsApp Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-green"
                   dir="ltr"
-
                 >
                   <FaWhatsapp />
                   <span>WhatsApp</span>
@@ -137,7 +140,10 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="w-full sm:w-auto" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+          <div
+            className="w-full sm:w-auto"
+            dir={i18n.language === "ar" ? "rtl" : "ltr"}
+          >
             <h2 className="mb-7.5 text-custom-1 font-medium text-dark">
               {t("just_for_you")}
             </h2>

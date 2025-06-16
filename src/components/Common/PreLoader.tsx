@@ -1,11 +1,13 @@
-import React from "react";
+import { ImSpinner8 } from "react-icons/im";
 
-const PreLoader = () => {
+export default function PreLoader() {
   return (
-    <div className="fixed left-0 top-0 z-999999 flex h-screen w-screen items-center justify-center bg-white">
-      <div className="h-16 w-16 animate-spin rounded-full border-4 border-solid border-blue border-t-transparent"></div>
+    <div className="fixed left-0 top-0 z-50 flex h-screen w-screen items-center justify-center bg-white">
+      <ImSpinner8
+        size={64}
+       
+        className=" text-blue-light custom-spin"
+      />
     </div>
   );
-};
-
-export default PreLoader;
+}

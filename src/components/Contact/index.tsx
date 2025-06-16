@@ -1,12 +1,13 @@
+"use client";
+
 import React from "react";
-import Breadcrumb from "../Common/Breadcrumb";
 import MapboxMap from "../map";
+import Breadcrumb from "../Common/Breadcrumb";
 
 const Contact = () => {
   return (
     <>
-      <Breadcrumb title={"Contact"} pages={["contact"]} />
-
+      <Breadcrumb title={"Common Brands"} pages={["Common Brands"]} />{" "}
       <section className="overflow-hidden py-20 px-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-col xl:flex-row gap-7.5">
@@ -34,7 +35,7 @@ const Contact = () => {
                         fill="#3C50E0"
                       />
                     </svg>
-                    Name: James Septimus
+                    albasheermbl@gmail.com
                   </p>
 
                   <p className="flex items-center gap-4">
@@ -62,7 +63,7 @@ const Contact = () => {
                         fill="#3C50E0"
                       />
                     </svg>
-                    Phone: 1234 567890
+                    (+965) 79744-0729
                   </p>
 
                   <p className="flex gap-4">
@@ -81,7 +82,7 @@ const Contact = () => {
                         fill="#3C50E0"
                       />
                     </svg>
-                    Address: 7398 Smoke Ranch RoadLas Vegas, Nevada 89128
+                    Qupa-Circle Irbid Jordan
                   </p>
                 </div>
               </div>
@@ -174,7 +175,6 @@ const Contact = () => {
           </div>
         </div>
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mt-24 rounded-2xl bg-white shadow-lg">
-          
           <MapboxMap />
         </div>
       </section>

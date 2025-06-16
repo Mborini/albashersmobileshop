@@ -11,6 +11,15 @@
     @apply font-euclid-circular-a font-normal text-base text-dark-3 relative z-1;
   }
 }
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.custom-spin {
+  animation: spin 1s linear infinite;
+}
 
 @layer components {
   .dropdown {

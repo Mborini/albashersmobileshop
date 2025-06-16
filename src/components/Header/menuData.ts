@@ -23,12 +23,12 @@ export const menuData: Menu[] = [
     id: 4,
     title: "new_arrivals",
     newTab: false,
-    path: "/products/new-arrivals",
+    path: "new-arrivals-products",
   },
   {
     id: 5,
     title: "best_offers",
     newTab: false,
-    path: "/products/best-offers",
+    path: "best-offers-products",
   },
 ];
