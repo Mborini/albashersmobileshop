@@ -106,6 +106,37 @@ const config: Config = {
         DEFAULT: "#F27430",
         dark: "#E1580E",
       },
+      purple: {
+        DEFAULT: "#A855F7",
+        dark: "#9333EA",
+        light: "#D8B4FE",
+        "light-2": "#E9D5FF",
+      },
+      pink: {
+        DEFAULT: "#F472B6",
+        dark: "#EC4899",
+        light: "#F9A8D4",
+        "light-2": "#FCE7F3",
+      },
+      violet: {
+        DEFAULT: "#8B5CF6",
+        dark: "#7C3AED",
+        light: "#C4B5FD",
+        "light-2": "#E0D7FE",
+      },
+      indigo: {
+        DEFAULT: "#6366F1",
+        dark: "#4F46E5",
+        light: "#818CF8",
+        "light-2": "#C7D2FE",
+      },
+      amber: {
+        DEFAULT: "#F59E0B",
+        dark: "#D97706",
+        light: "#FBBF24",
+        "light-2": "#FEF08A",
+      },
+     
     },
     screens: {
       xsm: "375px",

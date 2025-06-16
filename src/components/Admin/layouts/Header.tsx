@@ -9,7 +9,7 @@ export default function AdminHeader() {
 
         {/* Centered title */}
         <h2
-          className="flex-1 text-center text-dark font-extrabold tracking-wide select-none"
+          className="flex-1 text-center text-dark font-extrabold select-none"
           style={{ userSelect: 'none' }}
         >
           Management System
@@ -28,8 +28,8 @@ export default function AdminHeader() {
             <span
               className="text-dark font-medium no-underline cursor-pointer transition-colors duration-150 hover:text-blue-300 hover:underline"
             >
-              Go to Site
-            </span>
+              Go to Website
+                          </span>
           </Link>
         </div>
       </div>
