@@ -5,7 +5,6 @@ export async function POST(req) {
       const body = await req.json();
       const {  color_id, product_id } = body;
   
-      console.log("Received data:", body);
       const client = await pool.connect();
       const result = await client.query(
         'INSERT INTO product_colors (color_id, product_id) VALUES ($1, $2) RETURNING *',

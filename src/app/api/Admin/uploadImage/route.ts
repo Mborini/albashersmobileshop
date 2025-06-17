@@ -33,7 +33,6 @@ async function deleteOldMedia(oldMediaUrl: string | null) {
 
   try {
     const result = await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
-    console.log("Deleted old media:", result);
     return result;
   } catch (error) {
     console.error("Error deleting old media:", error);
@@ -46,7 +45,6 @@ export async function POST(request: Request) {
   const oldImageUrl = formData.get("oldImageUrl") as string | null;
   const folder = (formData.get("folder") as string) || "Ads";
 
-  console.log("Received oldImageUrl:", oldImageUrl);
 
   if (oldImageUrl) {
     await deleteOldMedia(oldImageUrl);
