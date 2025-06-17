@@ -11,11 +11,19 @@ import {
 } from "@mantine/core";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
-import { FaEye, FaMinusCircle, FaPlusCircle, FaRegImages } from "react-icons/fa";
+import {
+  FaEye,
+  FaMinusCircle,
+  FaPlusCircle,
+  FaRegImages,
+} from "react-icons/fa";
 import ProductViewModal from "./model/ProductViewModal";
 import EditSubCategoryModal from "./model/EditSubCategoryModal";
 import { LuFolderTree } from "react-icons/lu";
 import EditImegesModal from "./model/EditImegesModal";
+import EditColorsModal from "./model/EditColorsModal";
+import { MdFormatColorText } from "react-icons/md";
+import { IoColorPaletteOutline } from "react-icons/io5";
 
 export default function List({ product, onEdit, onDelete, onProductUpdate }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -35,6 +43,10 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
     setSelectedProduct(product);
     setModalType("edit-imgs");
   };
+  const handleEditColors = (product) => {
+    setSelectedProduct(product);
+    setModalType("edit-colors");
+  };
 
   const handleProductUpdate = (updatedProduct) => {
     if (onProductUpdate) {
@@ -47,7 +59,7 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
     setModalType(null);
     setSelectedProduct(null);
   };
-
+  console.log(product, "product in list component");
   return (
     <>
       {product.map((product) => (
@@ -72,19 +84,25 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
                   title={product.category_name}
                   bullet={<FaPlusCircle size={18} color="green" />}
                 >
-                  <Text c="dimmed" size="sm">Category</Text>
+                  <Text c="dimmed" size="sm">
+                    Category
+                  </Text>
                 </Timeline.Item>
                 <Timeline.Item
                   title={product.subcategory_name}
                   bullet={<FaPlusCircle size={18} color="green" />}
                 >
-                  <Text c="dimmed" size="sm">Sub Category</Text>
+                  <Text c="dimmed" size="sm">
+                    Sub Category
+                  </Text>
                 </Timeline.Item>
                 <Timeline.Item
                   title={product.product_name}
                   bullet={<FaMinusCircle size={18} color="red" />}
                 >
-                  <Text c="dimmed" size="sm">Product</Text>
+                  <Text c="dimmed" size="sm">
+                    Product
+                  </Text>
                 </Timeline.Item>
               </Timeline>
             </div>
@@ -134,7 +152,7 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
                 size="md"
                 onClick={() => handleEditSubCategory(product)}
               >
-                <LuFolderTree style={{ fontSize: 22 }} />
+                <LuFolderTree color="navy" style={{ fontSize: 22 }} />
               </ActionIcon>
             </Tooltip>
 
@@ -146,7 +164,19 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
                 size="md"
                 onClick={() => handleEditImgs(product)}
               >
-                <FaRegImages style={{ fontSize: 22 }} />
+                <FaRegImages color="green" style={{ fontSize: 22 }} />
+              </ActionIcon>
+            </Tooltip>
+
+            <Tooltip label="Edit Colors" withArrow radius={5}>
+              <ActionIcon
+                variant="light"
+                radius="xl"
+                color="blue"
+                size="md"
+                onClick={() => handleEditColors(product)}
+              >
+                <IoColorPaletteOutline color="teal" style={{ fontSize: 22 }} />
               </ActionIcon>
             </Tooltip>
 
@@ -212,7 +242,12 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
         opened={modalType === "edit-imgs"}
         onClose={closeModal}
         product={selectedProduct}
-        onProductUpdate={handleProductUpdate} // ✅ أضفناها هنا
+        onProductUpdate={handleProductUpdate}
+      />
+      <EditColorsModal
+        opened={modalType === "edit-colors"}
+        onClose={closeModal}
+        product={selectedProduct}
       />
     </>
   );

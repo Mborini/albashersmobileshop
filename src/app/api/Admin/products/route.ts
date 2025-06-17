@@ -4,10 +4,8 @@ export async function GET() {
   let client;
   try {
     client = await pool.connect();
-  
 
-    const query = `
-SELECT 
+    const query = `SELECT 
     p.id AS product_id,
     p.title AS product_name,
     p.description,
@@ -24,7 +22,14 @@ SELECT
         DISTINCT JSONB_BUILD_OBJECT('id', pi.id, 'image_url', pi.image_url)
       ) FILTER (WHERE pi.id IS NOT NULL),
       '[]'::jsonb
-    ) AS product_images
+    ) AS product_images,
+    -- هنا نضيف ألوان المنتج
+    COALESCE(
+      JSONB_AGG(
+        DISTINCT JSONB_BUILD_OBJECT('id', clr.id, 'name', clr.name, 'hex_code', clr.hex_code)
+      ) FILTER (WHERE clr.id IS NOT NULL),
+      '[]'::jsonb
+    ) AS product_colors
 FROM products p
 LEFT JOIN brands b ON p.brand_id = b.id
 LEFT JOIN "subCategories" sc ON p."subcategory_id" = sc.id
@@ -32,6 +37,9 @@ LEFT JOIN categories c ON sc.category_id = c.id
 LEFT JOIN product_attributes pa ON p.id = pa.product_id
 LEFT JOIN attributes a ON pa.attribute_id = a.id
 LEFT JOIN product_images pi ON p.id = pi.product_id
+-- ربط جدول ألوان المنتج
+LEFT JOIN product_colors pc ON p.id = pc.product_id
+LEFT JOIN colors clr ON pc.color_id = clr.id
 GROUP BY 
     p.id, p.title, p.description, p.price, p."discountedPrice",
     b.name, sc.name, c.name
@@ -40,8 +48,7 @@ ORDER BY p.id;
     `;
 
     const res = await client.query(query);
-    
-  
+
     return new Response(JSON.stringify(res.rows), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -57,8 +64,6 @@ ORDER BY p.id;
   }
 }
 
-
-
 export async function POST(req: Request) {
   const client = await pool.connect();
 
@@ -73,7 +78,7 @@ export async function POST(req: Request) {
       discountedPrice,
       attributes,
       is_new_arrival,
-      is_best_offer
+      is_best_offer,
     } = body;
 
     if (
@@ -107,7 +112,7 @@ export async function POST(req: Request) {
       price,
       discountedPrice,
       is_new_arrival,
-      is_best_offer
+      is_best_offer,
     ]);
 
     const product = productResult.rows[0];
@@ -142,6 +147,3 @@ export async function POST(req: Request) {
     client.release();
   }
 }
-
-
-
