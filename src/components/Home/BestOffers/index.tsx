@@ -53,7 +53,6 @@ const BestSaller = () => {
 
     fetchNewArrivalProduct();
   }, []);
-
   return (
     <section className="overflow-hidden mt-24">
       {newArrivalProduct.length === 0 ? (

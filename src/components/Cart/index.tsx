@@ -33,6 +33,9 @@ const Cart = () => {
                     <div className="min-w-[400px]">
                       <p className="text-dark">Product</p>
                     </div>
+                    <div className="min-w-[180px]">
+                      <p className="text-dark">Color</p>
+                    </div>
 
                     <div className="min-w-[180px]">
                       <p className="text-dark">Price</p>

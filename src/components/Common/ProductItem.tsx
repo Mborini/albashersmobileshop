@@ -16,7 +16,7 @@ const ProductItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
 
   const dispatch = useDispatch<AppDispatch>();
-
+console.log(item, "item in product item component");
   // update the QuickView state
   const handleQuickViewUpdate = () => {
     dispatch(updateQuickView({ ...item }));
@@ -27,6 +27,7 @@ const ProductItem = ({ item }: { item: Product }) => {
       addItemToCart({
         ...item,
         quantity: 1,
+        color: item.color 
       })
     );
   };
@@ -37,6 +38,7 @@ const ProductItem = ({ item }: { item: Product }) => {
         ...item,
         status: "available",
         quantity: 1,
+      
       })
     );
   };

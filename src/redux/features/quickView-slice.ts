@@ -13,7 +13,8 @@ const initialState = {
     img: "",
     id: 0,
     brand_name: "",
-    images: []
+    images: [],
+    colors: [],
   } as Product,
 } as InitialState;
 

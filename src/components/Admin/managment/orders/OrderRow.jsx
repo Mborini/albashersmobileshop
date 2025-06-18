@@ -1,14 +1,8 @@
 import React, { useState } from "react";
-import {
-  Table,
-  Button,
-  Text,
-  Badge,
-  Group,
-  Popover,
-} from "@mantine/core";
+import { Table, Button, Text, Badge, Group, Popover } from "@mantine/core";
 import { FaInfo } from "react-icons/fa";
 import dayjs from "dayjs";
+import { CiNoWaitingSign } from "react-icons/ci";
 
 function OrderRow({ order, onComplete, onDecline }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
@@ -69,15 +63,34 @@ function OrderRow({ order, onComplete, onDecline }) {
       <Table.Td>
         {order.cart_items.length > 0 ? (
           <Group gap={4}>
-            <div>
-              <Text size="sm" fw={500}>
+            <div className="space-y-1">
+              <Text size="sm" fw={600} className="text-gray-900">
                 {order.cart_items[0].title}
               </Text>
-              <Text size="xs" c="dimmed">
-                Qty: {order.cart_items[0].quantity} | Price:{" "}
-                {order.cart_items[0].discountedPrice} JOD
-              </Text>
+
+              <div className="flex items-center gap-3 text-xs text-gray-500">
+                <span>Qty: {order.cart_items[0].quantity}</span>
+                <span>
+                  | Price:{" "}
+                  <span className="font-semibold text-black">
+                    {order.cart_items[0].discountedPrice} JOD
+                  </span>
+                </span>
+
+                <span className="flex items-center gap-1">
+                  | Color:
+                  {order.cart_items[0].color ? (
+                    <span
+                      style={{ backgroundColor: order.cart_items[0].color }}
+                      className="w-4 h-4 rounded-full border border-gray-300 shadow-sm cursor-pointer hover:scale-110 transition-transform"
+                    ></span>
+                  ) : (
+                    <CiNoWaitingSign className="text-gray-400" size={16} />
+                  )}
+                </span>
+              </div>
             </div>
+
             {order.cart_items.length > 1 && (
               <Popover width={250} position="bottom" withArrow shadow="md">
                 <Popover.Target>
@@ -93,6 +106,25 @@ function OrderRow({ order, onComplete, onDecline }) {
                       </Text>
                       <Text size="xs" c="dimmed">
                         Qty: {item.quantity} | Price: {item.discountedPrice} JOD
+                      </Text>
+                      <Text size="xs" c="dimmed">
+                        Color:{" "}
+                        {item.color ? (
+                          <span
+                            style={{
+                              backgroundColor: item.color,
+                              display: "inline-block",
+                              width: 12,
+                              height: 12,
+                              borderRadius: "50%",
+                            }}
+                          ></span>
+                        ) : (
+                          <CiNoWaitingSign
+                            size={16}
+                            className="inline-block align-middle text-gray-400"
+                          />
+                        )}
                       </Text>
                     </div>
                   ))}
@@ -117,7 +149,9 @@ function OrderRow({ order, onComplete, onDecline }) {
       <Table.Td>
         <Button
           size="xs"
-          color={order.isdeclined ? "gray" : order.isCompleted ? "yellow" : "green"}
+          color={
+            order.isdeclined ? "gray" : order.isCompleted ? "yellow" : "green"
+          }
           variant="light"
           onClick={() => onComplete(order.id)}
           style={{

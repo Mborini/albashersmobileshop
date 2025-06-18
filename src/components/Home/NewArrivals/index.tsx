@@ -49,7 +49,6 @@ const NewArrival = () => {
 
     fetchNewArrivalProduct();
   }, []);
-
   return (
     <section className="overflow-hidden pt-15">
       <div

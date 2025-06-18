@@ -25,6 +25,7 @@ const SingleItem = ({ item }: { item: Product }) => {
       addItemToCart({
         ...item,
         quantity: 1,
+        color: item.color 
       })
     );
   };
@@ -35,6 +36,7 @@ const SingleItem = ({ item }: { item: Product }) => {
         ...item,
         status: "available",
         quantity: 1,
+      
       })
     );
   };

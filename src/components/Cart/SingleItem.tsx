@@ -7,6 +7,7 @@ import {
 } from "@/redux/features/cart-slice";
 
 import Image from "next/image";
+import { CiNoWaitingSign } from "react-icons/ci";
 
 const SingleItem = ({ item }) => {
   const [quantity, setQuantity] = useState(item.quantity);
@@ -37,25 +38,36 @@ const SingleItem = ({ item }) => {
         <div className="flex items-center justify-between gap-5">
           <div className="w-full flex items-center gap-5.5">
             <div className="flex items-center justify-center rounded-[5px] bg-gray-2 max-w-[80px] w-full h-17.5">
-            {item.images[0] && (
-            <Image
-              src={item.images[0]}
-              className="object-cover"
-              width={90}
-              height={90}
-              alt="Product image"
-            />
-          )}
+              {item.images[0] && (
+                <Image
+                  src={item.images[0]}
+                  className="object-cover"
+                  width={90}
+                  height={90}
+                  alt="Product image"
+                />
+              )}
             </div>
 
             <div>
               <h3 className="text-dark ease-out duration-200 hover:text-blue">
-                 {item.title} 
+                {item.title}
               </h3>
             </div>
           </div>
         </div>
       </div>
+
+      <div className="min-w-[180px]">
+  {item.color ? (
+    <p
+      style={{ backgroundColor: item.color }}
+      className="w-4 h-4 rounded-full cursor-pointer hover:scale-110 transition-transform"
+    ></p>
+  ) : (
+    <CiNoWaitingSign size={24} />
+  )}
+</div>
 
       <div className="min-w-[180px]">
         <p className="text-dark">${item.discountedPrice}</p>

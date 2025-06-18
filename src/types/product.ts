@@ -3,7 +3,11 @@ export type Attribute = {
   name?: string;
   value: string;
 };
-
+export type Colors = {
+  id: number;
+  name: string;
+  hex_code: string;
+};
 export type Product = {
   id?: number;
   title: string;
@@ -21,4 +25,5 @@ export type Product = {
   is_best_offer?: string;
   name?: string;
   value: string;
+  colors:Colors[]
 };

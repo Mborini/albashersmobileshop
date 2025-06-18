@@ -16,18 +16,21 @@ import PreviewSliderModal from "@/components/Common/PreviewSlider";
 
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
+import { Toaster } from "react-hot-toast";
 
-
-export default function SiteLayout({ children }: { children: React.ReactNode }) {
+export default function SiteLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const [loading, setLoading] = useState<boolean>(true);
- 
 
   useEffect(() => {
     setTimeout(() => setLoading(false), 1000);
   }, []);
 
   return (
-    <html  suppressHydrationWarning={true}>
+    <html suppressHydrationWarning={true}>
       <body>
         {loading ? (
           <PreLoader />
@@ -46,6 +49,18 @@ export default function SiteLayout({ children }: { children: React.ReactNode }) 
                 </ModalProvider>
               </CartModalProvider>
             </ReduxProvider>
+            <Toaster
+              position="top-center"
+              toastOptions={{
+                duration: 3000,
+                style: {
+                  zIndex: 99999, 
+                  background: "red",
+                  color: "#fff",
+                  fontFamily: "Euclid Circular A",
+                },
+              }}
+            />
             <ScrollToTop />
             <Footer />
           </>

@@ -8,6 +8,8 @@ export type CartItem = {
   discountedPrice: number;
   quantity: number;
   images: string[];
+  color: string; 
+  
 };
 
 type InitialState = {

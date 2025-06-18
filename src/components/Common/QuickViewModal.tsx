@@ -10,13 +10,15 @@ import { usePreviewSlider } from "@/app/context/PreviewSliderContext";
 import { resetQuickView } from "@/redux/features/quickView-slice";
 import { updateproductDetails } from "@/redux/features/product-details";
 import { VscError } from "react-icons/vsc";
-import { CiCircleCheck } from "react-icons/ci";
+import { CiCircleCheck, CiNoWaitingSign } from "react-icons/ci";
 import { Badge } from "@mantine/core";
+import toast, { Toaster } from "react-hot-toast";
 
 const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
   const { openPreviewModal } = usePreviewSlider();
   const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -32,16 +34,26 @@ const QuickViewModal = () => {
     openPreviewModal();
   };
   // add to cart
-  const handleAddToCart = () => {
-    dispatch(
-      addItemToCart({
-        ...product,
-        quantity,
-      })
-    );
+  // add to cart
+const handleAddToCart = () => {
+  // إذا المنتج له ألوان ولم يتم اختيار لون
+  if (product.colors?.length > 0 && !selectedColor) {
+    toast.error("يرجى اختيار لون قبل إضافة المنتج إلى السلة.");
 
-    closeModal();
-  };
+    return;
+  }
+  dispatch(
+    addItemToCart({
+      ...product,
+      quantity,
+      color: selectedColor, // ممكن يكون null إذا ما فيه ألوان، وهذا عادي
+    })
+  );
+  setSelectedColor(null); // Reset selected color after adding to cart
+
+  closeModal();
+};
+
 
   useEffect(() => {
     // closing modal while clicking outside
@@ -61,11 +73,10 @@ const QuickViewModal = () => {
       setQuantity(1);
     };
   }, [isModalOpen, closeModal]);
-
   return (
     <div
       className={`${
-        isModalOpen ? "z-99999" : "hidden"
+        isModalOpen ? "z-9999" : "hidden"
       } fixed top-0 left-0 overflow-y-auto no-scrollbar w-full h-screen sm:py-20 xl:py-25 2xl:py-[230px] bg-dark/70 sm:px-8 px-4 py-5`}
     >
       <div className="flex items-center justify-center ">
@@ -178,7 +189,30 @@ const QuickViewModal = () => {
                 </div>
               </div>
               <p>{product.description}</p>
-              {/* //attributes Array */}
+              <div className="mt-5">
+                <h4 className="font-semibold text-lg text-dark mb-3.5">
+                  Colors
+                </h4>
+                {product.colors && product.colors.length > 0 ? (
+                  <div className="flex gap-3 flex-wrap">
+                    {product.colors.map((color) => (
+                      <div
+                        key={color.id}
+                        className={`w-4 h-4 rounded-full cursor-pointer transition-transform hover:scale-110 ${
+                          selectedColor === color.hex_code
+                            ? "ring-2 ring-black"
+                            : ""
+                        }`}
+                        style={{ backgroundColor: color.hex_code }}
+                        title={color.name}
+                        onClick={() => setSelectedColor(color.hex_code)}
+                      ></div>
+                    ))}
+                  </div>
+                ) : (
+                  <CiNoWaitingSign />
+                )}
+              </div>
               {product.attributes &&
                 Object.keys(product.attributes).length > 0 && (
                   <div className="mt-5">
