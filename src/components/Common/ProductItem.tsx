@@ -17,18 +17,19 @@ const ProductItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
 
   const dispatch = useDispatch<AppDispatch>();
-  console.log(item, "item in product item component");
   // update the QuickView state
   const handleQuickViewUpdate = () => {
     dispatch(updateQuickView({ ...item }));
   };
   // add to cart
   const handleAddToCart = () => {
+  
+
     dispatch(
       addItemToCart({
         ...item,
         quantity: 1,
-        color: item.color,
+        color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
       })
     );
   };
@@ -134,7 +135,7 @@ const ProductItem = ({ item }: { item: Product }) => {
               {item.colors.map((color) => (
                 <div
                   key={color.id}
-                  className={`w-4 h-4 rounded-full cursor-pointer transition-transform hover:scale-110 `}
+                  className={`w-3 h-3 rounded-full cursor-pointer transition-transform hover:scale-110 `}
                   style={{ backgroundColor: color.hex_code }}
                   title={color.name}
                 ></div>

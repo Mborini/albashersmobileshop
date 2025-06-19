@@ -10,6 +10,8 @@ import { AppDispatch } from "@/redux/store";
 import Link from "next/link";
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
+import { CiNoWaitingSign } from "react-icons/ci";
+import { Badge } from "@mantine/core";
 const SingleGridItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t } = useTranslation();
@@ -26,6 +28,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
       addItemToCart({
         ...item,
         quantity: 1,
+        color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
       })
     );
   };
@@ -117,50 +120,39 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         </div>
       </div>
 
-      <div dir="ltr" className="flex items-center gap-2.5 mb-2">
-        <div className="flex items-center gap-1">
-          <Image
-            src="/images/icons/icon-star.svg"
-            alt="star icon"
-            width={15}
-            height={15}
-          />
-          <Image
-            src="/images/icons/icon-star.svg"
-            alt="star icon"
-            width={15}
-            height={15}
-          />
-          <Image
-            src="/images/icons/icon-star.svg"
-            alt="star icon"
-            width={15}
-            height={15}
-          />
-          <Image
-            src="/images/icons/icon-star.svg"
-            alt="star icon"
-            width={15}
-            height={15}
-          />
-          <Image
-            src="/images/icons/icon-star.svg"
-            alt="star icon"
-            width={15}
-            height={15}
-          />
-        </div>
-
-        <p className="text-custom-sm">({item.brand_name})</p>
+      <div className="flex gap-3 justify-between ">
+        <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
+          <Link href="/shop-details"> {item.title} </Link>
+        </h3>{" "}
+        <Badge
+          size="md"
+          variant="gradient"
+          gradient={{ from: "green", to: "lime", deg: 360 }}
+        >
+          {item.brand_name}{" "}
+        </Badge>
       </div>
-
-      <h3
-        dir="ltr"
-        className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5"
-      >
-        {item.title}
-      </h3>
-
+      <div className="flex items-center gap-2.5 mb-2">
+        <div className="flex items-center gap-1">
+          {item.colors && item.colors.length > 0 ? (
+            <div className="flex gap-3 flex-wrap">
+              {item.colors.map((color) => (
+                <div
+                  key={color.id}
+                  className={`w-3 h-3 rounded-full cursor-pointer transition-transform hover:scale-110 `}
+                  style={{ backgroundColor: color.hex_code }}
+                  title={color.name}
+                ></div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex items-center text-xs gap-2">
+              <p>No Colors</p>
+              <CiNoWaitingSign />
+            </div>
+          )}
+        </div>
+      </div>
       <span dir="ltr" className="flex items-center gap-2 font-medium text-lg">
         <span className="text-dark">JOD {item.price}</span>
         <span className="text-dark-4 line-through">

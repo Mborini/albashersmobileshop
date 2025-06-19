@@ -34,11 +34,12 @@ const SliderImages = () => {
   }, [adsImages]);
 
   if (loading) return <div className="text-center py-10">Loading...</div>;
-  if (adsImages.length === 0) return <div className="text-center py-10">No images found.</div>;
+  if (adsImages.length === 0)
+    return <div className="text-center py-10">No images found.</div>;
 
   return (
-    <section className="w-full h-[100dvh] overflow-hidden">
-      <div className="relative w-full h-full">
+    <section className="w-full h-[40vh] sm:h-[60vh] md:h-[80vh] lg:h-[100vh] overflow-hidden">
+      <div className="relative w-full h-full ">
         <Image
           src={adsImages[currentIndex]?.image_Url || "/fallback.jpg"}
           alt={`Slider Image ${currentIndex + 1}`}
