@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import React, { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
@@ -10,6 +10,7 @@ import BestSeller from "./BestOffers";
 import CounDown from "./Countdown";
 import Testimonials from "./Testimonials";
 import Newsletter from "../Common/Newsletter";
+import SliderImages from "./sliderImages";
 
 const Home = () => {
   const categoriesRef = useRef(null);
@@ -29,7 +30,9 @@ const Home = () => {
 
   return (
     <main>
+      <SliderImages />
       <Hero />
+
       <div ref={categoriesRef}>
         <Categories />
       </div>

@@ -27,7 +27,7 @@ const Hero = () => {
     }
   }
 
-  const sliderImages = adsImages.filter((img) => img.is_slider === true);
+  const sliderImages = adsImages.filter((img) => img.is_slider === true && img.is_main == false);
   const otherImages = adsImages.filter((img) => img.is_slider === false);
 
   if (loading) {

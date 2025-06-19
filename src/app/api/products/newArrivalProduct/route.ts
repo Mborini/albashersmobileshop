@@ -44,7 +44,7 @@ export async function GET() {
 
       GROUP BY p.id, b.name
 
-      LIMIT 8
+      LIMIT 10
     `);
 
     client.release();

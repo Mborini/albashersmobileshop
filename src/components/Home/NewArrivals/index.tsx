@@ -68,7 +68,7 @@ const NewArrival = () => {
           }}
         >
           {/* Optional dark overlay for better text visibility */}
-          <div className="absolute inset-0 bg-black/30 z-0 rounded-xl" />
+          <div className="absolute inset-0  z-0 rounded-xl" />
 
           {/* Content */}
           <div className="relative z-10 flex items-center justify-between" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
@@ -93,7 +93,7 @@ const NewArrival = () => {
         </motion.div>
 
         {/* Product Grid */}
-        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-4 gap-y-6">
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-6">
         {loading
             ? Array.from({ length: 8 }).map((_, i) => (
                 <SkeletonProductItem key={i} />

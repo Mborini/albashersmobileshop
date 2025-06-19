@@ -52,12 +52,15 @@ export default function Search() {
 
     fetchResults();
   }, [debouncedQuery]);
+
   const handelClose = () => {
     setQuery("");
     close();
   };
+
   return (
     <>
+      {/* Glassy Modal */}
       <Modal
         opened={opened}
         onClose={handelClose}
@@ -65,19 +68,37 @@ export default function Search() {
         centered
         radius="md"
         dir={i18n.language === "ar" ? "rtl" : "ltr"}
+        overlayProps={{
+          backgroundOpacity: 0.2,
+          blur: 6,
+        }}
+        styles={{
+          content: {
+            background: "rgba(255, 255, 255, 0.25)",
+            backdropFilter: "blur(15px)",
+            borderRadius: "1rem",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
+          },
+          header: {
+            color: "#333",
+            fontWeight: 600,
+            fontSize: "1.1rem",
+            background: "rgba(255, 255, 255, 0.7)",
+          },
+        }}
       >
         <ScrollArea h={400} type="never">
-          {" "}
-          {/* تمنع ظهور السكور بار */}
           <Stack dir="ltr">
             <TextInput
               autoFocus
-              radius={"md"}
-              variant="filled"
-              placeholder="Search for a product..."
+              radius="md"
+                variant="filled"
+              placeholder={t("search_products")}
               value={query}
               onChange={(e) => setQuery(e.currentTarget.value)}
               dir="ltr"
+               mt="md"
             />
 
             {loading ? (
@@ -89,16 +110,19 @@ export default function Search() {
                 <Box
                   key={product.id}
                   p="xs"
-                  style={{ borderRadius: 8, transition: "0.2s" }}
-                  className="hover:bg-blue-light-5 cursor-pointer"
-                  dir={"ltr"}
+                  style={{
+                    borderRadius: 8,
+                    transition: "0.2s",
+                  }}
+                  className="hover:bg-white/80 bg-white/70 cursor-pointer"
+                  dir="ltr"
                   onClick={() => {
-                    dispatch(updateQuickView(product)); // استخدم اسم الأكشن الصحيح
-                    openModal(); // افتح مودال التفاصيل
-                    handelClose(); // سكّر مودال البحث
+                    dispatch(updateQuickView(product));
+                    openModal();
+                    handelClose();
                   }}
                 >
-                  <Group align="center" >
+                  <Group align="center">
                     {product.images[0] && (
                       <Image
                         src={product.images[0]}
@@ -108,8 +132,8 @@ export default function Search() {
                       />
                     )}
 
-                    <Stack  style={{ flex: 1 }}>
-                      <Group >
+                    <Stack style={{ flex: 1 }}>
+                      <Group>
                         <Text fw={500} size="sm">
                           {product.title}
                         </Text>
@@ -130,21 +154,22 @@ export default function Search() {
         </ScrollArea>
       </Modal>
 
-      <Button
-        variant="outline"
-        radius="lg"
-        onClick={open}
-        className={`flex items-center gap-2 px-3 ${
-          i18n.language === "ar" ? "flex-row-reverse" : "flex-row"
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <FaSearch size={14} />
-          <span className="text-sm hidden sm:inline whitespace-nowrap">
+      {/* Search Button */}
+      <div className="w-full flex justify-center">
+        <Button
+          variant="light"
+          radius="lg"
+          onClick={open}
+          className={`flex items-center gap-2 px-3 py-2 transition-all backdrop-blur-md bg-white/30 border border-white/40 shadow-md hover:bg-white/50 ${
+            i18n.language === "ar" ? "flex-row-reverse" : "flex-row"
+          }`}
+        >
+          <FaSearch color="#000" size={14} />
+          <span className="text-sm hidden sm:inline text-black whitespace-nowrap">
             {t("search_products")}
           </span>
-        </div>
-      </Button>
+        </Button>
+      </div>
     </>
   );
 }
