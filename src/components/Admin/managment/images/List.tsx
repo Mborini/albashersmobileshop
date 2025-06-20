@@ -10,6 +10,8 @@ import {
   Title,
   Loader,
   Center,
+  Box,
+  rem,
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import "@mantine/carousel/styles.css";
@@ -19,7 +21,7 @@ import { FaEdit } from "react-icons/fa";
 
 export default function GridImages({ onEditImage }) {
   const [adsImages, setAdsImages] = useState([]);
-  const [loading, setLoading] = useState(true); // loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadAdsImages();
@@ -37,181 +39,170 @@ export default function GridImages({ onEditImage }) {
     }
   }
 
-  const sliderImages = adsImages.filter((img) => img.is_slider === true && img.is_video === false);
-  const otherImages = adsImages.filter((img) => img.is_slider === false || img.is_video === false);
-  const video= adsImages.filter((img) => img.is_video === true);
+  const mainSliderImages = adsImages.filter(
+    (img) => img.is_slider && img.is_main
+  );
+  const sliderImages = adsImages.filter(
+    (img) => img.is_slider && !img.is_main && !img.is_video
+  );
+  const otherImages = adsImages.filter(
+    (img) => !img.is_slider && !img.is_main && !img.is_video
+  );
+  const videoImages = adsImages.filter((img) => img.is_video);
 
   if (loading) {
     return (
-      <Center style={{ height: "400px" }}>
+      <Center h={400}>
         <Loader size="xl" variant="dots" />
       </Center>
     );
   }
+
+  const ImageCard = ({ item }) => (
+    <Card
+      withBorder
+      radius="md"
+      shadow="sm"
+      padding="md"
+      onClick={() =>
+        onEditImage({
+          id: item.id,
+          name: item.title,
+          image: item.image_Url,
+          description: item.description,
+          price: item.price,
+          discounted_Price: item.discounted_Price,
+        })
+      }
+      style={{ cursor: "pointer" }}
+    >
+      <Grid align="center">
+        <Grid.Col span={{ base: 12, sm: 6 }}>
+          <Text fw={700} size="xl" c="blue">
+            {Math.floor(((item.price - item.discounted_Price) / item.price) * 100)}%
+            Sale Off
+          </Text>
+          <Title order={4} mt="xs">
+            {item.title}
+          </Title>
+          <Text mt="xs" c="dimmed" size="sm">
+            {item.description}
+          </Text>
+          <Text size="lg" mt="sm" fw={700} c="red">
+            ${item.discounted_Price}{" "}
+            <Text span td="line-through" c="gray">
+              ${item.price}
+            </Text>
+          </Text>
+          <Button leftSection={<FaEdit />} mt="md" color="orange">
+            تعديل
+          </Button>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, sm: 6 }}>
+          <Image
+            src={item.image_Url}
+            alt={item.title}
+            fit="contain"
+            radius="sm"
+            h="100%"
+            w="100%"
+          />
+        </Grid.Col>
+      </Grid>
+    </Card>
+  );
+
+  const SliderSection = ({ title, images }) =>
+    images.length > 0 ? (
+      <Box mt="xl">
+        {title && (
+          <Title order={3} mb="md">
+            {title}
+          </Title>
+        )}
+        <Carousel
+          withIndicators
+          slideSize="100%"
+          slideGap="md"
+          loop
+          styles={{
+            indicator: {
+              backgroundColor: "#999",
+              "&[data-active]": {
+                backgroundColor: "#000",
+              },
+            },
+          }}
+        >
+          {images.map((item, index) => (
+            <Carousel.Slide key={index}>
+              <ImageCard item={item} />
+            </Carousel.Slide>
+          ))}
+        </Carousel>
+      </Box>
+    ) : (
+      <Text>No {title?.toLowerCase()} available</Text>
+    );
+
   return (
     <>
-      <Grid gutter="md" align="stretch">
-        {/* Left side: Carousel */}
+      <Grid gutter="md">
         <Grid.Col span={{ base: 12, md: 8 }}>
-          {sliderImages.length > 0 ? (
-            <Carousel
-              withIndicators
-              slideSize="100%"
-              slideGap="md"
-              sx={{
-                ".mantine-Carousel-indicator": {
-                  backgroundColor: "#999",
-                  '&[data-active="true"]': {
-                    backgroundColor: "#000",
-                  },
-                },
-              }}
-            >
-              {sliderImages.map((item, index) => (
-                <Carousel.Slide key={index}>
-                  <Card
-                    shadow="sm"
-                    padding="lg"
-                    radius="md"
-                    withBorder
-                    h="100%"
-                    onClick={() =>
-                      onEditImage({
-                        id: item.id,
-                        name: item.title,
-                        image: item.image_Url,
-                        description: item.description,
-                        price: item.price,
-                        discounted_Price: item.discounted_Price,
-                      })
-                    }
-                    style={{ cursor: "pointer" }}
-                  >
-                    <Grid align="center">
-                      <Grid.Col span={{ base: 12, sm: 6 }}>
-                        <Text size="xl" fw={700} color="blue">
-                          {Math.floor(
-                            ((item.price - item.discounted_Price) /
-                              item.price) *
-                              100
-                          )}
-                          % Sale Off
-                        </Text>
-                        <Title order={3} mt="sm">
-                          {item.title}
-                        </Title>
-                        <Text mt="sm" c="dimmed" size="sm">
-                          {item.description}
-                        </Text>
-                        <Button color="orange" radius="md" mt="md">
-                          <FaEdit />
-                        </Button>
-                      </Grid.Col>
-                      <Grid.Col span={{ base: 12, sm: 6 }}>
-                        <Image
-                          src={item.image_Url}
-                          alt={item.title}
-                          fit="contain"
-                          h="100%"
-                          w="100%"
-                        />
-                      </Grid.Col>
-                    </Grid>
-                  </Card>
-                </Carousel.Slide>
-              ))}
-            </Carousel>
-          ) : (
-            <Text>No slider image available</Text>
-          )}
+          <SliderSection title="Slider Images" images={sliderImages} />
         </Grid.Col>
 
-        {/* Right side: other images */}
         <Grid.Col span={{ base: 12, md: 4 }}>
-          <Stack h="100%" gap="md">
-            {otherImages
-            .map((img) => (
-              <Card
-                key={img.id}
-                shadow="sm"
-                padding="md"
-                radius="md"
-                withBorder
-                onClick={() =>
-                  onEditImage({
-                    id: img.id,
-                    name: img.title,
-                    image: img.image_Url,
-                    description: img.description,
-                    price: img.price,
-                    discounted_Price: img.discounted_Price,
-                  })
-                }
-                style={{ cursor: "pointer" }}
-              >
-                <Grid align="center">
-                  <Grid.Col span={{ base: 12, sm: 6 }}>
-                    <Text fw={500}>{img.title}</Text>
-                    <Text size="xs" c="dimmed">
-                      {img.description}
-                    </Text>
-                    <Text size="lg" c="red" fw={700}>
-                      ${img.discounted_Price}{" "}
-                      <Text span c="gray" td="line-through">
-                        ${img.price}
-                      </Text>
-                    </Text>
-                    <Button color="orange" radius="md" mt="xs">
-                      <FaEdit />
-                    </Button>
-                  </Grid.Col>
-                  <Grid.Col span={{ base: 12, sm: 6 }}>
-                    <Image src={img.image_Url} alt={img.title} fit="contain" />
-                  </Grid.Col>
-                </Grid>
-              </Card>
+          <Stack gap="md">
+            {otherImages.map((img) => (
+              <ImageCard key={img.id} item={img} />
             ))}
           </Stack>
         </Grid.Col>
-      </Grid>
-      {/* Video section below the Grid */}
-     {/* Video section below the Grid */}
-<div style={{ marginTop: "2rem", width: "100%" }}>
-  {video
-    .map((img) => (
-      <Card
-        key={img.id}
-        shadow="sm"
-        padding="md"
-        radius="md"
-        withBorder
-        style={{ marginBottom: "1rem" }}
-      >
-        <video
-          controls
-          width="100%"
-          src={img.image_Url}
-          style={{ borderRadius: "8px" }}
-        >
-          Your browser does not support the video tag.
-        </video>
-        <Button
-          color="orange"
-          mt="md"
-          leftSection={<FaEdit />}
-          onClick={() =>
-            onEditImage({
-              id: img.id,
-              image: img.image_Url,
-            })
-          }
-        >
-          تعديل الفيديو
-        </Button>
-      </Card>
-    ))}
-</div>
 
+        <Grid.Col span={{ base: 12 }}>
+          <SliderSection title="Main Slider Images" images={mainSliderImages} />
+        </Grid.Col>
+
+        <Grid.Col span={12}>
+          {videoImages.length > 0 && (
+            <Box mt="xl">
+              <Title order={3} mb="md">
+                الفيديوهات
+              </Title>
+              <Grid>
+                {videoImages.map((vid) => (
+                  <Grid.Col key={vid.id} span={{ base: 12, sm: 6, md: 4 }}>
+                    <Card withBorder radius="md" shadow="sm" padding="md">
+                      <video
+                        controls
+                        style={{ width: "100%", borderRadius: rem(8) }}
+                        src={vid.image_Url}
+                      >
+                        Your browser does not support the video tag.
+                      </video>
+                      <Button
+                        fullWidth
+                        mt="md"
+                        leftSection={<FaEdit />}
+                        color="orange"
+                        onClick={() =>
+                          onEditImage({
+                            id: vid.id,
+                            image: vid.image_Url,
+                          })
+                        }
+                      >
+                        تعديل الفيديو
+                      </Button>
+                    </Card>
+                  </Grid.Col>
+                ))}
+              </Grid>
+            </Box>
+          )}
+        </Grid.Col>
+      </Grid>
     </>
   );
 }
