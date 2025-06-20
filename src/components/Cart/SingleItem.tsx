@@ -15,7 +15,7 @@ const SingleItem = ({ item }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const handleRemoveFromCart = () => {
-    dispatch(removeItemFromCart(item.id));
+    dispatch(removeItemFromCart({ id: item.id, color: item.color }));
   };
 
   const handleIncreaseQuantity = () => {

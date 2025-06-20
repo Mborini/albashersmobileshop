@@ -58,18 +58,24 @@ export const cart = createSlice({
   initialState,
   reducers: {
     addItemToCart: (state, action: PayloadAction<CartItem>) => {
-      const existingItem = state.items.find((item) => item.id === action.payload.id);
-      if (existingItem) {
+      const existingItem = state.items.find(
+        (item) => item.id === action.payload.id && item.color === action.payload.color
+      );
+            if (existingItem) {
         existingItem.quantity += action.payload.quantity;
       } else {
         state.items.push(action.payload);
       }
       saveCartToLocalStorage(state.items);
     },
-    removeItemFromCart: (state, action: PayloadAction<number>) => {
-      state.items = state.items.filter((item) => item.id !== action.payload);
+    removeItemFromCart: (state, action: PayloadAction<{ id: number; color: string }>) => {
+      state.items = state.items.filter(
+        (item) =>
+          item.id !== action.payload.id || item.color !== action.payload.color
+      );
       saveCartToLocalStorage(state.items);
     },
+    
     updateCartItemQuantity: (
       state,
       action: PayloadAction<{ id: number; quantity: number }>
