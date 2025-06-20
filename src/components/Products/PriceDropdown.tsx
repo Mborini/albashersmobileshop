@@ -1,98 +1,145 @@
+"use client";
+
 import { useState } from "react";
-import RangeSlider from "react-range-slider-input";
-import "react-range-slider-input/dist/style.css";
+import {
+  Box,
+  Text,
+  Flex,
+  Paper,
+  ActionIcon,
+  Collapse,
+  RangeSlider,
+  NumberInput,
+} from "@mantine/core";
 import { useTranslation } from "react-i18next";
+import { IoIosArrowUp } from "react-icons/io";
 
 const PriceDropdown = ({ onPriceChange }) => {
-  const { t, i18n } = useTranslation();
+  const { t } = useTranslation();
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
   const [selectedPrice, setSelectedPrice] = useState<[number, number]>([
     1, 2000,
   ]);
 
-  const handlePriceChange = (values) => {
-    const newPrice = {
-      min: Math.floor(values[0]),
-      max: Math.ceil(values[1]),
-    };
+  const handlePriceChange = (values: [number, number]) => {
+    const [min, max] = values;
+    if (min > max) return;
     setSelectedPrice(values);
-    onPriceChange(newPrice);
+    onPriceChange({ min, max });
+  };
+
+  const handleMinChange = (value: number | "") => {
+    if (value === "") return;
+    const newMin = Math.min(value, selectedPrice[1]);
+    handlePriceChange([newMin, selectedPrice[1]]);
+  };
+
+  const handleMaxChange = (value: number | "") => {
+    if (value === "") return;
+    const newMax = Math.max(value, selectedPrice[0]);
+    handlePriceChange([selectedPrice[0], newMax]);
   };
 
   return (
-    <div className="bg-white shadow-1 rounded-lg">
-      <div
+    <Paper shadow="sm" radius="md" withBorder>
+      {/* Header */}
+      <Flex
+        align="center"
+        justify="space-between"
+        px="md"
+        py="sm"
         onClick={() => setToggleDropdown(!toggleDropdown)}
-        className="cursor-pointer flex items-center justify-between py-3 pl-6 pr-5.5"
+        style={{ cursor: "pointer" }}
       >
-        <p className="text-dark">{t("price")}</p>
-        <button
-          onClick={() => setToggleDropdown(!toggleDropdown)}
-          id="price-dropdown-btn"
-          aria-label="button for price dropdown"
-          className={`text-dark ease-out duration-200 ${
-            toggleDropdown && "rotate-180"
-          }`}
+        <Text fw={500}>{t("price")}</Text>
+        <ActionIcon
+          variant="subtle"
+          color="dark"
+          size="md"
+          aria-label="Toggle price dropdown"
+          style={{
+            transform: toggleDropdown ? "rotate(180deg)" : "rotate(0deg)",
+            transition: "transform 200ms ease",
+          }}
         >
-          <svg
-            className="fill-current"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M4.43057 8.51192C4.70014 8.19743 5.17361 8.161 5.48811 8.43057L12 14.0122L18.5119 8.43057C18.8264 8.16101 19.2999 8.19743 19.5695 8.51192C19.839 8.82642 19.8026 9.29989 19.4881 9.56946L12.4881 15.5695C12.2072 15.8102 11.7928 15.8102 11.5119 15.5695L4.51192 9.56946C4.19743 9.29989 4.161 8.82641 4.43057 8.51192Z"
-              fill=""
-            />
-          </svg>
-        </button>
-      </div>
+          <IoIosArrowUp size={20} />
+        </ActionIcon>
+      </Flex>
 
-      {/* // <!-- dropdown menu --> */}
-      <div
-        dir="ltr"
-        className={`p-6 ${toggleDropdown ? "block" : "hidden"}`}
-      >
-        <div id="pricingOne">
-          <div className="price-range">
-            <RangeSlider
-              id="range-slider-gradient"
-              className="margin-lg"
-              step={1}
+      <Collapse in={toggleDropdown}>
+        <Box px="md" pb="md">
+          {/* Slider */}
+          <RangeSlider
+            value={selectedPrice}
+            onChange={handlePriceChange}
+            min={1}
+            max={1500}
+            step={1}
+            size="sm"
+            color="blue"
+            thumbSize={18}
+          />
+
+          {/* Min/Max Inputs */}
+          <Flex justify="space-between" gap="sm" mt="md">
+            <NumberInput
+              label={t("min")}
+              value={selectedPrice[0]}
+              onChange={handleMinChange}
               min={1}
-              max={2000}
-              value={selectedPrice}
-              onInput={handlePriceChange}
+              max={selectedPrice[1]}
+              step={1}
+              radius="md"
+              size="xs"
+              hideControls={true}
+              leftSection={
+                <Text size="xs" c="dimmed" style={{ marginRight: 4 }}>
+                  JOD:
+                </Text>
+              }
+              leftSectionWidth={50}
+              styles={{
+                input: {
+                  paddingLeft: 60,
+                  fontSize: 13,
+                },
+                section: {
+                  pointerEvents: "none",
+                },
+              }}
             />
 
-            <div className="price-amount flex items-center justify-between pt-4">
-              <div className="text-custom-xs text-dark-4 flex rounded border border-gray-3/80">
-                <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                 JOD
-                </span>
-                <span id="minAmount" className="block px-3 py-1.5">
-                  {selectedPrice[0]}
-                </span>
-              </div>
-
-              <div className="text-custom-xs text-dark-4 flex rounded border border-gray-3/80">
-                <span className="block border-r border-gray-3/80 px-2.5 py-1.5">
-                  JOD
-                </span>
-                <span id="maxAmount" className="block px-3 py-1.5">
-                  {selectedPrice[1]}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+            <NumberInput
+              label={t("max")}
+              value={selectedPrice[1]}
+              onChange={handleMaxChange}
+              min={selectedPrice[0]}
+              max={1500}
+              step={1}
+               radius="md"
+              size="xs"
+              hideControls={true}
+              leftSection={
+                <Text size="xs" c="dimmed" style={{ marginRight: 4 }}>
+                  JOD:
+                </Text>
+              }
+              leftSectionWidth={50}
+              styles={{
+                input: {
+                  paddingLeft: 60,
+                  fontSize: 13,
+                },
+                section: {
+                  pointerEvents: "none",
+                },
+              }}
+            />
+          </Flex>
+        </Box>
+      </Collapse>
+    </Paper>
   );
 };
 

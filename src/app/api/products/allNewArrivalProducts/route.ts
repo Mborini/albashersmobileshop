@@ -3,34 +3,27 @@ import pool from "../../../lib/db";
 export async function GET() {
   try {
     const client = await pool.connect();
-  
 
     const productRes = await client.query(`
       SELECT 
         p.*, 
         b.name AS brand_name,
-    
-        -- تجميع الصفات ككائن JSON
         COALESCE(
           jsonb_object_agg(a.name, pa.value) 
           FILTER (WHERE a.name IS NOT NULL), 
           '{}'::jsonb
         ) AS attributes,
-    
-        -- تجميع الصور بدون تكرار
         COALESCE(
           array_agg(DISTINCT pi.image_url) 
           FILTER (WHERE pi.image_url IS NOT NULL), 
           '{}'
         ) AS images,
-    
         COALESCE(
           JSONB_AGG(
             DISTINCT JSONB_BUILD_OBJECT('id', clr.id, 'name', clr.name, 'hex_code', clr.hex_code)
           ) FILTER (WHERE clr.id IS NOT NULL),
           '[]'::jsonb
         ) AS colors
-    
       FROM products p
       INNER JOIN brands b ON p.brand_id = b.id
       LEFT JOIN product_images pi ON pi.product_id = p.id
@@ -38,21 +31,29 @@ export async function GET() {
       LEFT JOIN attributes a ON pa.attribute_id = a.id
       LEFT JOIN product_colors pc ON pc.product_id = p.id
       LEFT JOIN colors clr ON pc.color_id = clr.id
-    
       WHERE p.is_new_arrival = true
-    
       GROUP BY p.id, b.name
     `);
-    
+
     const products = productRes.rows;
 
-    // 2. Extract unique brand IDs from those products
-    const brandIds = [...new Set(products.map((p) => p.brand_id))];
+    // استخراج جميع الألوان من المنتجات
+    const allColors = products.flatMap(p => p.colors || []);
 
+    // إزالة التكرارات بناءً على id
+    const uniqueColorsMap = new Map();
+    for (const color of allColors) {
+      if (!uniqueColorsMap.has(color.id)) {
+        uniqueColorsMap.set(color.id, color);
+      }
+    }
+    const colors = Array.from(uniqueColorsMap.values());
+
+    // استخراج الماركات
+    const brandIds = [...new Set(products.map((p) => p.brand_id))];
     let brands = [];
 
     if (brandIds.length > 0) {
-      // 3. Get brand details for those IDs
       const brandQuery = `
         SELECT id, name 
         FROM brands 
@@ -65,7 +66,7 @@ export async function GET() {
 
     client.release();
 
-    return new Response(JSON.stringify({ products, brands }), {
+    return new Response(JSON.stringify({ products, brands, colors }), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

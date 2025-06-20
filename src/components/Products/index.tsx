@@ -1,7 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import CustomSelect from "./CustomSelect";
 import BrandDropdown from "./BrandDropdown";
 import ColorsDropdwon from "./ColorsDropdwon";
 import PriceDropdown from "./PriceDropdown";
@@ -16,14 +15,17 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { Empty } from "antd";
 import Pagination from "../Common/pagination";
 import { TextInput } from "@mantine/core";
-import { TbLayoutList } from "react-icons/tb";
 import { IoGridOutline } from "react-icons/io5";
+import { TbLayoutList } from "react-icons/tb";
 import { useTranslation } from "react-i18next";
-const Product = () => {
+const NewArrivalProduct = () => {
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
   const [product, setProduct] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [colors, setColors] = useState([]);
+  const { t } = useTranslation();
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState<{
@@ -31,17 +33,15 @@ const Product = () => {
     max: number;
   } | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const [searchTerm, setSearchTerm] = useState("");
- const { t, i18n } = useTranslation();
   const itemsPerPage = 6;
-
+  const [searchTerm, setSearchTerm] = useState("");
   const [stickyMenu, setStickyMenu] = useState(false);
   const searchParams = useSearchParams();
   const subCategoryId = searchParams.get("subCategoryId");
+  const [loading, setLoading] = useState(true);
   const selectedName = useSelector(
     (state: RootState) => state.subCategory.selectedSubCategoryName
   );
-  const [loading, setLoading] = useState(true);
   const handleStickyMenu = () => {
     if (window.scrollY >= 80) {
       setStickyMenu(true);
@@ -53,11 +53,6 @@ const Product = () => {
     setSelectedBrands([]);
     setSelectedPrice(null);
   };
-  const options = [
-    { label: "Latest Products", value: "0" },
-    { label: "Best Selling", value: "1" },
-    { label: "Old Products", value: "2" },
-  ];
 
   useEffect(() => {
     const fetchSubCategories = async () => {
@@ -67,8 +62,10 @@ const Product = () => {
           throw new Error("Failed to fetch product");
         }
         const data = await response.json();
+
         setProduct(data.products);
         setBrands(data.brands);
+        setColors(data.colors);
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -78,9 +75,10 @@ const Product = () => {
 
     fetchSubCategories();
   }, []);
+
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedBrands, selectedPrice]);
+  }, [selectedBrands, selectedPrice, selectedColor]);
 
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -88,9 +86,13 @@ const Product = () => {
   );
 
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-
   useEffect(() => {
     let filtered = [...product];
+    if (selectedColor) {
+      filtered = filtered.filter((p) =>
+        (p.colors || []).some((c) => c.hex_code === selectedColor)
+      );
+    }
 
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand_name));
@@ -109,7 +111,7 @@ const Product = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [selectedBrands, selectedPrice, searchTerm, product]);
+  }, [selectedBrands, selectedPrice, selectedColor, searchTerm, product]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
@@ -132,12 +134,11 @@ const Product = () => {
   return (
     <>
       <Breadcrumb
-       
         title={`${t("explore_products_of")} ${selectedName}`}
         pages={[selectedName, "/", "products"]}
       />
-      <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-              <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+      <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]">
+        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex gap-7.5">
             {/* <!-- Sidebar Start --> */}
             <div
@@ -186,29 +187,35 @@ const Product = () => {
                     brands={brands}
                     onBrandChange={setSelectedBrands}
                   />
+                  {/* <!-- gender box --> */}
 
-                  <ColorsDropdwon />
+                  {/* // <!-- color box --> */}
+                  <ColorsDropdwon
+                    colors={colors}
+                    onColorChange={setSelectedColor}
+                  />
 
+                  {/* // <!-- price range box --> */}
                   <PriceDropdown onPriceChange={setSelectedPrice} />
                 </div>
               </form>
             </div>
+            {/* // <!-- Sidebar End --> */}
 
             {/* // <!-- Content Start --> */}
             <div className="xl:max-w-[870px] w-full">
               <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
                 <div className="flex items-center justify-between">
                   {/* <!-- top bar left --> */}
-                  <div dir="ltr" className="flex flex-wrap items-center gap-4">
+                  <div className="flex flex-wrap items-center gap-4">
                     <TextInput
                       variant="filled"
                       radius="md"
-                      placeholder={t("search_products")}
+                      placeholder="Search products"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.currentTarget.value)}
                     />
                   </div>
-
                   {/* <!-- top bar right --> */}
                   <div className="flex items-center gap-2.5">
                     <button
@@ -324,4 +331,4 @@ const Product = () => {
   );
 };
 
-export default Product;
+export default NewArrivalProduct;

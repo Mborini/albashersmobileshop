@@ -52,11 +52,22 @@ export async function GET(
 
       const productsResult = await client.query(productsQuery, [slug]);
       const brandsResult = await client.query(brandsQuery, [slug]);
+      const allColors = productsResult.rows.flatMap((p) => p.colors || []);
 
+      // إزالة التكرارات بناءً على id
+      const uniqueColorsMap = new Map();
+      for (const color of allColors) {
+        if (!uniqueColorsMap.has(color.id)) {
+          uniqueColorsMap.set(color.id, color);
+        }
+      }
+      const colors = Array.from(uniqueColorsMap.values());
+  
       return new Response(
         JSON.stringify({
           products: productsResult.rows,
           brands: brandsResult.rows,
+          colors: colors,
         }),
         {
           status: 200,

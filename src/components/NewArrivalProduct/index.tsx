@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import CustomSelect from "./CustomSelect";
+
 import BrandDropdown from "./BrandDropdown";
 import ColorsDropdwon from "./ColorsDropdwon";
 import PriceDropdown from "./PriceDropdown";
@@ -23,6 +23,8 @@ const NewArrivalProduct = () => {
   const [productSidebar, setProductSidebar] = useState(false);
   const [product, setProduct] = useState([]);
   const [brands, setBrands] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
   const [selectedPrice, setSelectedPrice] = useState<{
@@ -48,12 +50,7 @@ const NewArrivalProduct = () => {
     setSelectedBrands([]);
     setSelectedPrice(null);
   };
-  const options = [
-    { label: "Latest Products", value: "0" },
-    { label: "Best Selling", value: "1" },
-    { label: "Old Products", value: "2" },
-  ];
-
+ 
   useEffect(() => {
     const fetchSubCategories = async () => {
       try {
@@ -65,6 +62,8 @@ const NewArrivalProduct = () => {
 
         setProduct(data.products);
         setBrands(data.brands);
+        setColors(data.colors);
+        
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -77,7 +76,7 @@ const NewArrivalProduct = () => {
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [selectedBrands, selectedPrice]);
+  }, [selectedBrands, selectedPrice, selectedColor]);
 
   const paginatedProducts = filteredProducts.slice(
     (currentPage - 1) * itemsPerPage,
@@ -87,7 +86,12 @@ const NewArrivalProduct = () => {
   const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
   useEffect(() => {
     let filtered = [...product];
-
+    if (selectedColor) {
+      filtered = filtered.filter((p) =>
+        (p.colors || []).some((c) => c.hex_code === selectedColor)
+      );
+    }
+    
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand_name));
     }
@@ -105,7 +109,7 @@ const NewArrivalProduct = () => {
     }
 
     setFilteredProducts(filtered);
-  }, [selectedBrands, selectedPrice, searchTerm, product]);
+  }, [selectedBrands, selectedPrice, selectedColor, searchTerm, product]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleStickyMenu);
@@ -184,7 +188,7 @@ const NewArrivalProduct = () => {
                   {/* <!-- gender box --> */}
 
                   {/* // <!-- color box --> */}
-                  <ColorsDropdwon />
+                  <ColorsDropdwon colors={colors} onColorChange={setSelectedColor} />
 
                   {/* // <!-- price range box --> */}
                   <PriceDropdown onPriceChange={setSelectedPrice} />
