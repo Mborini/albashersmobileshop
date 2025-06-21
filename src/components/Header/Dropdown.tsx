@@ -1,4 +1,5 @@
 "use client";
+
 import { useState } from "react";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
@@ -9,9 +10,8 @@ const Dropdown = ({ menuItem, stickyMenu }) => {
   const pathUrl = usePathname();
   const isActive = pathUrl.includes(menuItem.title);
 
-  const mainTextColor = stickyMenu ? "text-black" : "text-white";
   const dropdownBgColor = stickyMenu ? "bg-white" : "bg-blue-600";
-  const dropdownItemText = stickyMenu ? "text-black" : "text-white";
+  const dropdownItemText = "text-black";
 
   return (
     <li
@@ -21,7 +21,7 @@ const Dropdown = ({ menuItem, stickyMenu }) => {
       {/* Main button */}
       <div
         className={`flex items-center justify-between gap-2 text-custom-sm font-medium capitalize ${
-          stickyMenu ? "xl:py-4 text-black" : "xl:py-6 text-white"
+          stickyMenu ? "xl:py-4 text-black" : "xl:py-6 text-black"
         } ${isActive ? "text-blue-600" : ""}`}
       >
         {menuItem.title}
@@ -53,17 +53,20 @@ const Dropdown = ({ menuItem, stickyMenu }) => {
             {menuItem.submenu.map((item, i) => {
               const isCurrent = pathUrl === item.path;
               return (
-                <Link
-                  key={i}
-                  href={item.path}
-                  className={`block px-4 py-2 text-sm transition-colors duration-200 ${
-                    isCurrent
-                      ? "bg-blue-700 font-semibold text-white"
-                      : `hover:bg-blue-500 ${dropdownItemText}`
+                <Link key={i} href={item.path} legacyBehavior>
+                <a
+                  className={`group relative px-4 py-2 text-sm font-semibold inline-block overflow-hidden ${
+                    isCurrent ? "text-blue-600" : "text-black"
                   }`}
                 >
                   {item.title}
-                </Link>
+                  <span
+                    className="absolute left-0 bottom-0 w-0 h-0.5 bg-blue-600 transition-all duration-300 ease-in-out group-hover:w-full"
+                  />
+                </a>
+              </Link>
+              
+              
               );
             })}
           </motion.ul>

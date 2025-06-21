@@ -6,6 +6,7 @@
   "cart": "عربة التسوق",
   "support": "الدعم",
   "product_categories": "فئات المنتجات",
+  "categories": "الفئات",
   "categories_description": "استكشف مجموعتنا الواسعة من الفئات",
   "this_week": "هذا الأسبوع",
   "add_to_cart": "أضف إلى السلة",
@@ -23,6 +24,5 @@
   "brands": "العلامات التجارية",
   "colors": "الألوان",
   "price": "السعر",
-  "search_products": "ابحث عن المنتجات"  
-  
+  "search_products": "بحث"
 }

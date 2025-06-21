@@ -6,6 +6,7 @@
     "cart": "Cart",
     "support": "Support",
     "product_categories": "Product Categories",
+    "categories": "Categories",
     "categories_description": "Explore our wide range of categories",
     "this_week": "This Week",
     "add_to_cart": "Add to Cart",
@@ -23,6 +24,6 @@
     "brands": "Brands",
     "colors": "Colors",
     "price": "Price",
-    "search_products": "Search Products"
+    "search_products": "Search"
   }
   

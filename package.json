@@ -47,6 +47,7 @@
     "react-loading-skeleton": "^3.5.0",
     "react-range-slider-input": "^3.0.7",
     "react-redux": "^9.2.0",
+    "react-world-flags": "^1.6.0",
     "swiper": "^10.2.0",
     "twilio": "^5.7.0"
   },

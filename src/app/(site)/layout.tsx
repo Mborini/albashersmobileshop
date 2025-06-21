@@ -17,6 +17,7 @@ import PreviewSliderModal from "@/components/Common/PreviewSlider";
 import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
 import { Toaster } from "react-hot-toast";
+import MobileBottomNav from "@/components/Header/MobileBottomNav";
 
 export default function SiteLayout({
   children,
@@ -42,6 +43,7 @@ export default function SiteLayout({
                   <PreviewSliderProvider>
                     <Header />
                     {children}
+                    <MobileBottomNav />
                     <QuickViewModal />
                     <CartSidebarModal />
                     <PreviewSliderModal />

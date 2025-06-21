@@ -68,7 +68,7 @@ const options: Option[] = [
   },
 ];
 
-export default function ChatPopup() {
+export default function ChatPopup({ iconOnly = false }: { iconOnly?: boolean }) {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     { sender: "bot", text: "مرحباً بك في متجر آيفون! اختر من القائمة:" },
@@ -97,7 +97,6 @@ export default function ChatPopup() {
         setCurrentOptions(option.next!);
       }, 600);
     } else {
-      // إعادة للقائمة الرئيسية بعد ثوانٍ
       setTimeout(() => {
         setMessages((prev) => [
           ...prev,
@@ -109,18 +108,25 @@ export default function ChatPopup() {
   };
 
   return (
-    <div>
-      {/* زر المحادثة */}
-      <button
-        onClick={() => setOpen(!open)}
-        className="fixed bottom-28 right-6 p-3 rounded-full bg-blue-light text-white shadow-xl z-50"
-      >
-        💬
-      </button>
+    <>
+      {/* الزر ضمن النافبار */}
+  {/* الزر ضمن النافبار */}
+<button
+  onClick={() => setOpen(!open)}
+  className="flex flex-col items-center text-gray-700 hover:text-blue-600"
+>
+  <img
+    src="images/logo/bot.gif" // حط هنا مسار صورة الـ GIF
+    alt="Chat Icon"
+    className="w-8 h-8"
+  />
+
+</button>
+
 
       {/* صندوق المحادثة */}
       {open && (
-        <div className="fixed bottom-36 right-15 w-80 bg-white rounded-lg shadow-lg custumborder flex flex-col z-50">
+        <div className="fixed bottom-20 right-3 w-80 bg-white rounded-lg shadow-lg custumborder flex flex-col z-50">
           <div className="bg-blue-light text-white p-2 font-bold border rounded-t-full flex justify-between items-center">
             بوت المحل
             <button onClick={() => setOpen(false)}>❌</button>
@@ -141,20 +147,19 @@ export default function ChatPopup() {
             ))}
           </div>
 
-        <div className="p-3 border-t flex flex-row flex-wrap gap-2 bg-gray-50 justify-start">
-  {currentOptions.map((opt, i) => (
-    <button
-      key={i}
-      onClick={() => handleClick(opt)}
-      className="px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-blue-100 transition duration-200"
-    >
-      {opt.label}
-    </button>
-  ))}
-</div>
-
+          <div className="p-3 border-t flex flex-row flex-wrap gap-2 bg-gray-50 justify-start">
+            {currentOptions.map((opt, i) => (
+              <button
+                key={i}
+                onClick={() => handleClick(opt)}
+                className="px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-blue-100 transition duration-200"
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

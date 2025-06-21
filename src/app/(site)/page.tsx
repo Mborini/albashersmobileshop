@@ -1,4 +1,4 @@
-import ChatPopup from "@/components/ChatPopup";
+import ChatPopup from "@/components/Header/ChatPopup";
 import Home from "@/components/Home";
 import { Metadata } from "next";
 import Script from "next/script";
@@ -85,7 +85,7 @@ export default function HomePage() {
   return (
     <>
       <Home />
-      <ChatPopup />
+     
 
       <Script
         type="application/ld+json"

@@ -93,12 +93,12 @@ export default function Search() {
             <TextInput
               autoFocus
               radius="md"
-                variant="filled"
+              variant="filled"
               placeholder={t("search_products")}
               value={query}
               onChange={(e) => setQuery(e.currentTarget.value)}
               dir="ltr"
-               mt="md"
+              mt="md"
             />
 
             {loading ? (
@@ -154,20 +154,20 @@ export default function Search() {
         </ScrollArea>
       </Modal>
 
-      {/* Search Button */}
-      <div className="w-full flex justify-center">
+      <div
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
+        className="w-full flex justify-center"
+      >
         <Button
-          variant="light"
-          radius="lg"
           onClick={open}
-          className={`flex items-center gap-2 px-3 py-2 transition-all backdrop-blur-md bg-white/30 border border-white/40 shadow-md hover:bg-white/50 ${
-            i18n.language === "ar" ? "flex-row-reverse" : "flex-row"
-          }`}
+          className="p-0 m-0 bg-transparent border-none shadow-none hover:bg-transparent"
         >
-          <FaSearch color="#000" size={14} />
-          <span className="text-sm hidden sm:inline text-black whitespace-nowrap">
-            {t("search_products")}
-          </span>
+          <div className="flex items-center gap-1">
+            <FaSearch color="#000" size={14} />
+            <span className="text-sm text-black hidden sm:inline">
+              {t("search_products")}
+            </span>
+          </div>
         </Button>
       </div>
     </>
