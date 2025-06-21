@@ -35,25 +35,43 @@ export async function deleteBrand(id: number) {
     throw error;
   }
   return true;
-}
-export async function uploadImage(
-  file: File,
-  oldImageUrl?: string
-): Promise<string> {
-  const formData = new FormData();
-  formData.append("file", file);
+}export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
+  // Step 1: طلب التوقيع من السيرفر
+  const signatureData = new FormData();
+  signatureData.append("folder", "brands");
   if (oldImageUrl) {
-    formData.append("oldImageUrl", oldImageUrl);
-    formData.append("folder", "brands");
+    signatureData.append("oldImageUrl", oldImageUrl);
   }
 
-  const res = await fetch("/api/Admin/uploadImage", {
+  const signatureRes = await fetch("/api/Admin/uploadImage", {
+    method: "POST",
+    body: signatureData,
+  });
+
+  if (!signatureRes.ok) {
+    throw new Error("Failed to get Cloudinary signature");
+  }
+
+  const { timestamp, signature, apiKey, cloudName, folder } = await signatureRes.json();
+
+  // Step 2: رفع الصورة مباشرة إلى Cloudinary
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("api_key", apiKey);
+  formData.append("timestamp", timestamp);
+  formData.append("signature", signature);
+  formData.append("folder", folder);
+
+  const cloudinaryRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
     method: "POST",
     body: formData,
   });
 
-  if (!res.ok) throw new Error("Upload failed");
+  if (!cloudinaryRes.ok) {
+    const errText = await cloudinaryRes.text();
+    throw new Error("Cloudinary upload failed: " + errText);
+  }
 
-  const data = await res.json();
-  return data.url;
+  const result = await cloudinaryRes.json();
+  return result.secure_url; // رابط الصورة النهائي
 }

@@ -65,6 +65,8 @@ export default function EditImagesModal({
     setIsUploading(true);
     try {
       const imageUrl = await uploadImage(newImage);
+      console.log("🚀 ~ imageUrl:", imageUrl); // <-- أضف هذا السطر
+
       const updatedProductData = await AddProductImage(
         product.product_id,
         imageUrl

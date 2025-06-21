@@ -41,9 +41,9 @@ const SingleItem = ({ item, removeItemFromCart }) => {
             </div>
           )}
           <p className="text-custom-sm">Quantity: {item.quantity}</p>
-          <p className="text-custom-sm">Price: ${item.discountedPrice}</p>
+          <p className="text-custom-sm">Price: JOD {item.discountedPrice}</p>
           <p className="text-custom-sm">
-            Total: ${item.discountedPrice * item.quantity}
+            Total: JOD {item.discountedPrice * item.quantity}
           </p>
         </div>
       </div>

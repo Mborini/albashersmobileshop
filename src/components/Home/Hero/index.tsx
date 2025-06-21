@@ -90,10 +90,10 @@ const Hero = () => {
                           </p>
                           <span className="flex items-center gap-3">
                             <span className="font-medium text-heading-5 text-red">
-                              ${item.discounted_Price}
+                              JOD {item.discounted_Price}
                             </span>
                             <span className="font-medium text-2xl text-dark-4 line-through">
-                              ${item.price}
+                           DOD {item.price}
                             </span>
                           </span>
                         </div>

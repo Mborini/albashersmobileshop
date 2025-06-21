@@ -59,7 +59,7 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
     setModalType(null);
     setSelectedProduct(null);
   };
-  console.log("product", product);
+  
   return (
     <>
       {product.map((product) => (

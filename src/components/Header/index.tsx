@@ -142,7 +142,7 @@ const Header = () => {
         {product.length}
       </span>
       <span className="text-sm font-medium hover:text-blue-600">
-        ${totalPrice}
+        JOD{totalPrice}
       </span>
     </button>
 

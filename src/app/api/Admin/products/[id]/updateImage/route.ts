@@ -6,6 +6,7 @@ export async function POST(req: Request, context: { params: Promise<{ id: string
   
     const body = await req.json();
     const { image } = body;
+  console.log('Received request to add image for product ID:', id, 'with image URL:', image);
   
     if (!id || !image) {
       return new Response(JSON.stringify({ error: 'Invalid request data' }), {

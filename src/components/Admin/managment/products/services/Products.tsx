@@ -82,23 +82,44 @@ export async function AddProductImage(id: number, image: string): Promise<Produc
   } as Product;
 }
 export async function uploadImage(file: File): Promise<string> {
+  // أولاً: نحصل على التوقيع من السيرفر
+  const signatureRes = await fetch("/api/Admin/uploadImage", {
+    method: "POST",
+    body: (() => {
+      const data = new FormData();
+      data.append("folder", "products");
+      return data;
+    })(),
+  });
+
+  if (!signatureRes.ok) {
+    throw new Error("Failed to get Cloudinary signature");
+  }
+
+  const { timestamp, signature, apiKey, cloudName, folder } = await signatureRes.json();
+
+  // ثانياً: نرفع الملف إلى Cloudinary مباشرة
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("folder", "products");
+  formData.append("api_key", apiKey);
+  formData.append("timestamp", timestamp);
+  formData.append("signature", signature);
+  formData.append("folder", folder);
 
-  const res = await fetch("/api/Admin/uploadImage", {
+  const cloudinaryRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
     method: "POST",
     body: formData,
   });
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "Upload failed");
+  if (!cloudinaryRes.ok) {
+    const errorText = await cloudinaryRes.text();
+    throw new Error("Cloudinary upload failed: " + errorText);
   }
 
-  const data = await res.json();
-  return data.url;
+  const result = await cloudinaryRes.json();
+  return result.secure_url; // هذا هو رابط الصورة النهائي
 }
+
 
 export async function DeleteProductImage(
   imageId: number

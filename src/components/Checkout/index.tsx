@@ -122,7 +122,7 @@ const Checkout = () => {
                           </div>
 
                           <p className="text-dark text-right">
-                            ${(item.discountedPrice * item.quantity).toFixed(2)}
+                            JOD {(item.discountedPrice * item.quantity).toFixed(2)}
                           </p>
                         </div>
                       ))}
@@ -133,7 +133,7 @@ const Checkout = () => {
                         </div>
                         <div>
                           <p className="font-medium text-lg text-dark text-right">
-                            ${totalPrice.toFixed(2)}
+                            JOD {totalPrice.toFixed(2)}
                           </p>
                         </div>
                       </div>

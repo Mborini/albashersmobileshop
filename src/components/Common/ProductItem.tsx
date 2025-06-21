@@ -147,9 +147,9 @@ const ProductItem = ({ item }: { item: Product }) => {
         </div>
       </div>
       <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">${item.price}</span>
+        <span className="text-dark">JOD {item.price}</span>
         <span className="text-dark-4 line-through">
-          ${item.discountedPrice}
+          JOD {item.discountedPrice}
         </span>
       </span>
     </div>
