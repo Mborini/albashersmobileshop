@@ -15,6 +15,7 @@ import { Badge } from "@mantine/core";
 import toast, { Toaster } from "react-hot-toast";
 import { MdFavoriteBorder, MdOutlineCancel } from "react-icons/md";
 import { FiMinus, FiPlus } from "react-icons/fi";
+import { LuShoppingBag } from "react-icons/lu";
 
 const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
@@ -165,7 +166,7 @@ const QuickViewModal = () => {
                   size="md"
                   variant="gradient"
                   gradient={{ from: "green", to: "lime", deg: 360 }}
-                  >
+                >
                   {product.brand_name}
                 </Badge>
               </div>
@@ -282,19 +283,16 @@ const QuickViewModal = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+              <div className="flex items-center gap-4 flex-nowrap overflow-auto">
                 <button
-                  disabled={quantity === 0 && true}
+                  disabled={quantity === 0}
                   onClick={() => handleAddToCart()}
-                  className={`inline-flex font-medium text-white bg-blue py-3 px-7 rounded-md ease-out duration-200 hover:bg-blue-dark
-                  `}
-                >
+                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md">
+                  <LuShoppingBag size={18} />
                   Add to Cart
                 </button>
 
-                <button
-                  className={`inline-flex items-center gap-2 font-medium text-white bg-dark py-3 px-6 rounded-md ease-out duration-200 hover:bg-opacity-95 `}
-                >
+                <button  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-dark py-3 px-6 rounded-md">
                   <MdFavoriteBorder size={18} />
                   Add to Wishlist
                 </button>
