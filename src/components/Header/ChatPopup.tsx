@@ -1,101 +1,106 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import {
+  Drawer,
+  ScrollArea,
+  Paper,
+  Text,
+  Group,
+  Stack,
+  Divider,
+} from "@mantine/core";
 
 type Message = { sender: "user" | "bot"; text: string };
 type Option = { label: string; next?: Option[]; reply?: string };
 
+// ✅ خيارات المحادثة المحسّنة
 const options: Option[] = [
   {
     label: "📱 المنتجات",
     next: [
-      {
-        label: "آيفون 15",
-        reply: "آيفون 15 متوفر بعدة ألوان وبسعر يبدأ من 900 دينار.",
-      },
-      {
-        label: "آيفون 14",
-        reply: "آيفون 14 متوفر وبخصم خاص حالياً. السعر يبدأ من 800 دينار.",
-      },
-      {
-        label: "آيفون 13",
-        reply: "لدينا عدد محدود من آيفون 13 بسعر 700 دينار.",
-      },
+      { label: "iPhone", reply: "تتوفر أجهزة iPhone بعدة موديلات وألوان." },
+      { label: "iPad", reply: "تتوفر أجهزة iPad لجميع الاستخدامات." },
+      { label: "Smart Watch", reply: "متوفر ساعات ذكية بجميع الأحجام." },
     ],
   },
   {
     label: "🎧 الإكسسوارات",
     next: [
-      {
-        label: "كفرات أصلية",
-        reply: "لدينا كفرات أصلية بأسعار تبدأ من 15 دينار.",
-      },
-      { label: "شواحن", reply: "شواحن آيفون أصلية ومتوافقة تبدأ من 20 دينار." },
-      { label: "سماعات", reply: "تتوفر سماعات AirPods بأنواعها المختلفة." },
+      { label: "كفرات", reply: "نوفر مجموعة متنوعة من الكفرات الأصلية والمميزة." },
+      { label: "شواحن", reply: "نوفر شواحن أصلية وسريعة." },
+      { label: "سماعات", reply: "تتوفر سماعات بجودة عالية منها AirPods." },
+    ],
+  },
+  {
+    label: "🏷️ البراندات",
+    next: [
+      { label: "Apple", reply: "منتجات Apple الأصلية متوفرة." },
+      { label: "Anker", reply: "نوفر مجموعة مختارة من منتجات Anker." },
+      { label: "Joyroom", reply: "Joyroom متوفر للإكسسوارات والشواحن." },
     ],
   },
   {
     label: "🛠️ الصيانة",
     next: [
-      {
-        label: "تغيير شاشة",
-        reply: "تكلفة تغيير الشاشة تبدأ من 80 دينار حسب الموديل.",
-      },
-      {
-        label: "تغيير بطارية",
-        reply: "تغيير البطارية الأصلية بسعر يبدأ من 40 دينار.",
-      },
-      { label: "مشاكل في الشبكة", reply: "نقدم فحص مجاني لمشاكل الشبكة." },
+      { label: "تغيير شاشة", reply: "نقوم بتبديل الشاشات الأصلية بجودة عالية." },
+      { label: "تغيير بطارية", reply: "نستخدم بطاريات أصلية ومضمونة." },
+      { label: "مشاكل في الشبكة", reply: "نقدم خدمة فحص الشبكة مجاناً." },
     ],
   },
   {
-    label: "❓ أسئلة متكررة",
+    label: "✅ الكفالات",
+    reply: "جميع الأجهزة مكفولة لمدة سنة من تاريخ الشراء، وتشمل الكفالة العيوب المصنعية فقط.",
+  },
+  {
+    label: "🕓 مواعيد العمل",
+    reply: "دوامنا من السبت إلى الخميس، من الساعة 10 صباحاً حتى 11 مساءً.",
+  },
+  {
+    label: "📞 أرقام التواصل",
     next: [
-      {
-        label: "هل الأجهزة مكفولة؟",
-        reply: "نعم، جميع الأجهزة مكفولة لمدة سنة.",
-      },
-      {
-        label: "هل توفرون تقسيط؟",
-        reply: "نعم، يوجد تقسيط من خلال شركات معتمدة.",
-      },
+      { label: "رقم المحل", reply: "رقم الهاتف: 06xxxxxxx" },
+      { label: "رقم الصيانة", reply: "رقم الصيانة: 079xxxxxxx" },
+      { label: "واتساب", reply: "راسلنا عبر واتساب: 079xxxxxxx" },
     ],
   },
   {
-    label: "📞 تواصل معنا",
-    reply:
-      "يمكنك التواصل معنا عبر واتساب: 079xxxxxxx أو زيارتنا في شارع مكة، عمّان.",
+    label: "ℹ️ معلومات إضافية",
+    next: [
+      { label: "هل الأجهزة مكفولة؟", reply: "نعم، جميع الأجهزة مكفولة لمدة سنة." },
+      { label: "هل يوجد تقسيط؟", reply: "نعم، يوجد تقسيط عبر شركات معتمدة." },
+    ],
   },
 ];
 
-export default function ChatPopup({ iconOnly = false }: { iconOnly?: boolean }) {
+export default function ChatPopup() {
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
-    { sender: "bot", text: "مرحباً بك في متجر آيفون! اختر من القائمة:" },
+    { sender: "bot", text: "مرحباً بك في Albasheer Shop!:" },
   ]);
   const [currentOptions, setCurrentOptions] = useState<Option[]>(options);
+  const lastMessageRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [messages]);
 
   const handleClick = (option: Option) => {
-    const userMsg: Message = { sender: "user", text: option.label };
-    setMessages((prev) => [...prev, userMsg]);
+    setMessages((prev) => [...prev, { sender: "user", text: option.label }]);
 
     if (option.reply) {
       setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          { sender: "bot", text: option.reply! },
-        ]);
-      }, 500);
+        setMessages((prev) => [...prev, { sender: "bot", text: option.reply! }]);
+      }, 400);
     }
 
     if (option.next) {
       setTimeout(() => {
-        setMessages((prev) => [
-          ...prev,
-          { sender: "bot", text: "اختر من القائمة التالية:" },
-        ]);
+        setMessages((prev) => [...prev, { sender: "bot", text: "اختر :" }]);
         setCurrentOptions(option.next!);
-      }, 600);
+      }, 500);
     } else {
       setTimeout(() => {
         setMessages((prev) => [
@@ -103,51 +108,69 @@ export default function ChatPopup({ iconOnly = false }: { iconOnly?: boolean }) 
           { sender: "bot", text: "هل ترغب في العودة للقائمة الرئيسية؟" },
         ]);
         setCurrentOptions(options);
-      }, 3000);
+      }, 2000);
     }
   };
 
   return (
     <>
-      {/* الزر ضمن النافبار */}
-  {/* الزر ضمن النافبار */}
-<button
-  onClick={() => setOpen(!open)}
-  className="flex flex-col items-center text-gray-700 hover:text-blue-600"
->
-  <img
-    src="images/logo/bot.gif" // حط هنا مسار صورة الـ GIF
-    alt="Chat Icon"
-    className="w-8 h-8"
-  />
-
-</button>
-
+      {/* زر البوت ثابت في الزاوية اليسرى السفلى */}
+      <button
+        onClick={() => setOpen(true)}
+        style={{
+          position: "fixed",
+          bottom: 80,
+          left: 20,
+          zIndex: 999,
+          width: 50,
+          height: 50,
+          borderRadius: "50%",
+          backgroundColor: "white",
+          border: "1px solid #ddd",
+          boxShadow: "0 0 8px rgba(0,0,0,0.1)",
+          padding: 0,
+          cursor: "pointer",
+        }}
+      >
+        <img
+          src="/images/logo/bot.gif"
+          alt="Bot"
+          style={{ width: "100%", height: "100%", borderRadius: "50%" }}
+        />
+      </button>
 
       {/* صندوق المحادثة */}
-      {open && (
-        <div className="fixed bottom-20 right-3 w-80 bg-white rounded-lg shadow-lg custumborder flex flex-col z-50">
-          <div className="bg-blue-light text-white p-2 font-bold border rounded-t-full flex justify-between items-center">
-            بوت المحل
-            <button onClick={() => setOpen(false)}>❌</button>
-          </div>
+      <Drawer
+        opened={open}
+        onClose={() => setOpen(false)}
+        position="right"
+        size="sm"
+        title="Albasheer AI"
+        padding="md"
+      >
+        <Stack gap="xs" h={400}>
+          <ScrollArea h="100%" offsetScrollbars>
+            <Stack>
+              {messages.map((msg, i) => (
+                <div key={i} ref={i === messages.length - 1 ? lastMessageRef : null}>
+                  <Paper
+                    p="xs"
+                    radius="md"
+                    bg={msg.sender === "user" ? "gray.1" : "blue.1"}
+                    maw="80%"
+                    ml={msg.sender === "user" ? "auto" : undefined}
+                    mr={msg.sender === "bot" ? "auto" : undefined}
+                  >
+                    <Text size="sm" dir="rtl">{msg.text}</Text>
+                  </Paper>
+                </div>
+              ))}
+            </Stack>
+          </ScrollArea>
 
-          <div className="p-2 h-64 overflow-y-auto text-sm space-y-2">
-            {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`p-2 rounded-md ${
-                  msg.sender === "user"
-                    ? "bg-gray-200 text-right ml-8"
-                    : "bg-blue-100 text-left mr-8"
-                }`}
-              >
-                {msg.text}
-              </div>
-            ))}
-          </div>
+          <Divider label="خيارات" labelPosition="center" />
 
-          <div className="p-3 border-t flex flex-row flex-wrap gap-2 bg-gray-50 justify-start">
+          <Group wrap="wrap" justify="start">
             {currentOptions.map((opt, i) => (
               <button
                 key={i}
@@ -157,9 +180,9 @@ export default function ChatPopup({ iconOnly = false }: { iconOnly?: boolean }) 
                 {opt.label}
               </button>
             ))}
-          </div>
-        </div>
-      )}
+          </Group>
+        </Stack>
+      </Drawer>
     </>
   );
 }
