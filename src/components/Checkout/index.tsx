@@ -127,6 +127,16 @@ const Checkout = () => {
                         </div>
                       ))}
 
+                      <div className="flex items-center border-b border-gray-3 pb-5 justify-between pt-5">
+                        <div>
+                          <p className="font-medium text-md text-dark">Shipping</p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-lg text-dark text-right">
+                            Free
+                          </p>
+                        </div>
+                      </div>
                       <div className="flex items-center justify-between pt-5">
                         <div>
                           <p className="font-medium text-lg text-dark">Total</p>

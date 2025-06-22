@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Hero from "./Hero";
 import Categories from "./Categories";
 import PromoBanner from "./PromoBanner";
-import CounDown from "./Countdown";
+import Video from "./Countdown";
 import Testimonials from "./Testimonials";
 import Newsletter from "../Common/Newsletter";
 import SliderImages from "./sliderImages";
@@ -35,7 +35,7 @@ const Home = () => {
         <Categories />
       </div>
    <ProductHighlights />
-      <CounDown />
+      <Video />
       <PromoBanner />
       <Testimonials />
       <Newsletter />

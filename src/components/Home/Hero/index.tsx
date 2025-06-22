@@ -32,7 +32,7 @@ const Hero = () => {
 
   if (loading) {
     return (
-      <section className="pt-57.5 sm:pt-45 lg:pt-30 xl:pt-51.5 pb-5 bg-[#E5EAF4]">
+      <section className="pt-10 sm:pt-12 lg:pt-20 xl:pt-24 pb-5 bg-[#E5EAF4]">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap gap-5">
             <div className="xl:max-w-[757px] w-full">
@@ -50,10 +50,11 @@ const Hero = () => {
         <HeroFeature />
       </section>
     );
+    
   }
 
   return (
-    <section className="overflow-hidden pb-10 lg:pb-12.5 xl:pb-15 pt-57.5 sm:pt-45 lg:pt-30 xl:pt-51.5 bg-[#E5EAF4]">
+    <section className="overflow-hidden pb-10 lg:pb-12.5 xl:pb-15 pt-10 sm:pt-12 lg:pt-20 xl:pt-24 bg-[#E5EAF4]">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         <div className="flex flex-wrap gap-5">
           <div className="xl:max-w-[757px] w-full">
@@ -68,12 +69,11 @@ const Hero = () => {
               <HeroCarousel images={sliderImages} />
             </div>
           </div>
-
+  
           <div className="xl:max-w-[393px] w-full">
-            <div className="flex flex-col sm:flex-row xl:flex-col gap-5">
+            <div className="flex flex-col gap-5">
               {otherImages
                 .filter((item) => item.is_video === false)
-
                 .map((item) => (
                   <div
                     key={item.id}
@@ -93,7 +93,7 @@ const Hero = () => {
                               JOD {item.discounted_Price}
                             </span>
                             <span className="font-medium text-2xl text-dark-4 line-through">
-                           DOD {item.price}
+                              DOD {item.price}
                             </span>
                           </span>
                         </div>
@@ -104,6 +104,7 @@ const Hero = () => {
                           alt={item.title}
                           width={175}
                           height={175}
+                          className="w-full max-w-[150px] h-auto object-contain"
                         />
                       </div>
                     </div>
@@ -113,10 +114,11 @@ const Hero = () => {
           </div>
         </div>
       </div>
-
+  
       <HeroFeature />
     </section>
   );
+  
 };
 
 export default Hero;
