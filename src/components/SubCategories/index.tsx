@@ -14,6 +14,17 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useTranslation } from "react-i18next";
 
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+  return isMobile;
+};
+
 const SubCategories = () => {
   const sliderRef = useRef(null);
   const [SubCategory, setSubCategory] = useState([]);
@@ -24,6 +35,7 @@ const SubCategories = () => {
   );
   const [loading, setLoading] = useState(true);
   const { t, i18n } = useTranslation();
+  const isMobile = useIsMobile();
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -66,30 +78,29 @@ const SubCategories = () => {
         title={`${t("explore_subcategories_of")} ${selectedName}`}
         pages={["categories", "/", selectedName]}
       />
-      <section className="overflow-hidden pt-17.5 "  dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+      <section
+        className="overflow-hidden pt-8"
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      >
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 pb-15 border-b border-gray-3">
           <div className="swiper categories-carousel common-carousel">
-            {/* <!-- section title --> */}
-            <div className="mb-10 flex items-end justify-end">
-              {loading ? (
-                ""
-              ) : (
+            {!loading && !isMobile ? (
+              <div className="mb-10 flex items-end justify-end">
                 <div className="flex items-center gap-3" dir="ltr">
                   <button onClick={handlePrev} className="swiper-button-prev">
                     <FaChevronLeft />
                   </button>
-
                   <button onClick={handleNext} className="swiper-button-next">
                     <FaChevronRight />
                   </button>
                 </div>
-              )}
-            </div>
+              </div>
+            ) : null}
+
             {loading ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-4">
                 {Array.from({ length: 6 }).map((_, idx) => (
                   <div key={idx} className="flex flex-col items-center gap-3">
-                    {/* Circle */}
                     <Skeleton
                       circle
                       width={130}
@@ -97,7 +108,6 @@ const SubCategories = () => {
                       baseColor="#d1d5db"
                       highlightColor="#f3f4f6"
                     />
-                    {/* Line */}
                     <Skeleton
                       width={80}
                       height={12}
@@ -108,14 +118,19 @@ const SubCategories = () => {
                   </div>
                 ))}
               </div>
+            ) : isMobile ? (
+              <div className="grid grid-cols-2 gap-4">
+                {SubCategory.map((item, key) => (
+                  <div key={key}>
+                    <SingleSubCategory item={item} />
+                  </div>
+                ))}
+              </div>
             ) : (
               <Swiper
                 ref={sliderRef}
                 slidesPerView={6}
                 breakpoints={{
-                  0: {
-                    slidesPerView: 2,
-                  },
                   1000: {
                     slidesPerView: 4,
                   },

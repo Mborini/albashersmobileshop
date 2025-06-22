@@ -53,20 +53,17 @@ const Categories = () => {
   }, []);
 
   return (
-    <section className="overflow-hidden pt-17.5"lang={i18n.language} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+    <section className="overflow-hidden pt-17.5" >
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 pb-15 border-b border-gray-3">
         <div className="swiper categories-carousel common-carousel">
           {/* <!-- section title --> */}
-          <div className="mb-10 flex items-center justify-between">
+          <div dir={i18n.language === "ar" ? "rtl" : "ltr"} className="mb-10 flex items-center justify-between">
             <div>
               <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
                 <BiCategory className="text-2xl text-blue" size={20} />
                 {t('product_categories')}
               </span>
-              <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
-               
-                {t('categories_description')}
-              </h2>
+              
             </div>
             {loading ? (
             ""

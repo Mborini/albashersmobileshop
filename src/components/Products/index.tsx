@@ -295,20 +295,21 @@ const NewArrivalProduct = () => {
                 </div>
               ) : (
                 <div
-                  className={`${
-                    productStyle === "grid"
-                      ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-7.5 gap-y-9"
-                      : "flex flex-col gap-7.5"
-                  }`}
-                >
-                  {paginatedProducts.map((item, key) =>
-                    productStyle === "grid" ? (
-                      <SingleGridItem item={item} key={key} />
-                    ) : (
-                      <SingleListItem item={item} key={key} />
-                    )
-                  )}
-                </div>
+                className={`${
+                  productStyle === "grid"
+                    ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4"
+                    : "flex flex-col gap-4"
+                }`}
+              >
+                {paginatedProducts.map((item, key) =>
+                  productStyle === "grid" ? (
+                    <SingleGridItem item={item} key={key} />
+                  ) : (
+                    <SingleListItem item={item} key={key} />
+                  )
+                )}
+              </div>
+              
               )}
 
               {/* <!-- Products Grid Tab Content End --> */}

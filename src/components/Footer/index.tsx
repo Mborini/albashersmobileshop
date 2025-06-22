@@ -39,7 +39,7 @@ const Footer = () => {
                 <FaPhoneAlt 
                 
                 color="white" size={24} />  
-                />
+               
                   <span dir="ltr">(+965) 79744-0729</span>
                 </div>
               </li>
