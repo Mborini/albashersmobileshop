@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { fetchAdsImages } from "@/components/Admin/managment/images/services/adsServices";
 import Image from "next/image";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 // استيراد Swiper و الموديولات المطلوبة
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -33,9 +35,17 @@ const SliderImages = () => {
     }
   }
 
-  if (loading) return <div className="text-center py-10">Loading...</div>;
-  if (adsImages.length === 0)
+  if (loading) {
+    return (
+      <section className="w-full mt-14 h-[40vh] sm:h-[60vh] md:h-[60vh] lg:h-[93vh] overflow-hidden">
+        <Skeleton height="100%" width="100%" />
+      </section>
+    );
+  }
+
+  if (adsImages.length === 0) {
     return <div className="text-center py-10">No images found.</div>;
+  }
 
   return (
     <section className="w-full mt-14 h-[40vh] sm:h-[60vh] md:h-[60vh] lg:h-[93vh] overflow-hidden">
@@ -46,7 +56,6 @@ const SliderImages = () => {
         loop={true}
         autoplay={{ delay: 5000, disableOnInteraction: false }}
         pagination={{ clickable: true }}
-        
         className="h-full"
       >
         {adsImages.map((img, idx) => (

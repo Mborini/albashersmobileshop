@@ -55,25 +55,7 @@ const BestSaller = () => {
   }, []);
   return (
     <section className="overflow-hidden mt-24">
-      {newArrivalProduct.length === 0 ? (
-        <div
-          lang={i18n.language}
-          dir={i18n.language === "ar" ? "rtl" : "ltr"}
-          className="relative justify-center flex w-full h-[300px] sm:h-[400px] md:h-[500px] my-10 max-w-[1170px] mx-auto overflow-hidden rounded-xl"
-        >
-          <Image
-            src="/images/shapes/commingSoon.jpg"
-            alt="No products found"
-            fill
-            className="object-cover"
-          />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <p className="text-white text-2xl font-semibold bg-black/60 px-4 py-2 rounded-md">
-              Best Offers Coming Soon!
-            </p>
-          </div>
-        </div>
-      ) : (
+    
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mb-15">
           <motion.div
             className="relative w-full min-h-[80px] rounded-xl p-5 mb-8 overflow-hidden"
@@ -112,7 +94,7 @@ const BestSaller = () => {
 
           <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-6">
           {loading
-              ? Array.from({ length: 8 }).map((_, i) => (
+              ? Array.from({ length: 10 }).map((_, i) => (
                   <SkeletonProductItem key={i} />
                 ))
               : Array.isArray(newArrivalProduct) &&
@@ -121,7 +103,7 @@ const BestSaller = () => {
                 ))}
           </div>
         </div>
-      )}
+      
 
       {/* Global animation keyframes */}
       <style jsx global>{`
