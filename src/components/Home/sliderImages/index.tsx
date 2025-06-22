@@ -1,13 +1,21 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { fetchAdsImages } from "@/components/Admin/managment/images/services/adsServices";
 import Image from "next/image";
-import { useEffect, useState } from "react";
+
+// استيراد Swiper و الموديولات المطلوبة
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// استيراد CSS الخاص بالـ Swiper
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { Autoplay, Navigation, Pagination } from "swiper/modules";
 
 const SliderImages = () => {
   const [adsImages, setAdsImages] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     loadAdsImages();
@@ -25,29 +33,36 @@ const SliderImages = () => {
     }
   }
 
-  useEffect(() => {
-    if (adsImages.length === 0) return;
-    const interval = setInterval(() => {
-      setCurrentIndex((prevIndex) => (prevIndex + 1) % adsImages.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, [adsImages]);
-
   if (loading) return <div className="text-center py-10">Loading...</div>;
   if (adsImages.length === 0)
     return <div className="text-center py-10">No images found.</div>;
 
   return (
-    <section className="w-full h-[40vh] sm:h-[60vh] md:h-[80vh] lg:h-[100vh] overflow-hidden">
-      <div className="relative w-full h-full ">
-        <Image
-          src={adsImages[currentIndex]?.image_Url || "/fallback.jpg"}
-          alt={`Slider Image ${currentIndex + 1}`}
-          fill
-          priority
-          className="object-cover w-full h-full transition-opacity duration-1000 ease-in-out"
-        />
-      </div>
+    <section className="w-full mt-14 h-[40vh] sm:h-[60vh] md:h-[60vh] lg:h-[93vh] overflow-hidden">
+      <Swiper
+        modules={[Autoplay, Pagination, Navigation]}
+        spaceBetween={0}
+        slidesPerView={1}
+        loop={true}
+        autoplay={{ delay: 5000, disableOnInteraction: false }}
+        pagination={{ clickable: true }}
+        
+        className="h-full"
+      >
+        {adsImages.map((img, idx) => (
+          <SwiperSlide key={idx}>
+            <div className="relative w-full h-[40vh] sm:h-[60vh] md:h-[50vh] lg:h-[93vh]">
+              <Image
+                src={img.image_Url || "/fallback.jpg"}
+                alt={`Slider Image ${idx + 1}`}
+                fill
+                priority
+                className="object-cover w-full h-full"
+              />
+            </div>
+          </SwiperSlide>
+        ))}
+      </Swiper>
     </section>
   );
 };
