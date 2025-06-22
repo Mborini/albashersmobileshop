@@ -3,9 +3,10 @@ import Cart from "@/components/Cart";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
-  title: "Cart Page | NextCommerce Nextjs E-commerce template",
-  description: "This is Cart Page for NextCommerce Template",
-  // other metadata
+  title: "Al-Basher Shop",
+  description:
+    "أفضل متجر في إربد لبيع أجهزة iPhone الأصلية، اكسسوارات الهواتف، ساعات آبل، شواحن أصلية، وصلات شحن، ملحقات آيباد، منتجات جيروم، أنكر، جوجل وغيرها من أفضل العلامات التجارية. تسوق الآن مع توصيل سريع وخدمة مميزة في الأردن.",
+
 };
 
 const CartPage = () => {

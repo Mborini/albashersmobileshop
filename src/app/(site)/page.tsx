@@ -74,7 +74,7 @@ export const metadata: Metadata = {
         alt: "متجر الآيفون في إربد - Al-Basher Shop",
       },
     ],
-    locale: "ar_JO",
+    locale: "irbid_JO",
     type: "website",
   },
   
