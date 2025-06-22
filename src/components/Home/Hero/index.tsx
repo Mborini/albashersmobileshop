@@ -54,7 +54,7 @@ const Hero = () => {
   }
 
   return (
-    <section className="overflow-hidden pb-10 lg:pb-12.5 xl:pb-15 pt-10 sm:pt-12 lg:pt-20 xl:pt-24 bg-[#E5EAF4]">
+    <section className="overflow-hidden pb-10 lg:pb-12.5 xl:pb-15 pt-10 sm:pt-12 lg:pt-20 xl:pt-24 bg-[#e8edf7]">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         <div className="flex flex-wrap gap-5">
           <div className="xl:max-w-[757px] w-full">
@@ -93,7 +93,7 @@ const Hero = () => {
                               JOD {item.discounted_Price}
                             </span>
                             <span className="font-medium text-2xl text-dark-4 line-through">
-                              DOD {item.price}
+                              JOD {item.price}
                             </span>
                           </span>
                         </div>
