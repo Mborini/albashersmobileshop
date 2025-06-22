@@ -4,15 +4,19 @@ import { AppDispatch } from "@/redux/store";
 import Image from "next/image";
 import { BsFillTrash2Fill } from "react-icons/bs";
 import { FaTrashAlt } from "react-icons/fa";
+import { useTranslation } from "react-i18next";
 
 const SingleItem = ({ item, removeItemFromCart }) => {
   const dispatch = useDispatch<AppDispatch>();
-
+  const { t, i18n } = useTranslation();
   const handleRemoveFromCart = () => {
     dispatch(removeItemFromCart({ id: item.id, color: item.color }));
   };
   return (
-    <div className="flex items-center justify-between gap-5">
+    <div
+      className="flex items-center justify-between gap-5"
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+    >
       <div className="w-full flex items-center gap-6">
         <div className="flex items-center justify-center rounded-[10px] bg-gray-3 max-w-[90px] w-full h-22.5">
           {item.images[0] && (
@@ -30,9 +34,10 @@ const SingleItem = ({ item, removeItemFromCart }) => {
           <h3 className="font-medium text-dark mb-1 ease-out duration-200 hover:text-blue">
             {item.title}
           </h3>
+
           {item.color && (
             <div className="text-custom-sm flex items-center gap-2 mb-1">
-              <p>color:</p>
+              <p>{t("color")}:</p>
 
               <span
                 style={{ backgroundColor: item.color }}
@@ -40,10 +45,16 @@ const SingleItem = ({ item, removeItemFromCart }) => {
               ></span>
             </div>
           )}
-          <p className="text-custom-sm">Quantity: {item.quantity}</p>
-          <p className="text-custom-sm">Price: JOD {item.discountedPrice}</p>
           <p className="text-custom-sm">
-            Total: JOD {item.discountedPrice * item.quantity}
+            {" "}
+            {t("quantity")} : {item.quantity}
+          </p>
+          <p className="text-custom-sm">
+            {" "}
+            {t("price")} : JOD {item.discountedPrice}
+          </p>
+          <p className="text-custom-sm">
+            {t("total")} : JOD {item.discountedPrice * item.quantity}
           </p>
         </div>
       </div>

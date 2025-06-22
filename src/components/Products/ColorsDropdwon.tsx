@@ -12,11 +12,12 @@ import {
   Group,
 } from "@mantine/core";
 import { IoIosArrowUp } from "react-icons/io";
-
+import { useTranslation } from "react-i18next";
 const ColorsDropdown = ({ colors, onColorChange }) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
   const [activeColor, setActiveColor] = useState<string | null>(null);
-
+  const { t } = useTranslation();
+  
   const handleColorChange = (color: string | null) => {
     setActiveColor(color);
     onColorChange(color);
@@ -33,7 +34,9 @@ const ColorsDropdown = ({ colors, onColorChange }) => {
         onClick={() => setToggleDropdown((prev) => !prev)}
         style={{ cursor: "pointer" }}
       >
-        <Text fw={500}>Colors</Text>
+        <Text fw={500}>
+          {t("colors")}
+        </Text>
         <ActionIcon
           variant="subtle"
           color="dark"
@@ -74,7 +77,7 @@ const ColorsDropdown = ({ colors, onColorChange }) => {
                   fontWeight: 400,
                 }}
               >
-                All
+               {t("all")}
               </Box>
             </Tooltip>
 

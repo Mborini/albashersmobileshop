@@ -67,10 +67,12 @@ const Footer = () => {
                   href="https://www.facebook.com/AlbasherShop/"
                   aria-label="Facebook Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-blue"
-                  dir="ltr"
-                >
+                  dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                  >
                   <FaFacebook />
-                  <span>Facebook</span>
+                  <span>
+                    {t("facebook_page")}
+                  </span>
                 </a>
               </li>
 
@@ -79,10 +81,12 @@ const Footer = () => {
                   href="https://www.instagram.com/albasher.jo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw%3D%3D"
                   aria-label="Instagram Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-orange"
-                  dir="ltr"
-                >
+                  dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                  >
                   <FaInstagram />
-                  <span>Instagram</span>
+                  <span>
+                    {t("instagram_page")}
+                  </span>
                 </a>
               </li>
 
@@ -91,10 +95,13 @@ const Footer = () => {
                   href="https://api.whatsapp.com/send?phone=%2B962796855578&context=AffBft21GKovicFAmDVyUobbJSKgoFY_mKRzHwQkoRatO-3aXnjDeMOeBMnHPOl1my9Br6AkHUqNpVFlsGcvI-1nuWn8vBw-5bhvIv40x1YFVr0yNElt1kRHQ3G_VdN6VbazRr4XwakUDXYNYwEwmIh-OQ&source=FB_Page&app=facebook&entry_point=page_cta&fbclid=IwY2xjawKmyv9leHRuA2FlbQIxMABicmlkETFXaDVlZ040NFdMY05pOVRZAR7Okbmf6z6u3jERV8n0vVwZkA2_VvQ6Qv6Mv6DvWoRaINFFEvpmhMUwvuidHg_aem__njuoxiBAiwe17ajvov-ZA"
                   aria-label="WhatsApp Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-green"
-                  dir="ltr"
+                  dir={i18n.language === "ar" ? "rtl" : "ltr"}
+
                 >
                   <FaWhatsapp />
-                  <span>WhatsApp</span>
+                  <span>
+                    {t("whatsapp_page")}
+                  </span>
                 </a>
               </li>
             </ul>

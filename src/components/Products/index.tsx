@@ -24,7 +24,7 @@ const NewArrivalProduct = () => {
   const [product, setProduct] = useState([]);
   const [brands, setBrands] = useState([]);
   const [colors, setColors] = useState([]);
-  const { t } = useTranslation();
+  const { i18n, t } = useTranslation();
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
   const [filteredProducts, setFilteredProducts] = useState([]);
@@ -207,11 +207,14 @@ const NewArrivalProduct = () => {
               <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
                 <div className="flex items-center justify-between">
                   {/* <!-- top bar left --> */}
-                  <div className="flex flex-wrap items-center gap-4">
+                  <div
+                    className="flex flex-wrap items-center gap-4"
+                    dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                  >
                     <TextInput
                       variant="filled"
                       radius="md"
-                      placeholder="Search products"
+                      placeholder={t("search_products")}
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.currentTarget.value)}
                     />
@@ -291,25 +294,24 @@ const NewArrivalProduct = () => {
                 </div>
               ) : !filteredProducts.length ? (
                 <div className="flex items-center justify-center mt-36 w-full h-40">
-                  <Empty description="لا توجد نتائج حالياً. حاول مرة أخرى." />
+                  <Empty description={t("no_products_found")} />
                 </div>
               ) : (
                 <div
-                className={`${
-                  productStyle === "grid"
-                    ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4"
-                    : "flex flex-col gap-4"
-                }`}
-              >
-                {paginatedProducts.map((item, key) =>
-                  productStyle === "grid" ? (
-                    <SingleGridItem item={item} key={key} />
-                  ) : (
-                    <SingleListItem item={item} key={key} />
-                  )
-                )}
-              </div>
-              
+                  className={`${
+                    productStyle === "grid"
+                      ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4"
+                      : "flex flex-col gap-4"
+                  }`}
+                >
+                  {paginatedProducts.map((item, key) =>
+                    productStyle === "grid" ? (
+                      <SingleGridItem item={item} key={key} />
+                    ) : (
+                      <SingleListItem item={item} key={key} />
+                    )
+                  )}
+                </div>
               )}
 
               {/* <!-- Products Grid Tab Content End --> */}

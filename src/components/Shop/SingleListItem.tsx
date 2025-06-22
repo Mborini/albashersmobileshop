@@ -14,10 +14,12 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { Badge } from "@mantine/core";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
 
   // update the QuickView state
   const handleQuickViewUpdate = () => {
@@ -75,7 +77,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
           onClick={handleAddToCart}
           className="inline-flex font-medium text-xs sm:text-sm py-1.5 px-4 sm:px-5 rounded-[5px] bg-blue text-white hover:bg-blue-dark"
         >
-          Add to cart
+         {t("add_to_cart")}
         </button>
 
         <button
@@ -115,7 +117,8 @@ const SingleListItem = ({ item }: { item: Product }) => {
       <div className="flex flex-col items-center gap-2.5 mb-2">
         {item.colors?.length > 0 ? (
           <>
-            <h3 className="text-xs sm:text-sm text-center font-medium">Colors</h3>
+            <h3 className="text-xs sm:text-sm text-center font-medium">{t("colors")}
+            </h3>
             <div className="flex gap-2 flex-wrap justify-center">
               {item.colors.map((color) => (
                 <div
@@ -129,7 +132,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
           </>
         ) : (
           <div className="flex items-center gap-1 text-xs text-gray-500">
-            <p>No Colors</p>
+            <p>{t("no_colors")}</p>
             <CiNoWaitingSign />
           </div>
         )}
