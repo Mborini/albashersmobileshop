@@ -16,8 +16,6 @@ export const store = configureStore({
     productDetailsReducer,
     category: categoryReducer,
     subCategory: subCategoryReducer,
-    
-
   },
 });
 

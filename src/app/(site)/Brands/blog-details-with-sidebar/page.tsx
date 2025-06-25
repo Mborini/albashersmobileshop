@@ -1,5 +1,4 @@
 import React from "react";
-import BlogDetailsWithSidebar from "@/components/BlogDetailsWithSidebar";
 
 import { Metadata } from "next";
 export const metadata: Metadata = {
@@ -11,7 +10,6 @@ export const metadata: Metadata = {
 const BlogDetailsWithSidebarPage = () => {
   return (
     <main>
-      <BlogDetailsWithSidebar />
     </main>
   );
 };

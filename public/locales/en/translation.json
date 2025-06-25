@@ -40,5 +40,18 @@
   "Your_cart_is_empty": "Your Cart is Empty!",
   "continue_shopping": "Continue Shopping",
   "color": "Color",
-  "quantity": "Quantity"
+  "quantity": "Quantity",
+  "otp_msg": "An OTP has been sent to your email address",
+  "verify": "Verify",
+  "6_digits_otp": "6 Digits OTP",
+  "email_verification": "Email Verification",
+  "otp.required": "Please enter the OTP",
+  "otp.invalid": "Invalid OTP, please try again",
+  "otp.expired": "OTP expired, please request a new one",
+  "otp.success": "OTP verified successfully",
+  "otp.success1": "A new OTP has been sent to your email address",
+  "resend_otp": "Resend OTP",
+  "resend_after": "Resend after",
+  "error": "An error occurred, please try again later",
+  "success": "Operation completed successfully"
 }

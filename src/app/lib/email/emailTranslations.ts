@@ -1,0 +1,33 @@
+export const emailTranslations = {
+  ar: {
+    "email.thanks": "شكراً على طلبك",
+    "email.confirmation_msg": "تم استلام طلبك وسنتواصل معك على الرقم:",
+    "email.order_details": "تفاصيل الطلب:",
+    "email.product": "المنتج",
+    "email.quantity": "الكمية",
+    "email.price": "السعر",
+    "email.shipping": "الشحن",
+    "email.free": "مجاني",
+    "email.total": "الإجمالي",
+    "email.delivery_info": "معلومات التوصيل:",
+    "email.deliver_to": "سيتم التوصيل إلى:",
+    "email.notes": "ملاحظات",
+    "email.footer": " البشير شوب - جميع الحقوق محفوظة",
+  },
+  en: {
+    "email.thanks": "Thank you for your order",
+    "email.confirmation_msg":
+      "Your order has been received and we will contact you at:",
+    "email.order_details": "Order Details:",
+    "email.product": "Product",
+    "email.quantity": "Quantity",
+    "email.price": "Price",
+    "email.shipping": "Shipping",
+    "email.free": "Free",
+    "email.total": "Total",
+    "email.delivery_info": "Delivery Information:",
+    "email.deliver_to": "The order will be delivered to:",
+    "email.notes": "Notes",
+    "email.footer": "Albasheer Shop - All rights reserved",
+  },
+};
