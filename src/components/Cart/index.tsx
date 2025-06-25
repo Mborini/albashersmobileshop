@@ -6,10 +6,11 @@ import { useAppSelector } from "@/redux/store";
 import SingleItem from "./SingleItem";
 import Breadcrumb from "../Common/Breadcrumb";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 const Cart = () => {
   const cartItems = useAppSelector((state) => state.cartReducer.items);
-
+  const { t, i18n } = useTranslation();
   return (
     <>
       {/* <!-- ===== Breadcrumb Section Start ===== --> */}
@@ -18,7 +19,10 @@ const Cart = () => {
       </section>
       {/* <!-- ===== Breadcrumb Section End ===== --> */}
       {cartItems.length > 0 ? (
-        <section className="overflow-hidden py-20 bg-gray-2">
+        <section
+          className="overflow-hidden py-20 bg-gray-2"
+          dir={i18n.language === "ar" ? "rtl" : "ltr"}
+        >
           <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
             <div className="flex flex-wrap items-center justify-between gap-5 mb-7.5">
               <h2 className="font-medium text-dark text-2xl">Your Cart</h2>
@@ -103,13 +107,13 @@ const Cart = () => {
               </svg>
             </div>
 
-            <p className="pb-6">Your cart is empty!</p>
+            <p className="pb-6">{t("Your_cart_is_empty")}</p>
 
             <Link
               href={{ pathname: "/", query: { focus: "categories" } }}
               className="inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
             >
-              Continue Shopping
+              {t("continue_shopping")}
             </Link>
           </div>
         </>

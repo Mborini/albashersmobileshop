@@ -56,13 +56,12 @@ export default function SiteLayout({
               toastOptions={{
                 duration: 3000,
                 style: {
-                  zIndex: 99999, 
-                  background: "red",
-                  color: "#fff",
                   fontFamily: "Euclid Circular A",
+                  zIndex: 99999,
                 },
               }}
             />
+
             <ScrollToTop />
             <Footer />
           </>

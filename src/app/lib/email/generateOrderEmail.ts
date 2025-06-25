@@ -21,10 +21,13 @@ export function generateOrderEmail({
   note?: string;
   lang?: "ar" | "en";
 }) {
-  const t = (key: keyof typeof emailTranslations["ar"]) => emailTranslations[lang][key];
+  const t = (key: keyof (typeof emailTranslations)["ar"]) =>
+    emailTranslations[lang][key];
 
-  const logoUrl = "https://res.cloudinary.com/do1etuooh/image/upload/v1750775950/476908956_642303014852206_4219799890360416472_n_lrbqco.jpg"; // شعارك
-  const bannerImage = "https://res.cloudinary.com/do1etuooh/image/upload/v1750775946/479965633_642363961512778_4497972418892611363_n_zriu2r.jpg"; // صورة شكر
+  const logoUrl =
+    "https://res.cloudinary.com/do1etuooh/image/upload/v1750775950/476908956_642303014852206_4219799890360416472_n_lrbqco.jpg"; // شعارك
+  const bannerImage =
+    "https://res.cloudinary.com/do1etuooh/image/upload/v1750775946/479965633_642363961512778_4497972418892611363_n_zriu2r.jpg"; // صورة شكر
 
   const cartHtml = cartItems
     .map(
@@ -38,7 +41,10 @@ export function generateOrderEmail({
     .join("");
 
   const html = `
-    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+<div dir="${
+    lang === "ar" ? "rtl" : "ltr"
+  }" style="font-family: Arial, sans-serif; max-width: 600px; margin: auto;">
+
       <div style="text-align: center; padding: 20px;">
         <img src="${logoUrl}" alt="Logo" style="max-height: 80px;" />
       </div>
@@ -69,9 +75,7 @@ export function generateOrderEmail({
 
       <h3>${t("email.delivery_info")}</h3>
       <p>${t("email.deliver_to")} ${country}, ${city}, ${address}</p>
-      ${
-        note ? `<p><b>${t("email.notes")}:</b> ${note}</p>` : ""
-      }
+      ${note ? `<p><b>${t("email.notes")}:</b> ${note}</p>` : ""}
 
       <div style="margin-top: 20px; text-align: center;">
         <img src="${bannerImage}" alt="thank you" style="max-width: 100%; border-radius: 8px;" />

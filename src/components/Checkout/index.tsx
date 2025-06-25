@@ -19,7 +19,7 @@ const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
   const totalPrice = useSelector(selectTotalPrice);
   const dispatch = useDispatch();
-  const {  t } = useTranslation();
+  const { i18n, t } = useTranslation();
 
   const [isLoading, setIsLoading] = useState(false);
   const [isOrdered, setIsOrdered] = useState(false);
@@ -125,22 +125,27 @@ const Checkout = () => {
                   <Billing />
                 </div>
 
-                <div className="max-w-[455px] w-full">
+                <div
+                  dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                  className="max-w-[455px] w-full"
+                >
                   <div className="bg-white shadow-1 rounded-[10px]">
                     <div className="border-b border-gray-3 py-5 px-4 sm:px-8.5">
                       <h3 className="font-medium text-xl text-dark">
-                        Your Order
+                        {t("order_summary")}
                       </h3>
                     </div>
 
                     <div className="pt-2.5 pb-8.5 px-4 sm:px-8.5">
                       <div className="flex items-center justify-between py-5 border-b border-gray-3">
                         <div>
-                          <h4 className="font-medium text-dark">Product</h4>
+                          <h4 className="font-medium text-dark">
+                            {t("product")}
+                          </h4>
                         </div>
                         <div>
                           <h4 className="font-medium text-dark text-right">
-                            Subtotal
+                            {t("price")}
                           </h4>
                         </div>
                       </div>
@@ -154,14 +159,16 @@ const Checkout = () => {
                             <div>
                               <p className="text-dark">{item.title}</p>
                               <div className="text-custom-sm flex items-center gap-2 mb-1">
-                                <p>Color:</p>
+                                <p>
+                                  {item.color ? t("color") : t("no_color")} :
+                                </p>
                                 <span
                                   style={{ backgroundColor: item.color }}
                                   className="w-4 h-4 rounded-full cursor-pointer hover:scale-110 transition-transform"
                                 ></span>
                               </div>
                               <p className="text-sm text-gray-600">
-                                Qty: {item.quantity}
+                                {t("quantity")} : {item.quantity}
                               </p>
                             </div>
                           </div>
@@ -176,18 +183,20 @@ const Checkout = () => {
                       <div className="flex items-center border-b border-gray-3 pb-5 justify-between pt-5">
                         <div>
                           <p className="font-medium text-md text-dark">
-                            Shipping
+                            {t("shipping")}
                           </p>
                         </div>
                         <div>
                           <p className="font-medium text-lg text-dark text-right">
-                            Free
+                            {t("free")}
                           </p>
                         </div>
                       </div>
                       <div className="flex items-center justify-between pt-5">
                         <div>
-                          <p className="font-medium text-lg text-dark">Total</p>
+                          <p className="font-medium text-lg text-dark">
+                            {t("total")}
+                          </p>
                         </div>
                         <div>
                           <p className="font-medium text-lg text-dark text-right">
@@ -206,10 +215,10 @@ const Checkout = () => {
                     {isLoading ? (
                       <>
                         <FaSpinner className="animate-spin" />
-                        Processing...
+                        {t("processing_checkout")}
                       </>
                     ) : (
-                      "Process to Checkout"
+                      t("order_now")
                     )}
                   </button>
                 </div>
@@ -234,13 +243,13 @@ const Checkout = () => {
               </svg>
             </div>
 
-            <p className="pb-6">Your cart is empty!</p>
+            <p className="pb-6">{t("Your_cart_is_empty")}</p>
 
             <Link
               href={{ pathname: "/", query: { focus: "categories" } }}
               className="inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
             >
-              Continue Shopping
+              {t("continue_shopping")}
             </Link>
           </div>
         )}
