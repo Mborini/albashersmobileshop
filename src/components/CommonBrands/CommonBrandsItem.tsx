@@ -1,65 +1,34 @@
 import React from "react";
-
 import Image from "next/image";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 
 const CommonBrandItem = ({ item }: { item: CommonBrandItem }) => {
- 
+  const { t, i18n } = useTranslation();
+
   return (
     <div className="shadow-1 bg-white rounded-xl px-4 sm:px-5 pt-5 pb-4">
-     <Link href={`/Brands/single-common-brand?id=${item.id}`} className="rounded-md overflow-hidden">
-
+      <Link href={`/ProductsBrands/${item.id}`}>
         <Image
-          src={`/images/blog/${item.image.trim()}`}
-          alt="blog"
+          src={item.image}
+          alt="brand"
           className="rounded-md w-full"
           width={330}
           height={210}
         />
-      </Link>
-      <div className="mt-5.5">
-        <span className="flex items-center gap-3 mb-2.5">
-          <a
-            href="#"
-            className="text-custom-sm ease-out duration-200 hover:text-blue"
-          >
+
+        <div className="mt-5.5 text-center">
+          <span className="flex items-center justify-center gap-3 mb-2.5">
             {item.name}
-          </a>
+          </span>
 
-          {/* <!-- divider --> */}
-          <span className="block w-px h-4 bg-gray-4"></span>
+          <h2 className="font-medium text-dark text-lg sm:text-xl ease-out duration-200 mb-4 hover:text-blue w-full text-center">
+            {item.title}
+          </h2>
 
-          <a
-            href="#"
-            className="text-custom-sm ease-out duration-200 hover:text-blue"
-          >
-            {item.views} Views
-          </a>
-        </span>
-
-        <h2 className="font-medium text-dark text-lg sm:text-xl ease-out duration-200 mb-4 hover:text-blue">
-         {item.title}
-        </h2>
-
-        
-          Read More
-          <svg
-            className="fill-current"
-            width="18"
-            height="18"
-            viewBox="0 0 18 18"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              fillRule="evenodd"
-              clipRule="evenodd"
-              d="M10.1023 4.10225C10.3219 3.88258 10.6781 3.88258 10.8977 4.10225L15.3977 8.60225C15.6174 8.82192 15.6174 9.17808 15.3977 9.39775L10.8977 13.8977C10.6781 14.1174 10.3219 14.1174 10.1023 13.8977C9.88258 13.6781 9.88258 13.3219 10.1023 13.1023L13.642 9.5625H3C2.68934 9.5625 2.4375 9.31066 2.4375 9C2.4375 8.68934 2.68934 8.4375 3 8.4375H13.642L10.1023 4.89775C9.88258 4.67808 9.88258 4.32192 10.1023 4.10225Z"
-              fill=""
-            />
-          </svg>
-       
-      </div>
+          <span className="text-blue font-semibold">{t("shop_now")}</span>
+        </div>
+      </Link>
     </div>
   );
 };

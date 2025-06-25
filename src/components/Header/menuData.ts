@@ -11,7 +11,7 @@ export const menuData: Menu[] = [
     id: 2,
     title: "common_Brands",
     newTab: false,
-    path: "/Brands/AllCommon-Brands-Grid",
+    path: "/Brands",
   },
   {
     id: 3,
