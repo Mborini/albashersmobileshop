@@ -40,8 +40,7 @@ const Checkout = () => {
     }
   };
 
-  // دالة الإرسال النهائية بعد تحقق OTP
-  const sender = async (data: any, e?: React.FormEvent<HTMLFormElement>) => {
+  const sender = async (data: any) => {
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -71,15 +70,15 @@ const Checkout = () => {
 
       toast.success(t("success"));
       dispatch(removeAllItemsFromCart());
-      if (e) e.currentTarget.reset();
-      setIsLoading(false);
-      setIsOrdered(true);
+      setIsLoading(false); // هنا يمكن إزالته أو تركه حسب الحاجة
     } catch (error: any) {
       console.error("Error:", error);
       toast.error(error.message || t("error"));
       setIsLoading(false);
+      throw error; // ارفع الخطأ ليتعامل معه onOtpVerified
     }
   };
+
   const onclose = () => {
     setOtpModalOpened(false);
     setIsLoading(false);
@@ -106,10 +105,16 @@ const Checkout = () => {
   };
 
   // عند نجاح التحقق من OTP
-  const onOtpVerified = () => {
+  const onOtpVerified = async () => {
     if (!formDataStored) return;
-    sender(formDataStored);
-    setOtpModalOpened(false);
+    setIsLoading(true); // عطّل الزر لأن العملية بدأت
+    try {
+      await sender(formDataStored);
+      setOtpModalOpened(false);
+      setIsOrdered(true); // بعد نجاح العملية، الزر يبقى معطل
+    } catch (error) {
+      setIsLoading(false); // في حال فشل الإرسال، يسمح بالضغط مجددًا
+    }
   };
 
   return (
@@ -209,7 +214,7 @@ const Checkout = () => {
 
                   <button
                     type="submit"
-                    disabled={isLoading}
+                    disabled={isLoading || isOrdered} // يبقى معطل حتى انتهاء العملية والطلب ناجح
                     className="w-full flex justify-center items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (

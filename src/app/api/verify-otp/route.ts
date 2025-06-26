@@ -1,15 +1,21 @@
 import pool from "@/app/lib/db";
 import { NextResponse } from "next/server";
 
-
 export async function POST(request: Request) {
   try {
     const { email, otp } = await request.json();
+
     if (!email || !otp) {
       return NextResponse.json({ error: "Email and OTP are required" }, { status: 400 });
     }
 
-    // البحث عن الكود في قاعدة البيانات
+    // حذف كل رموز OTP التي انتهت صلاحيتها (أقدم من 5 دقائق)
+    await pool.query(`
+      DELETE FROM otp_codes
+      WHERE NOW() - created_at > INTERVAL '5 minutes'
+    `);
+
+    // البحث عن الكود في قاعدة البيانات بعد التنظيف
     const result = await pool.query(
       `SELECT * FROM otp_codes WHERE email = $1 AND otp = $2`,
       [email, otp]
@@ -22,9 +28,8 @@ export async function POST(request: Request) {
     const { created_at } = result.rows[0];
     const now = new Date();
     const createdAt = new Date(created_at);
-    const diffMinutes = (now.getTime() - createdAt.getTime()) / 60000; // 
+    const diffMinutes = (now.getTime() - createdAt.getTime()) / 60000;
 
-    // التحقق من الوقت
     if (diffMinutes > 5) {
       await pool.query(`DELETE FROM otp_codes WHERE email = $1 AND otp = $2`, [email, otp]);
       return NextResponse.json({ error: "انتهت صلاحية رمز التحقق" }, { status: 400 });

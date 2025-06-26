@@ -13,6 +13,8 @@ export const emailTranslations = {
     "email.deliver_to": "سيتم التوصيل إلى:",
     "email.notes": "ملاحظات",
     "email.footer": " البشير شوب - جميع الحقوق محفوظة",
+    "email.delivery_pay_info": "معلومات الدفع",
+    "email.pay_on_delivery": "الدفع عند الاستلام",
   },
   en: {
     "email.thanks": "Thank you for your order",
@@ -29,5 +31,7 @@ export const emailTranslations = {
     "email.deliver_to": "The order will be delivered to:",
     "email.notes": "Notes",
     "email.footer": "Albasheer Shop - All rights reserved",
+    "email.delivery_pay_info": "Payment Information",
+    "email.pay_on_delivery": "Cash on Delivery",
   },
 };

@@ -24,6 +24,9 @@ const EmptyCart = () => {
               <h3 className="font-medium text-gray-7  text-xl sm:text-2xl mb-3">
                 {t("message2")}
               </h3>
+              <h3 className="font-medium text-gray-7  text-xl sm:text-2xl mb-3">
+                {t("message5")}
+              </h3>
 
 
               <Link
