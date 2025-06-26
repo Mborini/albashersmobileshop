@@ -16,6 +16,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { MdFavoriteBorder, MdOutlineCancel } from "react-icons/md";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { LuShoppingBag } from "react-icons/lu";
+import { addItemToWishlist } from "@/redux/features/wishlist-slice";
 
 const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
@@ -53,6 +54,26 @@ const QuickViewModal = () => {
       })
     );
     setSelectedColor(null); // Reset selected color after adding to cart
+
+    closeModal();
+  };
+
+  const handleItemToWishList = () => {
+    // إذا المنتج له ألوان ولم يتم اختيار لون
+    if (product.colors?.length > 0 && !selectedColor) {
+      toast.error("يرجى اختيار لون قبل إضافة المنتج إلى المفضلة.");
+
+      return;
+    }
+    dispatch(
+      addItemToWishlist({
+        ...product,
+        status: "available",
+        quantity,
+        color: selectedColor, // ممكن يكون null إذا ما فيه ألوان، وهذا عادي
+      })
+    );
+    setSelectedColor(null); // Reset selected color after adding to wishlist
 
     closeModal();
   };
@@ -287,12 +308,16 @@ const QuickViewModal = () => {
                 <button
                   disabled={quantity === 0}
                   onClick={() => handleAddToCart()}
-                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md">
+                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md"
+                >
                   <LuShoppingBag size={18} />
                   Add to Cart
                 </button>
 
-                <button  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-dark py-3 px-6 rounded-md">
+                <button
+                  onClick={() => handleItemToWishList()}
+                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-dark py-3 px-6 rounded-md"
+                >
                   <MdFavoriteBorder size={18} />
                   Add to Wishlist
                 </button>

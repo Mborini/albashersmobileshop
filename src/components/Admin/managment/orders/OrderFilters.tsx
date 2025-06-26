@@ -45,7 +45,7 @@ function OrderFilters({ orders, onFilter }) {
     }
 
     onFilter(filtered);
-  }, [firstname, phone, itemTitle, status, orders, onFilter]);
+  }, [firstname, phone, itemTitle, status, orders, onFilter,dateRange]);
 
   return (
     <Paper p="md" mb="md">

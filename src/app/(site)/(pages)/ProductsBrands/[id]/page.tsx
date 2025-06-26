@@ -1,8 +1,8 @@
-// src/app/ProductsBrands/[id]/page.tsx
-
 import ProductsBrands from "@/components/CommonBrands/ProductsBrands";
 
+export default async function BrandProductsPage({ params }) {
+  // يمكنك هنا جلب البيانات
+  // const data = await fetch(...);
 
-export default function BrandProductsPage({ params }: { params: { id: string } }) {
   return <ProductsBrands id={params.id} />;
 }

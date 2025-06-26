@@ -19,18 +19,37 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
   };
 
   const handleAddToCart = () => {
-    dispatch(addItemToCart({ ...item, quantity: 1 }));
+    dispatch(
+      addItemToCart({
+        ...item,
+        quantity: 1,
+        color:
+          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+      })
+    );
   };
 
   const handleAddToWishlist = () => {
-    dispatch(addItemToWishlist({ ...item, status: "available", quantity: 1 }));
+    dispatch(
+      addItemToWishlist({
+        ...item,
+        status: "available",
+        quantity: 1,
+        color:
+          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+      })
+    );
   };
 
   return (
     <div className="group">
       <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-white shadow-1 min-h-[270px] mb-4">
-        <Image src={`/images/products/${item.images[0]}`} 
-         alt="" width={250} height={250} />
+        <Image
+          src={`/images/products/${item.images[0]}`}
+          alt=""
+          width={250}
+          height={250}
+        />
 
         <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
           <button
@@ -73,7 +92,6 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
           </button>
 
           <button
-            
             aria-label="button for favorite select"
             id="favOne"
             className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
@@ -140,7 +158,9 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
 
       <span className="flex items-center gap-2 font-medium text-lg">
         <span className="text-dark">JOD {item.price}</span>
-        <span className="text-dark-4 line-through">JOD {item.discountedPrice}</span>
+        <span className="text-dark-4 line-through">
+          JOD {item.discountedPrice}
+        </span>
       </span>
     </div>
   );

@@ -39,8 +39,8 @@ export default function ImagesForm({ image, onSubmit, onCancel }) {
     } else {
       form.reset();
     }
-  }, [image]);
-
+  }, [image, form]);
+  
   const handleSubmit = async (values) => {
     setLoading(true);
     try {

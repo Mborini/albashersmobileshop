@@ -68,7 +68,7 @@ export default function ProductForm({
       setIsArrival(false);
       setIsBestOffer(false);
     }
-  }, [product]);
+  }, [product, brands, subcategories]);
 
   async function loadAttributes(id: string | null) {
     if (!id) return;
@@ -174,7 +174,7 @@ export default function ProductForm({
           }))}
           value={selectedBrandId}
           onChange={setSelectedBrandId}
-          mb="sm"
+          
           required
           withAsterisk
         />

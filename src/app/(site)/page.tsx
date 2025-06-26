@@ -88,6 +88,7 @@ export default function HomePage() {
      
 
       <Script
+      id="google-analytics"
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({

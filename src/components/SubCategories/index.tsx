@@ -70,7 +70,7 @@ const SubCategories = () => {
     };
 
     fetchSubCategories();
-  }, []);
+  }, [categoryId]);
 
   return (
     <>

@@ -10,6 +10,7 @@ import {
   Stack,
   Divider,
 } from "@mantine/core";
+import Image from "next/image";
 
 type Message = { sender: "user" | "bot"; text: string };
 type Option = { label: string; next?: Option[]; reply?: string };
@@ -27,7 +28,10 @@ const options: Option[] = [
   {
     label: "🎧 الإكسسوارات",
     next: [
-      { label: "كفرات", reply: "نوفر مجموعة متنوعة من الكفرات الأصلية والمميزة." },
+      {
+        label: "كفرات",
+        reply: "نوفر مجموعة متنوعة من الكفرات الأصلية والمميزة.",
+      },
       { label: "شواحن", reply: "نوفر شواحن أصلية وسريعة." },
       { label: "سماعات", reply: "تتوفر سماعات بجودة عالية منها AirPods." },
     ],
@@ -43,14 +47,18 @@ const options: Option[] = [
   {
     label: "🛠️ الصيانة",
     next: [
-      { label: "تغيير شاشة", reply: "نقوم بتبديل الشاشات الأصلية بجودة عالية." },
+      {
+        label: "تغيير شاشة",
+        reply: "نقوم بتبديل الشاشات الأصلية بجودة عالية.",
+      },
       { label: "تغيير بطارية", reply: "نستخدم بطاريات أصلية ومضمونة." },
       { label: "مشاكل في الشبكة", reply: "نقدم خدمة فحص الشبكة مجاناً." },
     ],
   },
   {
     label: "✅ الكفالات",
-    reply: "جميع الأجهزة مكفولة لمدة سنة من تاريخ الشراء، وتشمل الكفالة العيوب المصنعية فقط.",
+    reply:
+      "جميع الأجهزة مكفولة لمدة سنة من تاريخ الشراء، وتشمل الكفالة العيوب المصنعية فقط.",
   },
   {
     label: "🕓 مواعيد العمل",
@@ -67,7 +75,10 @@ const options: Option[] = [
   {
     label: "ℹ️ معلومات إضافية",
     next: [
-      { label: "هل الأجهزة مكفولة؟", reply: "نعم، جميع الأجهزة مكفولة لمدة سنة." },
+      {
+        label: "هل الأجهزة مكفولة؟",
+        reply: "نعم، جميع الأجهزة مكفولة لمدة سنة.",
+      },
       { label: "هل يوجد تقسيط؟", reply: "نعم، يوجد تقسيط عبر شركات معتمدة." },
     ],
   },
@@ -92,7 +103,10 @@ export default function ChatPopup() {
 
     if (option.reply) {
       setTimeout(() => {
-        setMessages((prev) => [...prev, { sender: "bot", text: option.reply! }]);
+        setMessages((prev) => [
+          ...prev,
+          { sender: "bot", text: option.reply! },
+        ]);
       }, 400);
     }
 
@@ -132,10 +146,12 @@ export default function ChatPopup() {
           cursor: "pointer",
         }}
       >
-        <img
+        <Image
           src="/images/logo/bot.gif"
           alt="Bot"
-          style={{ width: "100%", height: "100%", borderRadius: "50%" }}
+          width={50} // نفس حجم الزر عندك
+          height={50}
+          style={{ borderRadius: "50%" }}
         />
       </button>
 
@@ -152,7 +168,10 @@ export default function ChatPopup() {
           <ScrollArea h="100%" offsetScrollbars>
             <Stack>
               {messages.map((msg, i) => (
-                <div key={i} ref={i === messages.length - 1 ? lastMessageRef : null}>
+                <div
+                  key={i}
+                  ref={i === messages.length - 1 ? lastMessageRef : null}
+                >
                   <Paper
                     p="xs"
                     radius="md"
@@ -161,7 +180,9 @@ export default function ChatPopup() {
                     ml={msg.sender === "user" ? "auto" : undefined}
                     mr={msg.sender === "bot" ? "auto" : undefined}
                   >
-                    <Text size="sm" dir="rtl">{msg.text}</Text>
+                    <Text size="sm" dir="rtl">
+                      {msg.text}
+                    </Text>
                   </Paper>
                 </div>
               ))}

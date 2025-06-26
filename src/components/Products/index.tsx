@@ -74,7 +74,7 @@ const NewArrivalProduct = () => {
     };
 
     fetchSubCategories();
-  }, []);
+  }, [subCategoryId]);
 
   useEffect(() => {
     setCurrentPage(1);

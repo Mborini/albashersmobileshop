@@ -1,26 +1,31 @@
-import pool from "@/app/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import pool from "@/app/lib/db";
 
+type ParamsType = {
+  params: { id: string };
+};
+
+// ✅ GET attributes by subcategory ID
 export async function GET(
   req: NextRequest,
-  contextPromise: Promise<{ params: { id: string } }>
-): Promise<Response> {
+  { params }: ParamsType
+) {
   try {
-    const { params } = await contextPromise;
     const { id } = params;
 
     const client = await pool.connect();
     const result = await client.query(
-      "SELECT id, name,input_type FROM attributes WHERE subcategory_id = $1 ORDER BY id ASC;",
+      "SELECT id, name, input_type FROM attributes WHERE subcategory_id = $1 ORDER BY id ASC;",
       [id]
     );
     client.release();
+
     return new Response(JSON.stringify(result.rows), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error: any) {
-    console.error("DB Error:", error);
+    console.error("DB Error (GET):", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { "Content-Type": "application/json" },
@@ -28,39 +33,32 @@ export async function GET(
   }
 }
 
+// ✅ PUT
 export async function PUT(
   req: NextRequest,
-  contextPromise: Promise<{ params: { id: string } }>
-): Promise<Response> {
+  { params }: ParamsType
+) {
   try {
-    const { params } = await contextPromise;
     const { id: subcategoryId } = params;
-
-    const body = await req.json();
-    const { attributes } = body;
+    const { attributes } = await req.json();
 
     if (!Array.isArray(attributes)) {
-      return new Response(
-        JSON.stringify({ error: "Attributes must be an array" }),
-        { status: 400, headers: { "Content-Type": "application/json" } }
+      return NextResponse.json(
+        { error: "Attributes must be an array" },
+        { status: 400 }
       );
     }
 
     const client = await pool.connect();
-
     try {
       await client.query("BEGIN");
 
-      // نحذف أولاً كل attributes الحالية لهذا subcategory
       await client.query("DELETE FROM attributes WHERE subcategory_id = $1", [
         subcategoryId,
       ]);
 
-      // ثم ندرج البيانات الجديدة
       for (const attr of attributes) {
         const { id, name, input_type } = attr;
-
-        // ممكن تتجنب id لو الـ id auto-generated في الجدول
         await client.query(
           `INSERT INTO attributes (id, subcategory_id, name, input_type)
            VALUES ($1, $2, $3, $4)`,
@@ -76,29 +74,24 @@ export async function PUT(
       client.release();
     }
 
-    return new Response(
-      JSON.stringify({ message: "Attributes updated successfully" }),
-      { status: 200, headers: { "Content-Type": "application/json" } }
+    return NextResponse.json(
+      { message: "Attributes updated successfully" },
+      { status: 200 }
     );
   } catch (error: any) {
-    console.error("DB Error:", error);
-    return new Response(
-      JSON.stringify({ error: error.message || "Internal Server Error" }),
-      { status: 500, headers: { "Content-Type": "application/json" } }
-    );
+    console.error("DB Error (PUT):", error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
+// ✅ POST
 export async function POST(
   req: NextRequest,
-  contextPromise: Promise<{ params: { id: string } }>
+  { params }: ParamsType
 ) {
   try {
-    const { params } = await contextPromise;
-    const subcategoryId = params.id;
-
-    const body = await req.json();
-    const { name, input_type } = body;
+    const { id: subcategoryId } = params;
+    const { name, input_type } = await req.json();
 
     if (!name || !input_type) {
       return NextResponse.json(
@@ -120,8 +113,8 @@ export async function POST(
     } finally {
       client.release();
     }
-  } catch (error) {
-    console.error("POST error:", error);
+  } catch (error: any) {
+    console.error("DB Error (POST):", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

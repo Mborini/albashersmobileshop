@@ -36,7 +36,8 @@ const SingleItem = ({ item }: { item: Product }) => {
         ...item,
         status: "available",
         quantity: 1,
-      
+        color:
+        item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
       })
     );
   };
