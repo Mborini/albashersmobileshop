@@ -78,6 +78,8 @@ export function generateOrderEmail({
           </tbody>
         </table>
 
+        <p>${t("email.pay_on_delivery")}</p>
+        ${note ? `<p><b>${t("email.notes")}:</b> ${note}</p>` : ""}
         <h3 style="margin-top: 30px; margin-bottom: 10px;">${t(
           "email.delivery_info"
         )}</h3>
@@ -85,8 +87,6 @@ export function generateOrderEmail({
         <h3 style="margin-top: 30px; margin-bottom: 10px;">${t(
           "email.delivery_pay_info"
         )}</h3>
-        <p>${t("email.pay_on_delivery")}</p>
-        ${note ? `<p><b>${t("email.notes")}:</b> ${note}</p>` : ""}
       </div>
 
       <div style="text-align: center; padding: 20px;">
@@ -95,7 +95,8 @@ export function generateOrderEmail({
 
    
 
-       
+             <div style="text-align: center; padding: 20px;">
+
         <img 
           src="https://res.cloudinary.com/do1etuooh/image/upload/v1750954328/albashername_fl4mi5.png" 
           alt="Side Image" 
@@ -103,16 +104,17 @@ export function generateOrderEmail({
         />
         
          <div>
-              <a href="https://www.facebook.com/AlbasherShop/">
-      <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952618/facebook_u8ghbn.png" alt="Facebook" style="width: 24px;" />
-    </a>
-    <a href="https://www.instagram.com/albasher.jo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
-      <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952620/instagram_sh1qqm.png" alt="Instagram" style="width: 24px;" />
-    </a>
-    <a href="https://api.whatsapp.com/send?phone=%2B962796855578&context=AffBft21GKovicFAmDVyUobbJSKgoFY_mKRzHwQkoRatO-3aXnjDeMOeBMnHPOl1my9Br6AkHUqNpVFlsGcvI-1nuWn8vBw-5bhvIv40x1YFVr0yNElt1kRHQ3G_VdN6VbazRr4XwakUDXYNYwEwmIh-OQ&source=FB_Page&app=facebook&entry_point=page_cta&fbclid=IwY2xjawKmyv9leHRuA2FlbQIxMABicmlkETFXaDVlZ040NFdMY05pOVRZAR7Okbmf6z6u3jERV8n0vVwZkA2_VvQ6Qv6Mv6DvWoRaINFFEvpmhMUwvuidHg_aem__njuoxiBAiwe17ajvov-ZA">
-      <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952618/whatsapp_knygrh.png" alt="WhatsApp" style="width: 24px;" />
-    </a>
-            </div>
+               <a href="https://www.facebook.com/AlbasherShop/">
+                 <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952618/facebook_u8ghbn.png" alt="Facebook" style="width: 24px;" />
+               </a>
+               <a href="https://www.instagram.com/albasher.jo?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==">
+                 <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952620/instagram_sh1qqm.png" alt="Instagram" style="width: 24px;" />
+               </a>
+                <a href="https://api.whatsapp.com/send?phone=%2B962796855578&context=AffBft21GKovicFAmDVyUobbJSKgoFY_mKRzHwQkoRatO-3aXnjDeMOeBMnHPOl1my9Br6AkHUqNpVFlsGcvI-1nuWn8vBw-5bhvIv40x1YFVr0yNElt1kRHQ3G_VdN6VbazRr4XwakUDXYNYwEwmIh-OQ&source=FB_Page&app=facebook&entry_point=page_cta&fbclid=IwY2xjawKmyv9leHRuA2FlbQIxMABicmlkETFXaDVlZ040NFdMY05pOVRZAR7Okbmf6z6u3jERV8n0vVwZkA2_VvQ6Qv6Mv6DvWoRaINFFEvpmhMUwvuidHg_aem__njuoxiBAiwe17ajvov-ZA">
+                  <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952618/whatsapp_knygrh.png" alt="WhatsApp" style="width: 24px;" />
+                </a>
+          </div>
+          </div>
       
    <div style="background-color: #f2f2f2; padding: 15px; text-align: center; font-size: 12px; color: #777;">
         ${t("email.footer")}
