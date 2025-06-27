@@ -2,33 +2,43 @@
 
 import React, { useEffect, useState } from "react";
 import { Table, ScrollArea, Paper } from "@mantine/core";
-import { completeOrder, declineOrder } from "./services/orders";
-import ConfirmDeclineModal from "./ConfirmDeclineModal";
+import { completeOrder, declineOrder, sendDeleveryEmail } from "./services/orders";
+import ConfirmModal from "./ConfirmModal";
 import OrderFilters from "./OrderFilters";
 import OrderRow from "./OrderRow";
 
 function OrderTable({ orders }) {
+  console.log(orders);
   const [orderList, setOrderList] = useState(orders);
   const [filteredOrders, setFilteredOrders] = useState(orders);
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
-  const [modalOpen, setModalOpen] = useState(false);
 
-  // تحديث البيانات لوصلتها تتغير
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+
+  const [declineModalOpen, setDeclineModalOpen] = useState(false);
+  const [completeModalOpen, setCompleteModalOpen] = useState(false);
+
   useEffect(() => {
     setOrderList(orders);
     setFilteredOrders(orders);
   }, [orders]);
 
-  const handleComplete = async (orderId) => {
+  const handleComplete = async () => {
+    console.log(selectedOrderId)
+    if (!selectedOrderId) return;
     try {
-      await completeOrder(orderId);
+      await completeOrder(selectedOrderId);
+      await sendDeleveryEmail(selectedOrder); // ✅ pass full order data
       const updatedOrders = orderList.map((order) =>
-        order.id === orderId
+        order.id === selectedOrderId
           ? { ...order, isCompleted: !order.isCompleted }
           : order
       );
       setOrderList(updatedOrders);
-      setFilteredOrders(updatedOrders); // حدث الفلترة بعد التحديث
+      setFilteredOrders(updatedOrders);
+      setSelectedOrderId(null);
+      setSelectedOrder(null);
+      setCompleteModalOpen(false);
     } catch (error) {
       console.error("Failed to complete order:", error);
     }
@@ -42,9 +52,9 @@ function OrderTable({ orders }) {
         order.id === selectedOrderId ? { ...order, isdeclined: true } : order
       );
       setOrderList(updatedOrders);
-      setFilteredOrders(updatedOrders); // حدث الفلترة بعد التحديث
-      setModalOpen(false);
+      setFilteredOrders(updatedOrders);
       setSelectedOrderId(null);
+      setDeclineModalOpen(false);
     } catch (error) {
       console.error("Failed to decline order:", error);
     }
@@ -74,20 +84,45 @@ function OrderTable({ orders }) {
                 <OrderRow
                   key={order.id}
                   order={order}
-                  onComplete={handleComplete}
+                  onComplete={() => {
+                    setSelectedOrderId(order.id);
+                    setSelectedOrder(order); // ✅ Save full order
+                    setCompleteModalOpen(true);
+                  }}
                   onDecline={() => {
                     setSelectedOrderId(order.id);
-                    setModalOpen(true);
+                    setDeclineModalOpen(true);
                   }}
                 />
               ))}
             </tbody>
           </Table>
         </ScrollArea>
-        <ConfirmDeclineModal
-          opened={modalOpen}
-          onClose={() => setModalOpen(false)}
+
+        {/* Confirm Complete/Pending */}
+        <ConfirmModal
+          opened={completeModalOpen}
+          onClose={() => setCompleteModalOpen(false)}
+          onConfirm={handleComplete}
+          title={
+            selectedOrder?.isCompleted
+              ? "Mark Order as Pending"
+              : "Complete the Order"
+          }
+          message={
+            selectedOrder?.isCompleted
+              ? "Are you sure you want to mark this order as pending?"
+              : "Are you sure you want to mark this order as complete?"
+          }
+        />
+
+        {/* Confirm Decline */}
+        <ConfirmModal
+          opened={declineModalOpen}
+          onClose={() => setDeclineModalOpen(false)}
           onConfirm={handleDecline}
+          title="Confirm Decline"
+          message="Are you sure you want to decline this order?"
         />
       </Paper>
     </>

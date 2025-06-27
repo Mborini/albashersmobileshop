@@ -16,4 +16,29 @@ export const declineOrder = async (orderId) => {
     method: 'PUT',
   });
 }
-  
+export const sendDeleveryEmail = async (order) => {
+  const res = await fetch("/api/send-delivery-email", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      to: order.email,
+      name: order.firstname,
+      phone: order.phone,
+      totalPrice: Number(order.total_price),
+      
+      country: order.country,
+      city: order.city,
+      address: order.address,
+      note: order.note,
+      lang: order.lang || "ar",
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to send delivery email");
+  }
+
+  return res.json();
+};

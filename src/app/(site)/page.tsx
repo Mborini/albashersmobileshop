@@ -85,7 +85,7 @@ export default function HomePage() {
   return (
     <>
       <Home />
-     
+      <ChatPopup />
 
       <Script
       id="google-analytics"

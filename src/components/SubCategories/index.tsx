@@ -131,12 +131,9 @@ const SubCategories = () => {
                 ref={sliderRef}
                 slidesPerView={6}
                 breakpoints={{
-                  1000: {
-                    slidesPerView: 4,
-                  },
-                  1200: {
-                    slidesPerView: 6,
-                  },
+                  0: { slidesPerView: 3 },
+                  1000: { slidesPerView: 4 },
+                  1200: { slidesPerView: 6 },
                 }}
               >
                 {SubCategory.map((item, key) => (
