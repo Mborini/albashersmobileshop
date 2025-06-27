@@ -18,6 +18,8 @@ import "@mantine/carousel/styles.css";
 import { fetchAdsImages } from "./services/adsServices";
 import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
+import MainSliderImages from "./MainSliderImages";
+import VideoList from "./VideoList";
 
 export default function GridImages({ onEditImage }) {
   const [adsImages, setAdsImages] = useState([]);
@@ -79,8 +81,10 @@ export default function GridImages({ onEditImage }) {
       <Grid align="center">
         <Grid.Col span={{ base: 12, sm: 6 }}>
           <Text fw={700} size="xl" c="blue">
-            {Math.floor(((item.price - item.discounted_Price) / item.price) * 100)}%
-            Sale Off
+            {Math.floor(
+              ((item.price - item.discounted_Price) / item.price) * 100
+            )}
+            % Sale Off
           </Text>
           <Title order={4} mt="xs">
             {item.title}
@@ -124,15 +128,7 @@ export default function GridImages({ onEditImage }) {
           withIndicators
           slideSize="100%"
           slideGap="md"
-          loop
-          styles={{
-            indicator: {
-              backgroundColor: "#999",
-              "&[data-active]": {
-                backgroundColor: "#000",
-              },
-            },
-          }}
+          
         >
           {images.map((item, index) => (
             <Carousel.Slide key={index}>
@@ -160,47 +156,21 @@ export default function GridImages({ onEditImage }) {
           </Stack>
         </Grid.Col>
 
-        <Grid.Col span={{ base: 12 }}>
-          <SliderSection title="Main Slider Images" images={mainSliderImages} />
-        </Grid.Col>
-
         <Grid.Col span={12}>
-          {videoImages.length > 0 && (
-            <Box mt="xl">
-              <Title order={3} mb="md">
-                الفيديوهات
-              </Title>
-              <Grid>
-                {videoImages.map((vid) => (
-                  <Grid.Col key={vid.id} span={{ base: 12, sm: 6, md: 4 }}>
-                    <Card withBorder radius="md" shadow="sm" padding="md">
-                      <video
-                        controls
-                        style={{ width: "100%", borderRadius: rem(8) }}
-                        src={vid.image_Url}
-                      >
-                        Your browser does not support the video tag.
-                      </video>
-                      <Button
-                        fullWidth
-                        mt="md"
-                        leftSection={<FaEdit />}
-                        color="orange"
-                        onClick={() =>
-                          onEditImage({
-                            id: vid.id,
-                            image: vid.image_Url,
-                          })
-                        }
-                      >
-                        تعديل الفيديو
-                      </Button>
-                    </Card>
-                  </Grid.Col>
-                ))}
-              </Grid>
-            </Box>
-          )}
+          <Grid.Col span={12}>
+            <Grid>
+              <Grid.Col span={{ base: 12, md: 6 }}>
+                <MainSliderImages
+                  images={mainSliderImages}
+                  onEditImage={onEditImage}
+                />
+              </Grid.Col>
+
+              <Grid.Col span={{ base: 12, md: 6 }}>
+                <VideoList videos={videoImages} onEditImage={onEditImage} />
+              </Grid.Col>
+            </Grid>
+          </Grid.Col>
         </Grid.Col>
       </Grid>
     </>

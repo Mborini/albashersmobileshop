@@ -61,13 +61,11 @@ export default function ImagesCard() {
           }}
         >
           <GridImages
-            adsImages={adsImages}
-            loading={loading}
-            onEditImage={(image) => {
-              setEditingImage(image);
-              open();
-            }}
-          />
+  onEditImage={(image) => {
+    setEditingImage(image);
+    open();
+  }}
+/>
         </Container>
       </Center>
 
@@ -79,14 +77,6 @@ export default function ImagesCard() {
         }}
         title="Edit Add Image"
         position="right"
-        
-        styles={{
-          drawer: {
-            [`@media (min-width: 400px)`]: {
-              width: "400px !important", // override size on larger screens
-            },
-          },
-        }}
       >
         <ImagesForm
           image={editingImage}
