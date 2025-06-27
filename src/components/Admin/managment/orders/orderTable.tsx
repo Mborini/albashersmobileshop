@@ -3,9 +3,9 @@
 import React, { useEffect, useState } from "react";
 import { Table, ScrollArea, Paper } from "@mantine/core";
 import { completeOrder, declineOrder, sendDeleveryEmail } from "./services/orders";
-import ConfirmModal from "./ConfirmModal";
 import OrderFilters from "./OrderFilters";
 import OrderRow from "./OrderRow";
+import ConfirmModal from "./ConfirmModal";
 
 function OrderTable({ orders }) {
   console.log(orders);
@@ -24,16 +24,23 @@ function OrderTable({ orders }) {
   }, [orders]);
 
   const handleComplete = async () => {
-    console.log(selectedOrderId)
-    if (!selectedOrderId) return;
+    if (!selectedOrderId || !selectedOrder) return;
+  
     try {
+      const wasCompleted = selectedOrder.isCompleted;
+  
       await completeOrder(selectedOrderId);
-      await sendDeleveryEmail(selectedOrder); // ✅ pass full order data
+  
+      if (!wasCompleted) {
+        await sendDeleveryEmail(selectedOrder);
+      }
+  
       const updatedOrders = orderList.map((order) =>
         order.id === selectedOrderId
-          ? { ...order, isCompleted: !order.isCompleted }
+          ? { ...order, isCompleted: !wasCompleted }
           : order
       );
+  
       setOrderList(updatedOrders);
       setFilteredOrders(updatedOrders);
       setSelectedOrderId(null);
@@ -43,6 +50,7 @@ function OrderTable({ orders }) {
       console.error("Failed to complete order:", error);
     }
   };
+  
 
   const handleDecline = async () => {
     if (!selectedOrderId) return;
@@ -107,12 +115,12 @@ function OrderTable({ orders }) {
           title={
             selectedOrder?.isCompleted
               ? "Mark Order as Pending"
-              : "Complete the Order"
+              : "Complete the Order "
           }
           message={
             selectedOrder?.isCompleted
               ? "Are you sure you want to mark this order as pending?"
-              : "Are you sure you want to mark this order as complete?"
+              : "Are you sure you want to mark this order as complete?, it will send an email to the customer."
           }
         />
 

@@ -16,8 +16,13 @@ export const emailTranslations = {
     "email.delivery_pay_info": "معلومات الدفع",
     "email.pay_on_delivery": "الدفع عند الاستلام",
     "email.order_on_the_way": "طلبك من البشير شوب قيد التوصيل",
-    "email.order_message": "عزيزي {name}، طلبك الآن قيد التحضير وسنقوم بتوصيله قريباً إلى {city}!",
-  
+    "email.order_message":
+      "عزيزي {name}، طلبك الآن قيد التحضير وسنقوم بتوصيله قريباً إلى {city}!",
+    "email.otp_subject": "رمز التحقق من البشير شوب",
+    "email.otp_heading": "رمز التحقق الخاص بك",
+    "email.otp_message": "مرحباً {name}، رمز التحقق الخاص بك هو:",
+    "email.otp_contact": "للاستفسار، تواصل معنا على الرقم:",
+    "email.new_otp_subject": "رمز تحقق جديد من البشير شوب",
   },
   en: {
     "email.thanks": "Thank you for your order",
@@ -37,7 +42,12 @@ export const emailTranslations = {
     "email.delivery_pay_info": "Payment Information",
     "email.pay_on_delivery": "Cash on Delivery",
     "email.order_on_the_way": "Your order from Albasheer Shop is on the way",
-    "email.order_message": "Dear {name}, your order will be delivered soon to {city}!",
-    
+    "email.order_message":
+      "Dear {name}, your order will be delivered soon to {city}!",
+    "email.otp_subject": "Your OTP Code from Albasheer Shop",
+    "email.otp_heading": "OTP Verification Code",
+    "email.otp_message": "Hello {name}, your OTP code is:",
+    "email.otp_contact": "For assistance, contact us at:",
+    "email.new_otp_subject": "New OTP Code from Albasheer Shop",
   },
 };

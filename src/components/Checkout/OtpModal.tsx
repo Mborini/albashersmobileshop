@@ -73,7 +73,7 @@ const OtpModal: React.FC<OtpModalProps> = ({
       const res = await fetch("/api/resend-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email ,lang: i18n.language }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || t("otp.invalid"));

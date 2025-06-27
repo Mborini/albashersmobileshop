@@ -40,7 +40,7 @@ export async function POST(request: Request) {
     await transporter.sendMail({
       from: process.env.EMAIL_USERNAME,
       to,
-      subject: `تم استلام طلبك - الإجمالي: JOD ${totalPrice}`,
+      subject: lang === "ar" ? "تفاصيل طلبك من البشير شوب " : "Your Order Details from Al-Basheer Shop",
       html,
     });
 

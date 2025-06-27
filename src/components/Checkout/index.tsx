@@ -32,7 +32,7 @@ const Checkout = () => {
     const res = await fetch("/api/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email , lang: i18n.language }),
     });
     if (!res.ok) {
       const errorData = await res.json();
