@@ -11,6 +11,7 @@ import {
   Divider,
 } from "@mantine/core";
 import Image from "next/image";
+import { BsRobot } from "react-icons/bs";
 
 type Message = { sender: "user" | "bot"; text: string };
 type Option = { label: string; next?: Option[]; reply?: string };
@@ -130,30 +131,28 @@ export default function ChatPopup() {
     <>
       {/* زر البوت ثابت في الزاوية اليسرى السفلى */}
       <button
-        onClick={() => setOpen(true)}
-        style={{
-          position: "fixed",
-          bottom: 80,
-          left: 20,
-          zIndex: 999,
-          width: 50,
-          height: 50,
-          borderRadius: "50%",
-          backgroundColor: "white",
-          border: "1px solid #ddd",
-          boxShadow: "0 0 8px rgba(0,0,0,0.1)",
-          padding: 0,
-          cursor: "pointer",
-        }}
-      >
-        <Image
-          src="/images/logo/bot.gif"
-          alt="Bot"
-          width={50} // نفس حجم الزر عندك
-          height={50}
-          style={{ borderRadius: "50%" }}
-        />
-      </button>
+  onClick={() => setOpen(true)}
+  style={{
+    position: "fixed",
+    bottom: 80,
+    left: 20,
+    zIndex: 999,
+    width: 50,
+    height: 50,
+    borderRadius: "50%",
+    backgroundColor: "black",
+    border: "1px solid #ddd",
+    boxShadow: "0 0 8px rgba(0,0,0,0.1)",
+    padding: 0,
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center", 
+  }}
+>
+  <BsRobot size={30} color="white" />
+</button>
+
 
       {/* صندوق المحادثة */}
       <Drawer

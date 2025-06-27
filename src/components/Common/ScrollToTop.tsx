@@ -38,7 +38,7 @@ export default function ScrollToTop() {
             isVisible ? "flex" : "hidden"
           }`}
         >
-<IoChevronUpCircleSharp color="blue" size={48}/>
+<IoChevronUpCircleSharp color="black" size={48}/>
 </button>
       )}
     </>

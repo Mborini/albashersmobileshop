@@ -71,14 +71,14 @@ const ProductItem = ({ item }: { item: Product }) => {
             }}
             id="newOne"
             aria-label="button for quick view"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
+            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
           >
             <IoEyeOutline size={18} />
           </button>
 
           <button
             onClick={() => handleAddToCart()}
-            className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-blue text-white ease-out duration-200 hover:bg-blue-dark"
+            className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-black text-white ease-out duration-200 hover:bg--gray-6"
           >
             {t("add_to_cart")}
           </button>
@@ -87,7 +87,7 @@ const ProductItem = ({ item }: { item: Product }) => {
             onClick={() => handleItemToWishList()}
             aria-label="button for favorite select"
             id="favOne"
-            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-blue"
+            className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
           >
             <MdFavoriteBorder size={18} />
           </button>
@@ -95,8 +95,8 @@ const ProductItem = ({ item }: { item: Product }) => {
       </div>
 
       <div className="flex gap-3 justify-between ">
-        <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
-          <Link href="/shop-details"> {item.title} </Link>
+        <h3 className="font-medium text-black ease-out duration-200 hover:text-gary-6 mb-1.5">
+           {item.title} 
         </h3>
         <Badge
       size="md"
