@@ -52,7 +52,7 @@ const ProductItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group">
-      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-gray shadow-2 border-gray-6 border-1 mb-4">
+      <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F5F5F7] shadow-2 border-gray-6 border-1 mb-4">
         {item.images[0] && (
           <Image
             src={item.images[0]}

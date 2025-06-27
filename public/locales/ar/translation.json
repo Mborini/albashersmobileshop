@@ -79,6 +79,16 @@
   "message4": "سيتم الاتصال بك من قبل فريقنا في أقرب وقت ممكن لتأكيد طلبك.",
   "shop_now": "تسوق الآن",
   "your_wishlist": "قائمة المفضلة الخاصة بك",
-  "action": "الإجراء"
- 
+  "action": "الإجراء",
+  "free_shipping": "شحن مجاني",
+  "free_shipping_desc": "لكل الطلبات",
+
+  "easy_returns": "إرجاع واستبدال خلال يوم",
+  "easy_returns_desc": "إلغاء الطلب بعد ٣ أيام",
+
+  "secure_payments": "مدفوعات آمنة 100%",
+  "secure_payments_desc": "ضمان أمان الدفع",
+
+  "support_247": "دعم فني 24/7",
+  "support_247_desc": "في أي وقت ومن أي مكان"
 }

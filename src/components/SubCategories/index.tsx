@@ -79,30 +79,36 @@ const SubCategories = () => {
         pages={["categories", "/", selectedName]}
       />
       <section
-        className="overflow-hidden pt-8"
+        className="overflow-hidden pt-4"
         dir={i18n.language === "ar" ? "rtl" : "ltr"}
       >
-        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 pb-15 border-b border-gray-3">
+        <div className="max-w-[1170px] w-full mt-2 mx-auto px-4 sm:px-8 xl:px-0 pb-15 ">
           <div className="swiper categories-carousel common-carousel">
             {!loading && !isMobile ? (
               <div className="mb-10 flex items-end justify-end">
                 <div className="flex items-center gap-3" dir="ltr">
-                  <button onClick={handlePrev} className="swiper-button-prev">
-                    <FaChevronLeft />
-                  </button>
-                  <button onClick={handleNext} className="swiper-button-next">
-                    <FaChevronRight />
-                  </button>
+                <button
+                  onClick={handlePrev}
+                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-black border border-black rounded-md text-white transition-all duration-300 hover:bg-white hover:text-black"
+                >
+                  <FaChevronLeft className="text-xs sm:text-sm" />
+                </button>
+
+                <button
+                  onClick={handleNext}
+                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-black border border-black rounded-md text-white transition-all duration-300 hover:bg-white hover:text-black"
+                >
+                  <FaChevronRight className="text-xs sm:text-sm" />
+                </button>
                 </div>
               </div>
             ) : null}
 
             {loading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-4">
-                {Array.from({ length: 6 }).map((_, idx) => (
+              <div className="grid grid-cols-2 sm:grid-cols-4 mt-5 xl:grid-cols-6 gap-4">
+                {Array.from({ length: 5 }).map((_, idx) => (
                   <div key={idx} className="flex flex-col items-center gap-3">
                     <Skeleton
-                      circle
                       width={130}
                       height={130}
                       baseColor="#d1d5db"
@@ -129,7 +135,7 @@ const SubCategories = () => {
             ) : (
               <Swiper
                 ref={sliderRef}
-                slidesPerView={6}
+                slidesPerView={5}
                 breakpoints={{
                   0: { slidesPerView: 3 },
                   1000: { slidesPerView: 4 },

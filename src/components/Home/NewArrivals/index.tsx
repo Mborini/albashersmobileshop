@@ -31,6 +31,7 @@ const NewArrival = () => {
   const [newArrivalProduct, setNewArrival] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t, i18n } = useTranslation();
+
   useEffect(() => {
     const fetchNewArrivalProduct = async () => {
       try {
@@ -49,52 +50,59 @@ const NewArrival = () => {
 
     fetchNewArrivalProduct();
   }, []);
+
   return (
     <section className="overflow-hidden pt-15">
-      <div
-        className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0"
-      >
-        {/* Section title with animated gradient + background image */}
-        <motion.div
+      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+        {/* Section title with animated background */}
+        <div
           className="relative w-full min-h-[80px] rounded-xl p-5 mb-8 overflow-hidden"
           style={{
-            backgroundImage: `
-              url('/images/shapes/newsletter-bg.jpg'),
-              linear-gradient(270deg, #0d47a1, #1976d2, #42a5f5, #1976d2, #0d47a1)
-            `,
+            backgroundColor: "#F5F5F7",
             backgroundSize: "cover, 600% 600%",
             backgroundBlendMode: "overlay",
             animation: "gradientShift 5s ease infinite",
           }}
         >
-          {/* Optional dark overlay for better text visibility */}
-          <div className="absolute inset-0  z-0 rounded-xl" />
-
-          {/* Content */}
-          <div className="relative z-10 flex items-center justify-between" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-            <div>
-              <span className="flex items-center gap-2.5 font-medium text-white mb-1.5">
+          <div
+            className="relative z-10 flex items-center justify-between"
+            dir={i18n.language === "ar" ? "rtl" : "ltr"}
+          >
+            <motion.div
+              initial={{ opacity: 0, x: i18n.language === "ar" ? 100 : -100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ amount: 0.3 }}
+            >
+              <span className="flex items-center gap-2.5 font-medium text-dark mb-1.5">
                 <MdOutlineStarOutline color="orange" size={25} />
                 {t("this_week")}
               </span>
-              <h2 className="font-semibold text-xl xl:text-heading-5 text-white">
+              <h2 className="font-semibold text-xl xl:text-heading-5 text-dark">
                 {t("new_arrivals")}
               </h2>
-            </div>
+            </motion.div>
 
-            <Link
-  href="/new-arrivals-products"
-  className="inline-flex font-medium text-custom-sm px-4 py-1 sm:py-2.5 sm:px-4 md:px-6 xl:px-7 rounded-md border border-gray-3 bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
->
-  {t("view_all")}
-</Link>
-
+            {/* هنا الأنيميشن على الكبسة */}
+            <motion.div
+              initial={{ opacity: 0, y: -50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              viewport={{ amount: 0.3 }}
+            >
+              <Link
+                href="/new-arrivals-products"
+                className="inline-flex font-medium text-custom-sm px-4 py-1 sm:py-2.5 sm:px-4 md:px-6 xl:px-7 rounded-md border border-gray-3 ease-out duration-200 bg-black text-white hover:border-transparent"
+              >
+                {t("view_all")}
+              </Link>
+            </motion.div>
           </div>
-        </motion.div>
+        </div>
 
         {/* Product Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-6">
-        {loading
+          {loading
             ? Array.from({ length: 10 }).map((_, i) => (
                 <SkeletonProductItem key={i} />
               ))

@@ -18,6 +18,7 @@ import ScrollToTop from "@/components/Common/ScrollToTop";
 import PreLoader from "@/components/Common/PreLoader";
 import { Toaster } from "react-hot-toast";
 import MobileBottomNav from "@/components/Header/MobileBottomNav";
+import ChatPopup from "@/components/Header/ChatPopup";
 
 export default function SiteLayout({
   children,
@@ -42,6 +43,7 @@ export default function SiteLayout({
                 <ModalProvider>
                   <PreviewSliderProvider>
                     <Header />
+                    <ChatPopup />
                     {children}
                     <MobileBottomNav />
                     <QuickViewModal />

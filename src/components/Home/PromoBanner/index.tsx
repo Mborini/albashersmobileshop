@@ -1,109 +1,109 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
+import { motion } from "framer-motion";
 
 const PromoBanner = () => {
   return (
-    <section className="overflow-hidden py-20">
+    <section className="overflow-hidden py-10 sm:py-20">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        {/* <!-- promo banner big --> */}
-        <div className="relative z-1 overflow-hidden rounded-lg bg-[#F5F5F7] py-12.5 lg:py-17.5 xl:py-22.5 px-4 sm:px-7.5 lg:px-14 xl:px-19 mb-7.5">
-          <div className="max-w-[550px] w-full">
-            <span className="block font-medium text-xl text-dark mb-3">
-              Apple iPhone 14 Plus
-            </span>
+        {/* promo banner big */}
+        <div className="rounded-lg bg-[#F5F5F7] px-4 sm:px-7 lg:px-14 xl:px-20 py-5 sm:py-5 lg:py-2 xl:py-2 flex items-center justify-between flex-row-reverse gap-6 sm:gap-10 mb-8">
+  {/* ✅ الصورة مع الأنيميشن */}
+  <motion.div
+    initial={{ opacity: 0, x: 100 }}
+    whileInView={{ opacity: 1, x: 0 }}
+    transition={{ duration: 0.4 }}
+    viewport={{ once: false, amount: 0.3 }}
+    className="w-[180px] sm:w-[220px] lg:w-[274px] shrink-0"
+  >
+    <Image
+      src="/images/promo/airpodsmax.png"
+      alt="AirPods Max image"
+      width={300}
+      height={300}
+      style={{ width: "100%", height: "auto", padding: "20px" }}
+      priority
+    />
+  </motion.div>
 
-            <h2 className="font-bold text-xl lg:text-heading-4 xl:text-heading-3 text-dark mb-5">
-              UP TO 30% OFF
-            </h2>
+  {/* ✅ النص */}
+  <div className="max-w-full sm:max-w-[550px] w-full">
+    <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-dark mb-4 sm:mb-5">
+      AirPods Max
+    </h2>
+    <p className="text-sm sm:text-base leading-relaxed">
+      Fully immersing you in every sound.
+    </p>
+  </div>
+</div>
 
-            <p>
-              iPhone 14 has the same superspeedy chip that’s in iPhone 13 Pro,
-              A15 Bionic, with a 5‑core GPU, powers all the latest features.
-            </p>
 
-            <a
-              href="#"
-              className="inline-flex font-medium text-custom-sm text-white bg-blue py-[11px] px-9.5 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5"
-            >
-              Buy Now
-            </a>
-          </div>
+        <div className="grid gap-6 sm:gap-8 lg:grid-cols-2">
+  {/* ✅ بطاقة AirPods */}
+  <div className="rounded-lg bg-[#F5F5F7] px-4 sm:px-7 lg:px-14 xl:px-20 py-5 sm:py-5 lg:py-2 xl:py-2 flex items-center justify-between flex-row-reverse gap-6 sm:gap-10 mb-8">
+  {/* صورة AirPods */}
+    <motion.div
+      initial={{ opacity: 0, x: 100 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: false, amount: 0.3 }}
+      className="w-[120px] sm:w-[160px] xl:w-[200px] shrink-0"
+    >
+      <Image
+        src="/images/promo/airpods.png"
+        alt="AirPods image"
+        width={200}
+        height={200}
+        style={{ width: "100%", height: "auto" }}
+        priority
+      />
+    </motion.div>
 
-          <Image
-            src="/images/promo/promo-01.png"
-            alt="promo img"
-            className="absolute bottom-0 right-4 lg:right-26 -z-1"
-            width={274}
-            height={350}
-          />
-        </div>
+    {/* النص */}
+    <div>
+      <h2 className="font-bold text-xl sm:text-2xl lg:text-3xl text-dark mb-2">
+        AirPods
+      </h2>
+      <p className="max-w-[100%] sm:max-w-[285px] text-sm sm:text-base">
+        Personalized Spatial Audio that immerses you in sound
+      </p>
+    </div>
+  </div>
 
-        <div className="grid gap-7.5 grid-cols-1 lg:grid-cols-2">
-          {/* <!-- promo banner small --> */}
-          <div className="relative z-1 overflow-hidden rounded-lg bg-[#DBF4F3] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10">
-            <Image
-              src="/images/promo/promo-02.png"
-              alt="promo img"
-              className="absolute top-1/2 -translate-y-1/2 left-3 sm:left-10 -z-1"
-              width={241}
-              height={241}
-            />
+  {/* ✅ بطاقة AirTag */}
+  <div className="rounded-lg bg-[#F5F5F7] px-4 sm:px-7 lg:px-14 xl:px-20 py-5 sm:py-5 lg:py-2 xl:py-2 flex items-center justify-between flex-row-reverse gap-6 sm:gap-10 mb-8">
+  {/* صورة AirTag */}
+    <motion.div
+      initial={{ opacity: 0, x: 100 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.8 }}
+      viewport={{ once: false, amount: 0.3 }}
+      className="w-[120px] sm:w-[160px] xl:w-[200px] shrink-0"
+    >
+      <Image
+        src="/images/promo/airtag.png"
+        alt="AirTag image"
+        width={200}
+        height={200}
+        style={{ width: "100%", height: "auto" }}
+        priority
+      />
+    </motion.div>
 
-            <div className="text-right">
-              <span className="block text-lg text-dark mb-1.5">
-                Foldable Motorised Treadmill
-              </span>
+    {/* النص */}
+    <div>
+      <h2 className="font-bold text-xl sm:text-2xl lg:text-3xl text-dark mb-2">
+        AirTag
+      </h2>
+      <p className="max-w-[100%] sm:max-w-[285px] text-sm sm:text-base">
+        Lose your knack for losing things.
+      </p>
+    </div>
+  </div>
+</div>
 
-              <h2 className="font-bold text-xl lg:text-heading-4 text-dark mb-2.5">
-                Workout At Home
-              </h2>
-
-              <p className="font-semibold text-custom-1 text-teal">
-                Flat 20% off
-              </p>
-
-              <a
-                href="#"
-                className="inline-flex font-medium text-custom-sm text-white bg-teal py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-teal-dark mt-9"
-              >
-                Grab Now
-              </a>
-            </div>
-          </div>
-
-          {/* <!-- promo banner small --> */}
-          <div className="relative z-1 overflow-hidden rounded-lg bg-[#FFECE1] py-10 xl:py-16 px-4 sm:px-7.5 xl:px-10">
-            <Image
-              src="/images/promo/promo-03.png"
-              alt="promo img"
-              className="absolute top-1/2 -translate-y-1/2 right-3 sm:right-8.5 -z-1"
-              width={200}
-              height={200}
-            />
-
-            <div>
-              <span className="block text-lg text-dark mb-1.5">
-                Apple Watch Ultra
-              </span>
-
-              <h2 className="font-bold text-xl lg:text-heading-4 text-dark mb-2.5">
-                Up to <span className="text-orange">40%</span> off
-              </h2>
-
-              <p className="max-w-[285px] text-custom-sm">
-                The aerospace-grade titanium case strikes the perfect balance of
-                everything.
-              </p>
-
-              <a
-                href="#"
-                className="inline-flex font-medium text-custom-sm text-white bg-orange py-2.5 px-8.5 rounded-md ease-out duration-200 hover:bg-orange-dark mt-7.5"
-              >
-                Buy Now
-              </a>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   );

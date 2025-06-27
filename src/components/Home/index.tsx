@@ -6,8 +6,6 @@ import Hero from "./Hero";
 import Categories from "./Categories";
 import PromoBanner from "./PromoBanner";
 import Video from "./Countdown";
-import Testimonials from "./Testimonials";
-import Newsletter from "../Common/Newsletter";
 import SliderImages from "./sliderImages";
 import ProductHighlights from "./ProductHighlights";
 
@@ -37,8 +35,7 @@ const Home = () => {
    <ProductHighlights />
       <Video />
       <PromoBanner />
-      <Testimonials />
-      <Newsletter />
+    
     </main>
   );
 };

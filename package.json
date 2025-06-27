@@ -29,7 +29,7 @@
     "embla-carousel-react": "^8.6.0",
     "formidable": "^3.5.4",
     "formidable-serverless": "^1.1.1",
-    "framer-motion": "^12.15.0",
+    "framer-motion": "^12.19.2",
     "i18next": "^25.2.1",
     "i18next-browser-languagedetector": "^8.1.0",
     "i18next-http-backend": "^3.0.2",

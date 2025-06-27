@@ -32,7 +32,7 @@ const Hero = () => {
 
   if (loading) {
     return (
-      <section className="pt-10 sm:pt-12 lg:pt-20 xl:pt-24 pb-5 bg-[#E5EAF4]">
+      <section className="pt-10 sm:pt-12 lg:pt-20 xl:pt-24 pb-5 bg-white">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           <div className="flex flex-wrap gap-5">
             <div className="xl:max-w-[757px] w-full">
@@ -54,18 +54,12 @@ const Hero = () => {
   }
 
   return (
-    <section className="overflow-hidden pb-10 lg:pb-12.5 xl:pb-15 pt-10 sm:pt-12 lg:pt-20 xl:pt-24 bg-[#e8edf7]">
+    <section className="overflow-hidden pb-10 lg:pb-12.5 xl:pb-15 pt-10 sm:pt-12 lg:pt-20 xl:pt-24 bg-white">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
         <div className="flex flex-wrap gap-5">
           <div className="xl:max-w-[757px] w-full">
-            <div className="relative z-1 rounded-[10px] bg-white overflow-hidden">
-              <Image
-                src="/images/hero/hero-bg.png"
-                alt="hero bg shapes"
-                className="absolute right-0 bottom-0 -z-1"
-                width={534}
-                height={520}
-              />
+            <div className="relative z-1 rounded-[10px] bg-[#F5F5F7] overflow-hidden">
+              
               <HeroCarousel images={sliderImages} />
             </div>
           </div>
@@ -77,7 +71,7 @@ const Hero = () => {
                 .map((item) => (
                   <div
                     key={item.id}
-                    className="w-full relative rounded-[10px] bg-white p-4 sm:p-7.5"
+                    className="w-full relative rounded-[10px] bg-[#F5F5F7] p-4 sm:p-7.5"
                   >
                     <div className="flex items-center gap-14">
                       <div>
@@ -89,10 +83,10 @@ const Hero = () => {
                             {item.description}
                           </p>
                           <span className="flex items-center gap-3">
-                            <span className="font-medium text-heading-5 text-red">
+                            <span className="font-medium text-xl text-dark">
                               JOD {item.discounted_Price}
                             </span>
-                            <span className="font-medium text-2xl text-dark-4 line-through">
+                            <span className="font-medium text-lg text-dark-4 line-through">
                               JOD {item.price}
                             </span>
                           </span>

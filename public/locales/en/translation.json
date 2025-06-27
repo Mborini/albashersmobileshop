@@ -79,6 +79,17 @@
   "message4": "Our team will contact you as soon as possible to confirm your order.",
   "shop_now": "Shop Now",
   "your_wishlist": "Your Wishlist",
-  "action": "Action"
+  "action": "Action",
+  "free_shipping": "Free Shipping",
+  "free_shipping_desc": "For all orders",
+
+  "easy_returns": "1 & 1 Returns",
+  "easy_returns_desc": "Cancellation after 3 days",
+
+  "secure_payments": "100% Secure Payments",
+  "secure_payments_desc": "Guarantee secure payments",
+
+  "support_247": "24/7 Dedicated Support",
+  "support_247_desc": "Anywhere & anytime"
 
 }

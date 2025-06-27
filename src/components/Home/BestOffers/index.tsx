@@ -4,10 +4,7 @@ import React, { useEffect, useState } from "react";
 import ProductItem from "@/components/Common/ProductItem";
 import Link from "next/link";
 import Skeleton from "react-loading-skeleton";
-import { MdOutlineStarOutline } from "react-icons/md";
 import { BiSolidOffer } from "react-icons/bi";
-import Image from "next/image";
-
 import { useTranslation } from "react-i18next";
 
 const SkeletonProductItem = () => {
@@ -53,57 +50,68 @@ const BestSaller = () => {
 
     fetchNewArrivalProduct();
   }, []);
+
   return (
     <section className="overflow-hidden mt-24">
-    
-        <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mb-15">
-          <motion.div
-            className="relative w-full min-h-[80px] rounded-xl p-5 mb-8 overflow-hidden"
-            style={{
-              backgroundImage: `
-                url('/images/shapes/bestSeller-bg.jpg'),
-                linear-gradient(270deg, #ff6f00, #ff8f00, #ffa726, #ff8f00, #ff6f00)
-              `,
-              backgroundSize: "cover, 600% 600%",
-              backgroundBlendMode: "overlay",
-              animation: "gradientShift 5s ease infinite",
-            }}
+      <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 mb-15">
+        <div
+          className="relative w-full min-h-[80px] rounded-xl p-5 mb-8 overflow-hidden"
+          style={{
+            backgroundColor: "#F5F5F7",
+            backgroundSize: "cover, 600% 600%",
+            backgroundBlendMode: "overlay",
+            animation: "gradientShift 5s ease infinite",
+          }}
+        >
+          <div className="absolute inset-0 z-0 rounded-xl" />
+          <div
+            className="relative z-10 flex items-center justify-between"
+            dir={i18n.language === "ar" ? "rtl" : "ltr"}
           >
-            <div className="absolute inset-0  z-0 rounded-xl" />
-            <div
-              className="relative z-10 flex items-center justify-between"
-              dir={i18n.language === "ar" ? "rtl" : "ltr"}
+            {/* ✅ النص فقط مع أنيميشن */}
+            <motion.div
+              initial={{ opacity: 0, x: i18n.language === "ar" ? 100 : -100 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ amount: 0.3 }}
             >
-              <div>
-                <span className="flex items-center gap-2.5 font-medium text-white mb-1.5">
-                  <BiSolidOffer color="white" size={25} />
-                  {t("jsut_for_you")}
-                </span>
-                <h2 className="font-semibold text-xl xl:text-heading-5 text-white">
-                  {t("best_offers")}
-                </h2>
-              </div>
+              <span className="flex items-center gap-2.5 font-medium text-black mb-1.5">
+                <BiSolidOffer color="orange" size={25} />
+                {t("jsut_for_you")}
+              </span>
+              <h2 className="font-semibold text-xl xl:text-heading-5 text-black">
+                {t("best_offers")}
+              </h2>
+            </motion.div>
+
+            {/* الزر مع أنيميشن نزول من فوق */}
+            <motion.div
+              initial={{ opacity: 0, y: -50 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+              viewport={{ amount: 0.3 }}
+            >
               <Link
                 href="/best-offers-products"
-                className="inline-flex font-medium text-sm sm:text-base px-4 py-1 sm:py-2.5 sm:px-4 md:px-6 xl:px-7 rounded-md border border-gray-3 bg-gray-1 text-dark ease-out duration-200 hover:bg-dark hover:text-white hover:border-transparent"
+                className="inline-flex font-medium text-custom-sm px-4 py-1 sm:py-2.5 sm:px-4 md:px-6 xl:px-7 rounded-md border border-gray-3 ease-out duration-200 bg-black text-white hover:border-transparent"
               >
                 {t("view_all")}
               </Link>
-            </div>
-          </motion.div>
-
-          <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-6">
-          {loading
-              ? Array.from({ length: 10 }).map((_, i) => (
-                  <SkeletonProductItem key={i} />
-                ))
-              : Array.isArray(newArrivalProduct) &&
-                newArrivalProduct.map((item, key) => (
-                  <ProductItem item={item} key={key} />
-                ))}
+            </motion.div>
           </div>
         </div>
-      
+
+        <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-x-4 gap-y-6">
+          {loading
+            ? Array.from({ length: 10 }).map((_, i) => (
+                <SkeletonProductItem key={i} />
+              ))
+            : Array.isArray(newArrivalProduct) &&
+              newArrivalProduct.map((item, key) => (
+                <ProductItem item={item} key={key} />
+              ))}
+        </div>
+      </div>
 
       {/* Global animation keyframes */}
       <style jsx global>{`
