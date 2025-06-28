@@ -20,7 +20,7 @@ const {t} = useTranslation();
         onClick={() => closeCartModal()}
         href={{ pathname: "/", query: { focus: "categories" } }}
 
-        className="w-full lg:w-10/12 mx-auto flex justify-center font-medium text-white bg-dark py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
+        className="w-full lg:w-10/12 mx-auto flex justify-center font-medium text-white bg-black py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
       >
         {t("continue_shopping")} {/* Continue Shopping button */}
       </Link>

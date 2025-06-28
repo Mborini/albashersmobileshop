@@ -205,47 +205,45 @@ const NewArrivalProduct = () => {
             {/* // <!-- Content Start --> */}
             <div className="xl:max-w-[870px] w-full">
               <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
-                <div className="flex items-center justify-between">
-                  {/* <!-- top bar left --> */}
-                  <div
-                    className="flex flex-wrap items-center gap-4"
-                    dir={i18n.language === "ar" ? "rtl" : "ltr"}
-                  >
-                    <TextInput
-                      variant="filled"
-                      radius="md"
-                      placeholder={t("search_products")}
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.currentTarget.value)}
-                    />
-                  </div>
-                  {/* <!-- top bar right --> */}
-                  <div className="flex items-center gap-2.5">
-                    <button
-                      onClick={() => setProductStyle("grid")}
-                      aria-label="button for product grid tab"
-                      className={`${
-                        productStyle === "grid"
-                          ? "bg-blue border-blue text-white"
-                          : "text-dark bg-gray-1 border-gray-3"
-                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
-                    >
-                      <IoGridOutline size={20} />
-                    </button>
+              <div className="flex items-center justify-between">
+  {/* <!-- top bar left --> */}
+  <div className="flex flex-wrap items-center gap-4">
+    <TextInput
+      variant="filled"
+      radius="md"
+      placeholder="Search products"
+      value={searchTerm}
+      onChange={(e) => setSearchTerm(e.currentTarget.value)}
+    />
+  </div>
 
-                    <button
-                      onClick={() => setProductStyle("list")}
-                      aria-label="button for product list tab"
-                      className={`${
-                        productStyle === "list"
-                          ? "bg-blue border-blue text-white"
-                          : "text-dark bg-gray-1 border-gray-3"
-                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
-                    >
-                      <TbLayoutList size={20} />
-                    </button>
-                  </div>
-                </div>
+  {/* <!-- top bar right --> */}
+  <div className="flex items-center gap-2.5">
+    <button
+      onClick={() => setProductStyle("grid")}
+      aria-label="button for product grid tab"
+      className={`${
+        productStyle === "grid"
+          ? "bg-black text-white"
+          : "bg-black text-white"
+      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
+    >
+      <IoGridOutline size={20} />
+    </button>
+
+    <button
+      onClick={() => setProductStyle("list")}
+      aria-label="button for product list tab"
+      className={`${
+        productStyle === "list"
+          ? "bg-black text-white"
+          : "bg-black text-white"
+      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
+    >
+      <TbLayoutList size={20} />
+    </button>
+  </div>
+</div>
               </div>
 
               {loading ? (

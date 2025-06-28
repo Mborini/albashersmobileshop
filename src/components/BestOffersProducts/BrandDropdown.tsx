@@ -63,36 +63,51 @@ const BrandDropdown = ({ brands, onBrandChange }) => {
             offsetScrollbars
           >
             <Checkbox.Group value={selectedBrands} onChange={handleChange}>
-              {brands.map((brand, idx) => (
-                <Checkbox
-                  key={idx}
-                  value={brand.name}
-                  label={
-                    <Flex justify="space-between" align="center" w="100%">
-                      <Text>{brand.name}</Text>
-                      <Box
-                        style={{
-                          backgroundColor: "#e0e0e0", // approximate of theme.colors.gray[2]
-                          borderRadius: 9999, // theme.radius.xl (usually a large radius)
-                          padding: "0 10px",
-                          fontSize: 12, // approximate theme.fontSizes.xs
-                          fontWeight: 500,
-                          color: "#4a4a4a", // approximate theme.colors.dark[6]
-                          minWidth: 30,
-                          textAlign: "center",
-                        }}
-                      >
-                        {brand.products}
-                      </Box>
-                    </Flex>
-                  }
-                  style={{
-                    marginBottom: 8,
-                   
-                  }}
-                />
-              ))}
-            </Checkbox.Group>
+  {brands.map((brand, idx) => (
+    <Checkbox
+      key={idx}
+      value={brand.name}
+      label={
+        <Flex justify="space-between" align="center" w="100%">
+          <Text>{brand.name}</Text>
+          <Box
+            style={{
+              backgroundColor: "#e0e0e0",
+              borderRadius: 9999,
+              padding: "0 10px",
+              fontSize: 12,
+              fontWeight: 500,
+              color: "#4a4a4a",
+              minWidth: 30,
+              textAlign: "center",
+            }}
+          >
+            {brand.products}
+          </Box>
+        </Flex>
+      }
+      styles={{
+        input: {
+          backgroundColor: selectedBrands.includes(brand.name)
+            ? "black"
+            : "white",
+          borderColor: selectedBrands.includes(brand.name)
+            ? "black"
+            : "#ced4da",
+        },
+        icon: {
+          color: selectedBrands.includes(brand.name) ? "white" : "black",
+        },
+        label: {
+          color: selectedBrands.includes(brand.name) ? "black" : "inherit",
+          fontWeight: selectedBrands.includes(brand.name) ? 600 : 400,
+        },
+      }}
+      style={{ marginBottom: 8 }}
+    />
+  ))}
+</Checkbox.Group>
+
           </ScrollArea>
         </Box>
       </Collapse>

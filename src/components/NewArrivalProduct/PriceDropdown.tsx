@@ -77,7 +77,7 @@ const PriceDropdown = ({ onPriceChange }) => {
             max={1500}
             step={1}
             size="sm"
-            color="blue"
+            color="black"
             thumbSize={18}
           />
 

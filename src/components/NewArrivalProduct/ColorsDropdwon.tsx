@@ -63,7 +63,7 @@ const ColorsDropdown = ({ colors, onColorChange }) => {
                   backgroundColor: "#eee",
                   border:
                     activeColor === null
-                      ? "2px solid #228be6"
+                      ? "2px solid black"
                       : "1px solid #ccc",
                   cursor: "pointer",
                   display: "flex",
@@ -90,7 +90,7 @@ const ColorsDropdown = ({ colors, onColorChange }) => {
                     backgroundColor: colorObj.hex_code,
                     border:
                       activeColor === colorObj.hex_code
-                        ? "2px solid #228be6"
+                        ? "2px solid black"
                         : "1px solid #ccc",
                     cursor: "pointer",
                   }}

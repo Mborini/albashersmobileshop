@@ -69,22 +69,22 @@ const SingleListItem = ({ item }: { item: Product }) => {
             handleQuickViewUpdate();
           }}
           aria-label="button for quick view"
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-[5px] shadow-1 text-dark bg-white hover:text-blue"
-        > <IoEyeOutline size={18} />
+          className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
+          > <IoEyeOutline size={18} />
         </button>
 
         <button
           onClick={handleAddToCart}
-          className="inline-flex font-medium text-xs sm:text-sm py-1.5 px-4 sm:px-5 rounded-[5px] bg-blue text-white hover:bg-blue-dark"
-        >
+          className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-black text-white ease-out duration-200 hover:bg--gray-6"
+          >
          {t("add_to_cart")}
         </button>
 
         <button
           onClick={handleItemToWishList}
           aria-label="button for favorite select"
-          className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-[5px] shadow-1 text-dark bg-white hover:text-blue"
-        >
+          className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
+          >
          <MdFavoriteBorder size={18} />
         </button>
       </div>
@@ -94,7 +94,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
     <div className="w-full flex flex-col gap-3 sm:gap-5 justify-center py-4 px-3 sm:px-7.5 lg:pl-11 lg:pr-12">
       <div>
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <h3 className="font-medium text-sm sm:text-base text-dark hover:text-blue mb-1">
+        <h3 className="font-medium text-dark ease-out duration-200 hover:text-gary-7 mb-1.5">
             {item.title}
           </h3>
           <Badge

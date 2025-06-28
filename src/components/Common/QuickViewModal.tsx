@@ -130,7 +130,7 @@ const QuickViewModal = () => {
                         height={61}
                         className={`aspect-square cursor-pointer ${
                           activePreview === index
-                            ? "border-2 border-blue-light rounded-lg"
+                            ? "border-2 border-black rounded-lg"
                             : ""
                         }`}
                         onClick={() => setActivePreview(index)}
@@ -308,7 +308,7 @@ const QuickViewModal = () => {
                 <button
                   disabled={quantity === 0}
                   onClick={() => handleAddToCart()}
-                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md"
+                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md"
                 >
                   <LuShoppingBag size={18} />
                   Add to Cart
@@ -316,7 +316,7 @@ const QuickViewModal = () => {
 
                 <button
                   onClick={() => handleItemToWishList()}
-                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-dark py-3 px-6 rounded-md"
+                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md"
                 >
                   <MdFavoriteBorder size={18} />
                   Add to Wishlist

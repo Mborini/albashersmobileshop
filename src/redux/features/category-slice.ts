@@ -6,8 +6,16 @@ interface CategoryState {
   selectedCategoryName: string;
 }
 
+// اقرأ القيمة من localStorage إذا كانت موجودة
+const getInitialCategoryName = (): string => {
+  if (typeof window !== "undefined") {
+    return localStorage.getItem("selectedCategoryName") || "";
+  }
+  return "";
+};
+
 const initialState: CategoryState = {
-  selectedCategoryName: "",
+  selectedCategoryName: getInitialCategoryName(),
 };
 
 const categorySlice = createSlice({
@@ -16,6 +24,11 @@ const categorySlice = createSlice({
   reducers: {
     setSelectedCategoryName: (state, action: PayloadAction<string>) => {
       state.selectedCategoryName = action.payload;
+
+      // خزّن القيمة في localStorage
+      if (typeof window !== "undefined") {
+        localStorage.setItem("selectedCategoryName", action.payload);
+      }
     },
   },
 });
