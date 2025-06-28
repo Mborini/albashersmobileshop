@@ -25,43 +25,48 @@ const MobileBottomNav = () => {
 
   return (
     // داخل return:
-    <div className="fixed bottom-0 left-0 w-full bg-white flex justify-around items-center h-14 z-50 sm:hidden">
-      {/* المفضلة */}
+    <div
+  className="fixed bottom-0 left-0 w-full flex justify-around items-center h-14 z-50 sm:hidden"
+  style={{
+    backgroundImage:
+      "linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0))",
+  }}
+>
 
       <Link
-  href="/?focus=categories"
-  scroll={false} // مهم حتى ما يعيد تحميل الصفحة
-  className="flex flex-col items-center text-gray-700 hover:text-blue-600"
->
-  <TbCategoryFilled size={24} color="gray" />
-  <span className="text-xs">{t("categories")}</span>
-</Link>
+        href="/?focus=categories"
+        scroll={false} // مهم حتى ما يعيد تحميل الصفحة
+        className="flex flex-col items-center text-white hover:text-blue-600"
+      >
+        <TbCategoryFilled size={24} />
+        <span className="text-xs">{t("categories")}</span>
+      </Link>
 
       <Link
         href="/best-offers-products"
-        className="flex flex-col items-center text-gray-700 hover:text-blue-600"
+        className="flex flex-col items-center text-white hover:text-blue-600"
       >
-        <BiSolidOffer size={24} color="green" />
+        <BiSolidOffer size={24} />
         <span className="text-xs">{t("best_offers")}</span>
       </Link>
       <Link
         href="/new-arrivals-products"
-        className="flex flex-col items-center text-gray-700 hover:text-blue-600"
+        className="flex flex-col items-center text-white hover:text-blue-600"
       >
-        <FaStarHalfAlt size={24} color="orange" />
+        <FaStarHalfAlt size={24} />
         <span className="text-xs">{t("new_arrivals")}</span>
       </Link>
       <Link
         href="/wishlist"
-        className="flex flex-col items-center text-gray-700 hover:text-blue-600"
+        className="flex flex-col items-center text-white hover:text-blue-600"
       >
-        <MdFavorite size={24} color="red" />
+        <MdFavorite size={24} />
         <span className="text-xs">{t("favorit")}</span>
       </Link>
       {/* السلة */}
       <button
         onClick={openCartModal}
-        className="relative flex flex-col items-center text-gray-700 hover:text-blue-600"
+        className="relative flex flex-col items-center text-white hover:text-blue-600"
       >
         <FiShoppingBag size={24} />
         <span className="text-xs">{t("cart")}</span>

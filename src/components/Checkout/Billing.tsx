@@ -7,8 +7,8 @@ const Billing = () => {
 
   return (
     <div dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-      <div className="bg-white shadow-1 rounded-[10px] p-4 mb-6">
-        <h2 className="font-medium text-dark text-xl sm:text-2xl">
+      <div className="bg-black text-white shadow-1 rounded-[10px] p-4 mb-6">
+        <h2 className="font-medium  text-xl sm:text-2xl">
           {t("billing.title")}
         </h2>
       </div>

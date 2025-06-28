@@ -90,6 +90,9 @@
   "secure_payments_desc": "Guarantee secure payments",
 
   "support_247": "24/7 Dedicated Support",
-  "support_247_desc": "Anywhere & anytime"
+  "support_247_desc": "Anywhere & anytime",
+  "chash_on_delivery": "Cash on Delivery",
+  "payment_methods": "Payment Methods",
+  "image": "Product Image"
 
 }

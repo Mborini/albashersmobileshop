@@ -90,5 +90,8 @@
   "secure_payments_desc": "ضمان أمان الدفع",
 
   "support_247": "دعم فني 24/7",
-  "support_247_desc": "في أي وقت ومن أي مكان"
+  "support_247_desc": "في أي وقت ومن أي مكان",
+  "chash_on_delivery": "الدفع عند الاستلام",
+  "payment_methods": "طريقة الدفع",
+  "image": "صورة المنتج"
 }

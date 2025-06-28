@@ -163,50 +163,53 @@ const Header = () => {
 
       {/* Drawer للموبايل */}
       <Drawer opened={opened} onClose={close} size="230px" position="right">
-        <div className="flex flex-col mt-2 gap-4">
-          {menuData.map((menuItem, idx) =>
-            menuItem.submenu ? (
-              <Dropdown key={idx} menuItem={menuItem} stickyMenu={stickyMenu} />
-            ) : (
-              <Button
-                key={idx}
-                component={Link}
-                href={menuItem.path}
-                onClick={close}
-                variant="light"
-                size="sm"
-              >
-                {t(menuItem.title)}
-              </Button>
-            )
-          )}
+  <div className="flex flex-col mt-2 gap-4">
+    {menuData.map((menuItem, idx) =>
+      menuItem.submenu ? (
+        <Dropdown key={idx} menuItem={menuItem} stickyMenu={stickyMenu} />
+      ) : (
+        <Button
+          key={idx}
+          component={Link}
+          href={menuItem.path}
+          onClick={close}
+          size="sm"
+          className="bg-black text-white hover:bg-black"
+        >
+          {t(menuItem.title)}
+        </Button>
+      )
+    )}
 
-          <Link
-            href="/wishlist"
-            className="text-sm flex items-center gap-1 text-gray-700 hover:text-blue-600"
-            dir={i18n.language === "ar" ? "rtl" : "ltr"}
-            onClick={close}
-          >
-            <MdFavorite color="red" size={20} />
-            {t("favorit")}
-          </Link>
+    {/* Wishlist Button Styled */}
+    <Link
+      href="/wishlist"
+      className="text-sm font-bold flex items-center justify-center gap-1 bg-black text-white hover:bg-black px-3 py-2 rounded"
+      
+      onClick={close}
+    >
+     
+      {t("favorit")}
+    </Link>
 
-          <button
-            onClick={() => {
-              changeLanguage(i18n.language === "en" ? "ar" : "en");
-              close();
-            }}
-            className="mt-6 self-end flex text-sm items-center gap-1 text-gray-700 hover:text-blue-600"
-            dir={i18n.language === "ar" ? "rtl" : "ltr"}
-          >
-            <Flag
-              code={i18n.language === "en" ? "GB" : "JO"}
-              style={{ width: 18, height: 12 }}
-            />
-            {i18n.language === "en" ? "AR" : "EN"}
-          </button>
-        </div>
-      </Drawer>
+    {/* Language Switch Button Styled */}
+    <button
+  onClick={() => {
+    changeLanguage(i18n.language === "en" ? "ar" : "en");
+  }}
+  className="w-full justify-center flex items-center gap-3 bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
+  
+>
+  <Flag
+    code={i18n.language === "en" ? "GB" : "JO"}
+    style={{ width: 18, height: 12 }}
+  />
+  <span>{i18n.language === "en" ? "EN" : "AR"}</span>
+</button>
+
+  </div>
+</Drawer>
+
     </header>
   );
 };

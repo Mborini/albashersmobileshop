@@ -77,49 +77,39 @@ const CartSidebarModal = () => {
           </div>
 
           <div className="border-t border-gray-3 bg-white pt-5 pb-4 sm:pb-7.5 lg:pb-11 mt-7.5 sticky bottom-0">
-            {cartItems.length > 0 ?(
-            <div
-              className="flex items-center justify-between gap-5 mb-6"
-              dir={i18n.language === "ar" ? "rtl" : "ltr"}
-            >
-              <p className="font-medium text-xl text-dark">{t("total")} :</p>
+  {cartItems.length > 0 && (
+    <>
+      <div
+        className="flex items-center justify-between gap-5 mb-6"
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      >
+        <p className="font-medium text-xl text-dark">{t("total")} :</p>
+        <p className="font-medium text-xl text-dark">JOD {totalPrice}</p>
+      </div>
 
-              <p className="font-medium text-xl text-dark">JOD {totalPrice}</p>
-            </div>
-            ) : (
-              null
-            )}
+      <div
+        className="flex items-center gap-4"
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      >
+        <Link
+          onClick={() => closeCartModal()}
+          href="/cart"
+          className="w-full flex justify-center text-sm text-white bg-black py-[13px] px-6 rounded-md ease-out duration-200"
+        >
+          {t("cart_view")}
+        </Link>
+        <Link
+          href="/checkout"
+          onClick={() => closeCartModal()}
+          className="w-full flex justify-center text-sm text-white bg-black py-[13px] px-6 rounded-md ease-out duration-200 hover:bg-opacity-95"
+        >
+          {t("complete_your_order")}
+        </Link>
+      </div>
+    </>
+  )}
+</div>
 
-            <div
-              className="flex items-center gap-4"
-              dir={i18n.language === "ar" ? "rtl" : "ltr"}
-            >
-              <Link
-                onClick={() => closeCartModal()}
-                href="/cart"
-                className="w-full flex justify-center text-sm text-white bg-black py-[13px] px-6 rounded-md ease-out duration-200 "
-              >
-                {t("cart_view")}
-              </Link>
-              <Link
-                href={cartItems.length === 0 ? "#" : "/checkout"}
-                onClick={(e) => {
-                  if (cartItems.length === 0) {
-                    e.preventDefault();
-                    return;
-                  }
-                  closeCartModal();
-                }}
-                className={`w-full flex justify-center text-sm text-white py-[13px] px-6 rounded-md ease-out duration-200 ${
-                  cartItems.length === 0
-                    ? "bg-black cursor-not-allowed pointer-events-none"
-                    : "bg-black hover:bg-opacity-95"
-                }`}
-              >
-                {t("complete_your_order")}
-              </Link>
-            </div>
-          </div>
         </div>
       </div>
     </div>

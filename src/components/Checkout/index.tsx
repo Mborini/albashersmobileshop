@@ -119,7 +119,9 @@ const Checkout = () => {
 
   return (
     <>
-      <Breadcrumb title={"Checkout"} pages={["checkout"]} />
+      <Breadcrumb title={
+        t("checkout")
+      } pages={["checkout"]} />
       <section className="overflow-hidden py-20 bg-gray-2">
         <Toaster position="top-center" />
         {cartItems.length ? (
@@ -135,10 +137,10 @@ const Checkout = () => {
                   className="max-w-[455px] w-full"
                 >
                   <div className="bg-white shadow-1 rounded-[10px]">
-                    <div className="border-b border-gray-3 py-5 px-4 sm:px-8.5">
-                      <h3 className="font-medium text-xl text-dark">
+                    <div className="border-b border-gray-3 rounded-t-[10px] py-5 px-4 sm:px-8.5 bg-black text-white">
+                      <h2 className="font-medium text-xl ">
                         {t("order_summary")}
-                      </h3>
+                      </h2>
                     </div>
 
                     <div className="pt-2.5 pb-8.5 px-4 sm:px-8.5">
@@ -192,8 +194,20 @@ const Checkout = () => {
                           </p>
                         </div>
                         <div>
-                          <p className="font-medium text-lg text-dark text-right">
+                          <p className="font-medium text-md text-dark text-right">
                             {t("free")}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center border-b border-gray-3 pb-5 justify-between pt-5">
+                        <div>
+                          <p className="font-medium text-md text-dark">
+                            {t("payment_methods")}
+                          </p>
+                        </div>
+                        <div>
+                          <p className="font-medium text-md text-dark text-right">
+                            {t("chash_on_delivery")}
                           </p>
                         </div>
                       </div>
@@ -215,7 +229,7 @@ const Checkout = () => {
                   <button
                     type="submit"
                     disabled={isLoading || isOrdered} // يبقى معطل حتى انتهاء العملية والطلب ناجح
-                    className="w-full flex justify-center items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark mt-7.5 disabled:opacity-70 disabled:cursor-not-allowed"
+                    className="w-full flex justify-center items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md ease-out duration-200  mt-7.5 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <>
