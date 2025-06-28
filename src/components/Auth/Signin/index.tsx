@@ -102,7 +102,7 @@ const Signin = () => {
                 type="submit"
                 disabled={loading}
                 className={`w-full flex justify-center font-medium text-white ${
-                  loading ? "bg-gray-500" : "bg-dark hover:bg-blue"
+                  loading ? "bg-gray-7" : "bg-black"
                 } py-3 px-6 rounded-lg ease-out duration-200 mt-7.5`}
               >
                 {loading ? "Signing in..." : "Sign in to account"}

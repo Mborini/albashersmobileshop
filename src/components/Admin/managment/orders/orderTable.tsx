@@ -120,7 +120,7 @@ function OrderTable({ orders }) {
           message={
             selectedOrder?.isCompleted
               ? "Are you sure you want to mark this order as pending?"
-              : "Are you sure you want to mark this order as complete?, it will send an email to the customer."
+              : "Are you sure you want to mark this order as complete?, it will send a delivery email to the customer."
           }
         />
 

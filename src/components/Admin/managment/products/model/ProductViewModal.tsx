@@ -23,14 +23,7 @@ export default function ProductViewModal({ opened, onClose, product }) {
       }}
     >
       <Group style={{ marginBottom: 15 }}>
-        <Image
-          src={`/images/products/${product.product_images[0]}`}
-          alt={product.product_name}
-          height={150}
-          width={150}
-          radius="md"
-          fit="cover"
-        />
+        
         <div>
           <Text size="lg">{product.product_name}</Text>
           <Text size="sm" c="dimmed">
