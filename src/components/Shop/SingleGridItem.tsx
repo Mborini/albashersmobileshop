@@ -28,23 +28,30 @@ const SingleGridItem = ({ item }: { item: Product }) => {
   const handleAddToCart = () => {
     dispatch(
       addItemToCart({
-        ...item,
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
         color:
           item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
       })
     );
   };
 
   const handleItemToWishList = () => {
-    
     dispatch(
       addItemToWishlist({
-        ...item,
-        status: "available",
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
         color:
           item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
+        status: "available",
       })
     );
   };
@@ -71,7 +78,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
             aria-label="button for quick view"
             className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
           >
-           <IoEyeOutline size={18} />
+            <IoEyeOutline size={18} />
           </button>
 
           <button
@@ -87,7 +94,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
             id="favOne"
             className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
           >
-          <MdFavoriteBorder size={18} />
+            <MdFavoriteBorder size={18} />
           </button>
         </div>
       </div>

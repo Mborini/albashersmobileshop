@@ -30,9 +30,14 @@ const SingleListItem = ({ item }: { item: Product }) => {
   const handleAddToCart = () => {
     dispatch(
       addItemToCart({
-        ...item,
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color:
+          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
       })
     );
   };
@@ -40,9 +45,15 @@ const SingleListItem = ({ item }: { item: Product }) => {
   const handleItemToWishList = () => {
     dispatch(
       addItemToWishlist({
-        ...item,
-        status: "available",
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
+        color:
+          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
+        status: "available",
       })
     );
   };
