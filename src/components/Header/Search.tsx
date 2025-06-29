@@ -210,7 +210,7 @@ export default function Search() {
         dir={i18n.language === "ar" ? "rtl" : "ltr"}
         className="w-full flex justify-center"
       >
-        <Button
+        <button
           onClick={open}
           className="p-0 m-0 bg-transparent border-none shadow-none hover:bg-transparent"
         >
@@ -220,7 +220,7 @@ export default function Search() {
               {t("search_products")}
             </span>
           </div>
-        </Button>
+        </button>
       </div>
     </>
   );
