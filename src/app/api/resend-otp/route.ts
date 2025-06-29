@@ -10,14 +10,19 @@ function generateOTP() {
 
 export async function POST(request: Request) {
   try {
-    const { email ,lang } = await request.json();
+    const { email, lang } = await request.json();
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
     // حذف الكود القديم
-    await pool.query(`DELETE FROM otp_codes WHERE email = $1`, [email]);
+    await pool.query(
+      `
+      DELETE FROM otp_codes WHERE email = $1 AND NOW() - created_at > INTERVAL '5 minutes'
+    `,
+      [email]
+    );
 
     // إنشاء كود جديد
     const otp = generateOTP();
@@ -40,7 +45,10 @@ export async function POST(request: Request) {
     await transporter.sendMail({
       from: process.env.EMAIL_USERNAME,
       to: email,
-      subject: lang === "ar" ? emailTranslations.ar["email.new_otp_subject"] : emailTranslations.en["email.new_otp_subject"],
+      subject:
+        lang === "ar"
+          ? emailTranslations.ar["email.new_otp_subject"]
+          : emailTranslations.en["email.new_otp_subject"],
       html: generateOtpEmail({ otp, lang }),
     });
 

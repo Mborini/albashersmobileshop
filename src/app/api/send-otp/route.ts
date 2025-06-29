@@ -16,13 +16,16 @@ export async function POST(request: Request) {
     }
 
     const otp = generateOTP();
-
-    await pool.query(`DELETE FROM otp_codes WHERE email = $1`, [email]);
+    await pool.query(`
+      DELETE FROM otp_codes
+WHERE NOW() - created_at > INTERVAL '5 minutes'   `);
+    
+    
     await pool.query(
       `INSERT INTO otp_codes (email, otp, created_at) VALUES ($1, $2, NOW())`,
       [email, otp]
     );
-
+    console.log("✅ OTP saved to DB:", { email, otp });
     const transporter = nodemailer.createTransport({
       service: "Gmail",
       auth: {
