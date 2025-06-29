@@ -179,23 +179,24 @@ export default function ProductForm({
           withAsterisk
         />
 
-        <NumberInput
-          variant="filled"
-          radius="xl"
-          mb="sm"
-          label="Price"
-          value={price}
-          onChange={setPrice}
-          placeholder="Enter product price"
-          withAsterisk
-          min={0}
-        />
+<NumberInput
+  variant="filled"
+  radius="xl"
+  mb="sm"
+  label="Price"
+  value={price}
+  onChange={(value) => setPrice(typeof value === "number" ? value : 0)}
+  placeholder="Enter product price"
+  withAsterisk
+  min={0}
+/>
+
         <NumberInput
           variant="filled"
           radius="xl"
           label="Discounted Price"
           value={discountedPrice}
-          onChange={setDiscountedPrice}
+          onChange={(value) => setDiscountedPrice(typeof value === "number" ? value : 0)}
           placeholder="Enter discounted price"
           mb="sm"
           withAsterisk
