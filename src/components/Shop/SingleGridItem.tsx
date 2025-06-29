@@ -16,7 +16,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
 const SingleGridItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
-  const { t } = useTranslation();
+  const { t,i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
 
   // update the QuickView state
@@ -82,11 +82,14 @@ const SingleGridItem = ({ item }: { item: Product }) => {
           </button>
 
           <button
-            onClick={() => handleAddToCart()}
-            className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-black text-white ease-out duration-200 hover:bg--gray-6"
-          >
-            {t("add_to_cart")}
-          </button>
+  onClick={() => handleAddToCart()}
+  className={`inline-flex font-medium py-[7px] px-5 rounded-[5px] bg-black text-white ease-out duration-200 hover:bg--gray-6 ${
+    i18n.language === "ar" ? "text-[12px]" : "text-custom-sm"
+  }`}
+>
+  {t("add_to_cart")}
+</button>
+
 
           <button
             onClick={() => handleItemToWishList()}
