@@ -32,14 +32,13 @@ export async function GET(
 }
 
 
-
-// ✅ PUT
 export async function PUT(
   req: NextRequest,
-  { params }: ParamsType
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: subcategoryId } = params;
+    const { id: subcategoryId } = await params;
+
     const { attributes } = await req.json();
 
     if (!Array.isArray(attributes)) {
@@ -83,14 +82,13 @@ export async function PUT(
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
-
-// ✅ POST
 export async function POST(
   req: NextRequest,
-  { params }: ParamsType
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id: subcategoryId } = params;
+    const { id: subcategoryId } = await params;
+
     const { name, input_type } = await req.json();
 
     if (!name || !input_type) {
