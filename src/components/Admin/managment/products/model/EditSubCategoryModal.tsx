@@ -99,7 +99,6 @@ export default function EditSubCategoryModal({ opened, onClose, product }) {
   }
 
   const handleSelectChange = (value) => {
-   
     setSelectedSubcategory(value);
     if (value) {
       loadAttributes(value);
@@ -156,7 +155,7 @@ export default function EditSubCategoryModal({ opened, onClose, product }) {
       attributes: {},
     };
   };
-  
+
   async function handleUpdate() {
     if (!product?.product_id) return;
 
@@ -202,16 +201,20 @@ export default function EditSubCategoryModal({ opened, onClose, product }) {
       withCloseButton={!loading}
       closeOnClickOutside={!loading}
       closeOnEscape={!loading}
-      title={<Text  fw={700}
-      mb="xs"
-      variant="gradient"
-      gradient={{ from: "indigo", to: "cyan" }}>Edit Subcategory and Attributes</Text>}
-
+      title={
+        <Text
+          fw={700}
+          mb="xs"
+          variant="gradient"
+          gradient={{ from: "indigo", to: "cyan" }}
+        >
+          Edit Subcategory and Attributes
+        </Text>
+      }
     >
-      
       <Grid>
         <Grid.Col span={6}>
-        <Text
+          <Text
             fw={500}
             mb="xs"
             variant="gradient"
@@ -247,7 +250,7 @@ export default function EditSubCategoryModal({ opened, onClose, product }) {
                         <span>No</span>
                       </>
                     ) : (
-                      <span>{attr.value}</span>
+                      <span>{String(attr.value)}</span>
                     )}
                   </div>
                 </List.Item>
@@ -260,11 +263,18 @@ export default function EditSubCategoryModal({ opened, onClose, product }) {
           )}
         </Grid.Col>
         <Grid.Col span={6}>
-       
           <Select
             variant="filled"
             radius="xl"
-            label={<Text variant="gradient" gradient={{ from: "indigo", to: "cyan" }} fw={500}>Select Subcategory</Text>}
+            label={
+              <Text
+                variant="gradient"
+                gradient={{ from: "indigo", to: "cyan" }}
+                fw={500}
+              >
+                Select Subcategory
+              </Text>
+            }
             placeholder="Choose one"
             data={subcategories.map((sub) => ({
               value: String(sub.id),
@@ -280,17 +290,12 @@ export default function EditSubCategoryModal({ opened, onClose, product }) {
               <Text fw={500} mt="md" mb="xs">
                 Fill New Attributes
               </Text>
-              <Stack spacing="sm">
+              <Stack >
                 {attributes.map((attr) => {
                   const isSelected = attributeValues[attr.id] !== undefined;
 
                   return (
-                    <Group
-                      key={attr.id}
-                      align="center"
-                      position="apart"
-                      spacing="sm"
-                    >
+                    <Group key={attr.id} align="center" >
                       <Checkbox
                         label={attr.name}
                         radius="xl"
