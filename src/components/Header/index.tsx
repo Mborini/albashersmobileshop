@@ -168,16 +168,15 @@ const Header = () => {
       menuItem.submenu ? (
         <Dropdown key={idx} menuItem={menuItem} stickyMenu={stickyMenu} />
       ) : (
-        <Button
-          key={idx}
-          component={Link}
-          href={menuItem.path}
-          onClick={close}
-          size="sm"
-          className="bg-black text-white hover:bg-black"
-        >
-          {t(menuItem.title)}
-        </Button>
+        <Link
+        key={idx}
+        href={menuItem.path}
+        onClick={close}
+        className="inline-flex items-center justify-center bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
+      >
+        {t(menuItem.title)}
+      </Link>
+      
       )
     )}
 
