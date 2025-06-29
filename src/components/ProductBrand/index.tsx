@@ -2,11 +2,6 @@
 import React, { useEffect, useState } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import CommonBrandItem from "../CommonBrands/CommonBrandsItem";
-import SearchForm from "../CommonBrands/SearchForm";
-import LatestPosts from "../CommonBrands/LatestPosts";
-import LatestProducts from "../CommonBrands/LatestProducts";
-import Categories from "../CommonBrands/Categories";
-import shopData from "../Shop/shopData";
 import ViewProductBrand from "./ViewProductsBrand";
 
 const ProductBrand = ({ brandId }) => {
@@ -23,32 +18,7 @@ const ProductBrand = ({ brandId }) => {
     fetchProducts();
   }, [brandId]);
   
-  const categories = [
-    {
-      name: "Desktop",
-      products: 10,
-    },
-    {
-      name: "Laptop",
-      products: 12,
-    },
-    {
-      name: "Monitor",
-      products: 30,
-    },
-    {
-      name: "UPS",
-      products: 23,
-    },
-    {
-      name: "Phone",
-      products: 10,
-    },
-    {
-      name: "Watch",
-      products: 13,
-    },
-  ];
+
   return (
     <>
       <Breadcrumb title={"Blog Grid Sidebar"} pages={["blog grid sidebar"]} />

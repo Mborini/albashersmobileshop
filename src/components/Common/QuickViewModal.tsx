@@ -46,13 +46,19 @@ const QuickViewModal = () => {
 
       return;
     }
+
     dispatch(
       addItemToCart({
-        ...product,
-        quantity,
-        color: selectedColor, // ممكن يكون null إذا ما فيه ألوان، وهذا عادي
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        discountedPrice: product.discountedPrice ?? product.price,
+        quantity: quantity,
+        color: selectedColor,
+        images: product.images ?? [], // تأكد إنها string[]
       })
     );
+
     setSelectedColor(null); // Reset selected color after adding to cart
 
     closeModal();
@@ -65,12 +71,17 @@ const QuickViewModal = () => {
 
       return;
     }
+
     dispatch(
       addItemToWishlist({
-        ...product,
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        discountedPrice: product.discountedPrice ?? product.price,
+        quantity: quantity,
+        color: selectedColor,
+        images: product.images ?? [], // تأكد إنها string[]
         status: "available",
-        quantity,
-        color: selectedColor, // ممكن يكون null إذا ما فيه ألوان، وهذا عادي
       })
     );
     setSelectedColor(null); // Reset selected color after adding to wishlist
@@ -231,27 +242,32 @@ const QuickViewModal = () => {
                     </h4>
                     <ul className="list-disc pl-5 space-y-1">
                       {Object.entries(product.attributes).map(
-                        ([name, value], index) => (
-                          <li
-                            key={index}
-                            className="text-dark-2 flex items-center gap-2"
-                          >
-                            <span className="font-medium">{name}:</span>
-                            {value === "true" ? (
-                              <div className="flex items-center gap-1">
-                                <CiCircleCheck color="green" size={20} />
-                                <span>Yes</span>
-                              </div>
-                            ) : value === "false" ? (
-                              <div className="flex items-center gap-1">
-                                <VscError color="red" size={20} />
-                                <span>No</span>
-                              </div>
-                            ) : (
-                              <span>{value}</span>
-                            )}
-                          </li>
-                        )
+                        ([name, value], index) => {
+                          const valStr = String(value).toLowerCase(); // يحول القيمة إلى نص صغير الأحرف
+
+                          return (
+                            <li
+                              key={index}
+                              className="text-dark-2 flex items-center gap-2"
+                            >
+                              <span className="font-medium">{name}:</span>
+
+                              {valStr === "true" ? (
+                                <div className="flex items-center gap-1">
+                                  <CiCircleCheck color="green" size={20} />
+                                  <span>Yes</span>
+                                </div>
+                              ) : valStr === "false" ? (
+                                <div className="flex items-center gap-1">
+                                  <VscError color="red" size={20} />
+                                  <span>No</span>
+                                </div>
+                              ) : (
+                                <span>{String(value)}</span>
+                              )}
+                            </li>
+                          );
+                        }
                       )}
                     </ul>
                   </div>

@@ -20,7 +20,7 @@ import { FaTrashAlt } from "react-icons/fa";
 
 interface ProductImage {
   id: number;
-  image_url: string;
+  image_url: string
 }
 
 interface Product {
@@ -35,6 +35,8 @@ interface EditImagesModalProps {
   onClose: () => void;
   product: Product | null;
   onProductUpdate: (updatedProduct: Product) => void;
+  
+  
 }
 
 export default function EditImagesModal({
@@ -65,7 +67,7 @@ export default function EditImagesModal({
     setIsUploading(true);
     try {
       const imageUrl = await uploadImage(newImage);
-      console.log("🚀 ~ imageUrl:", imageUrl); // <-- أضف هذا السطر
+      console.log("🚀 ~ imageUrl:", imageUrl); 
 
       const updatedProductData = await AddProductImage(
         product.product_id,
@@ -76,7 +78,7 @@ export default function EditImagesModal({
         ...product,
         product_images: updatedProductData.product_images,
       });
-
+      
       setNewImage(null);
     } catch (error) {
       console.error("Error uploading image:", error);
@@ -92,18 +94,25 @@ export default function EditImagesModal({
 
   const handleDeleteImage = async (imageId: number, imageUrl: string) => {
     if (!confirm("Are you sure you want to delete this image?")) return;
-
+  
     setIsDeleting(true);
     try {
       const updatedProductData = await DeleteProductImage(imageId);
-
+  
+      // تحويل الروابط لكائنات
+      const updatedProductImages = updatedProductData.product_images.map((url: string, index: number) => ({
+        id: Date.now() + index,
+        image_url: url,
+      }));
+  
       onProductUpdate({
         ...product,
-        product_images: updatedProductData.product_images,
+        product_images: updatedProductImages,
       });
-
+  
+      // هنا استخدم النسخة المحوّلة بدل updatedProductData.product_images مباشرة
       if (mainImage === imageUrl) {
-        setMainImage(updatedProductData.product_images[0]?.image_url ?? null);
+        setMainImage(updatedProductImages[0]?.image_url ?? null);
       }
     } catch (error) {
       console.error("Error deleting image:", error);
@@ -116,6 +125,7 @@ export default function EditImagesModal({
       setIsDeleting(false);
     }
   };
+  
 
   return (
 <Modal
@@ -129,14 +139,14 @@ export default function EditImagesModal({
     blur: 3,
   }}
 >
-  <Stack spacing="md">
+  <Stack >
     {/* Product title */}
     <Text size="xl" fw={700}>
       {product.product_name}
     </Text>
 
   
-    <Stack spacing="xs" mt="md" >
+    <Stack  mt="md" >
       <Text size="md" fw={600}>
         Upload New Image
       </Text>
@@ -173,7 +183,7 @@ export default function EditImagesModal({
     )}
 
     {/* Grid of thumbnails */}
-    <SimpleGrid cols={4} spacing="xs" breakpoints={[{ maxWidth: 'sm', cols: 2 }]}>
+    <SimpleGrid cols={4} spacing="xs" >
       {product.product_images?.map(({ id, image_url }) => (
         <Box
           key={id}

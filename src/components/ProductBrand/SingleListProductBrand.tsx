@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import { Product } from "@/types/product";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { updateQuickView } from "@/redux/features/quickView-slice";
 import { addItemToCart } from "@/redux/features/cart-slice";
@@ -9,6 +8,21 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import Image from "next/image";
 import Link from "next/link";
+export type Colors = {
+  id: number;
+  name: string;
+  hex_code: string;
+};
+
+export type Product = {
+  id: number;
+  title: string;
+  price: number;
+  discountedPrice?: number;
+  brand_name?: string;
+  colors?: Colors[];     // مصفوفة الألوان، ممكن تكون فارغة أو غير موجودة
+  images?: string[];     // مصفوفة روابط الصور (مثلاً: ["img1.jpg", "img2.jpg"])
+};
 
 const SingleListProductBrand = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
@@ -21,10 +35,13 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
   const handleAddToCart = () => {
     dispatch(
       addItemToCart({
-        ...item,
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color:
-          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
       })
     );
   };
@@ -32,11 +49,14 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
   const handleAddToWishlist = () => {
     dispatch(
       addItemToWishlist({
-        ...item,
-        status: "available",
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color:
-          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
+        status: "available",
       })
     );
   };

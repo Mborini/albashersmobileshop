@@ -87,12 +87,12 @@ export default function EditColorsModal({ opened, onClose, product }) {
         blur: 3,
       }}
     >
-      <Group align="flex-start" grow spacing="xl">
-        <Stack spacing="md" w="50%">
+      <Group align="flex-start" grow >
+        <Stack  w="50%">
           <Text size="lg" fw={700}>
             Current Colors
           </Text>
-          <Group spacing="xs" wrap="wrap">
+          <Group  wrap="wrap">
             {orderedProductColors.length > 0 ? (
               orderedProductColors.map((color) => (
                 <Tooltip key={color.id} label={`Delete ${color.name}`} withArrow>
@@ -120,7 +120,7 @@ export default function EditColorsModal({ opened, onClose, product }) {
           </Group>
         </Stack>
 
-        <Stack spacing="md" w="50%">
+        <Stack  w="50%">
           <Text size="lg" fw={700}>
             Add Colors
           </Text>

@@ -14,6 +14,18 @@ import Link from "next/link";
 import OtpModal from "./OtpModal"; // استدعاء مودال OTP
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+type CheckoutFormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  country: string;
+  city: string;
+  address: string;
+  note?: string; // اختياري إذا كان المستخدم ممكن يتركه فاضي
+  cartItems: { title: string; quantity: number; discountedPrice: number }[];
+  totalPrice: number;
+};
 
 const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
@@ -32,7 +44,7 @@ const Checkout = () => {
     const res = await fetch("/api/send-otp", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email , lang: i18n.language }),
+      body: JSON.stringify({ email, lang: i18n.language }),
     });
     if (!res.ok) {
       const errorData = await res.json();
@@ -87,8 +99,8 @@ const Checkout = () => {
     e.preventDefault();
     setIsLoading(true);
     const formData = new FormData(e.currentTarget);
-    const data = {
-      ...Object.fromEntries(formData.entries()),
+    const data: CheckoutFormData = {
+      ...(Object.fromEntries(formData.entries()) as any),
       cartItems,
       totalPrice,
     };
@@ -119,9 +131,7 @@ const Checkout = () => {
 
   return (
     <>
-      <Breadcrumb title={
-        t("checkout")
-      } pages={["checkout"]} />
+      <Breadcrumb title={t("checkout")} pages={["checkout"]} />
       <section className="overflow-hidden py-20 bg-gray-2">
         <Toaster position="top-center" />
         {cartItems.length ? (

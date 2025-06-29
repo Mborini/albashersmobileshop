@@ -24,15 +24,17 @@ const ProductItem = ({ item }: { item: Product }) => {
   const handleQuickViewUpdate = () => {
     dispatch(updateQuickView({ ...item }));
   };
-  // add to cart
   const handleAddToCart = () => {
-  
-
     dispatch(
       addItemToCart({
-        ...item,
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color:
+          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
       })
     );
   };
@@ -40,12 +42,15 @@ const ProductItem = ({ item }: { item: Product }) => {
   const handleItemToWishList = () => {
     dispatch(
       addItemToWishlist({
-        ...item,
-        status: "available",
+        id: item.id,
+        title: item.title,
+        price: item.price,
+        discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
         color:
-        item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
-    
+          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        images: item.images ?? [],
+        status: "available",
       })
     );
   };
@@ -96,17 +101,15 @@ const ProductItem = ({ item }: { item: Product }) => {
 
       <div className="flex gap-3 justify-between ">
         <h3 className="font-medium text-black ease-out duration-200 hover:text-gary-6 mb-1.5">
-           {item.title} 
+          {item.title}
         </h3>
         <Badge
-      size="md"
-      variant="gradient"
-      gradient={{ from: "green", to: "lime", deg: 360 }}
-      >
-     {
-      item.brand_name
-     }
-    </Badge>
+          size="md"
+          variant="gradient"
+          gradient={{ from: "green", to: "lime", deg: 360 }}
+        >
+          {item.brand_name}
+        </Badge>
       </div>
       <div className="flex items-center gap-2.5 mb-2">
         <div className="flex items-center gap-1">

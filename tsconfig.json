@@ -22,6 +22,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/Admin/attribu"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/Admin/attribu", "src/components/Admin/managment/products/model/EditImegesModal.tsx"],
   "exclude": ["node_modules"]
 }

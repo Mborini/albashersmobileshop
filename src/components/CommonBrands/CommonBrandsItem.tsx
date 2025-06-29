@@ -2,8 +2,14 @@ import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
+type Brand = {
+  id: number;
+  image: string;
+  name: string;
+  title: string;
+};
 
-const CommonBrandItem = ({ item }: { item: CommonBrandItem }) => {
+const CommonBrandItem = ({ item }: { item: Brand }) => {
   const { t, i18n } = useTranslation();
 
   return (

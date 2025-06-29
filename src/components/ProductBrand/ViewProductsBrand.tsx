@@ -1,21 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Breadcrumb from "../Common/Breadcrumb";
-
-import shopData from "../Shop/shopData";
-import Image from "next/image";
-import SingleGridItem from "../Shop/SingleGridItem";
-import SingleListItem from "../Shop/SingleListItem";
 import { useSearchParams } from "next/navigation";
-import { useSelector } from "react-redux";
-import { RootState } from "@reduxjs/toolkit/query";
-import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
-import { Empty } from "antd";
-import Pagination from "../Common/pagination";
-import BrandDropdown from "../Products/BrandDropdown";
-import ColorsDropdwon from "../Products/ColorsDropdwon";
-import PriceDropdown from "../Products/PriceDropdown";
 import CustomSelect from "../Header/Search";
 import SingleListProductBrand from "./SingleListProductBrand";
 
@@ -23,12 +9,13 @@ interface Product {
   id: number;
   title: string;
   description: string;
-  price: string;
+  price: number;          // هنا رقم بدل string
   subcategory_id: number;
   brand_id: number;
-  created_at: string; // أو Date إذا تم تحويله
+  created_at: string;
   discountedPrice: number;
 }
+
 
 interface Props {
   products: Product[];
@@ -46,10 +33,7 @@ const ViewProductBrand: React.FC<Props> = ({ products }) => {
   const [stickyMenu, setStickyMenu] = useState(false);
 
   const searchParams = useSearchParams();
-  const subCategoryId = searchParams.get("subCategoryId");
-  const selectedName = useSelector(
-    (state: RootState) => state.subCategory.selectedSubCategoryName
-  );
+ 
 
   const handleStickyMenu = () => {
     if (window.scrollY >= 80) {
@@ -163,7 +147,7 @@ const ViewProductBrand: React.FC<Props> = ({ products }) => {
                 <div className="flex items-center justify-between">
                   {/* Left side */}
                   <div className="flex flex-wrap items-center gap-4">
-                    <CustomSelect options={options} />
+                    <CustomSelect />
 
                     <p>
                       Showing{" "}

@@ -111,7 +111,7 @@ const OtpModal: React.FC<OtpModalProps> = ({
         size="md"
       />
 
-      <Group position="apart" mt="md">
+      <Group  mt="md">
         <Button
           variant="light"
           color="gray"

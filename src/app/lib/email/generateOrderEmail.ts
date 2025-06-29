@@ -13,6 +13,7 @@ export function generateOrderEmail({
 }: {
   name: string;
   phone: string;
+  email?: string;
   cartItems: { title: string; quantity: number; discountedPrice: number }[];
   totalPrice: number;
   country: string;

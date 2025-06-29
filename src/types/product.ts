@@ -8,7 +8,18 @@ export type Colors = {
   name: string;
   hex_code: string;
 };
+
+
+  export type ProductImage = {
+    id: number;
+    image_url: string;
+    alt_text?: string;  // اختيارية لو حبيت تضيف وصف للصورة
+  };
+  
+
+
 export type Product = {
+  product_images: ProductImage[];
   id?: number;
   title: string;
   description?: string;
@@ -25,5 +36,7 @@ export type Product = {
   is_best_offer?: string;
   name?: string;
   value: string;
-  colors:Colors[]
+  colors:Colors[];
+  product_id?: number;
+  
 };
