@@ -8,7 +8,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body>
-        <MantineProvider withGlobalStyles withNormalizeCSS  defaultColorScheme="light">
+        <MantineProvider defaultColorScheme="light">
           {children}
         </MantineProvider>
       </body>
