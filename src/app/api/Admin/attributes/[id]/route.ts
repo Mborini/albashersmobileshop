@@ -4,14 +4,12 @@ import pool from "@/app/lib/db";
 type ParamsType = {
   params: { id: string };
 };
-
-// ✅ GET attributes by subcategory ID
 export async function GET(
   req: NextRequest,
-  { params }: ParamsType
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { id } = params;
+    const { id } = await params;
 
     const client = await pool.connect();
     const result = await client.query(
@@ -32,6 +30,8 @@ export async function GET(
     });
   }
 }
+
+
 
 // ✅ PUT
 export async function PUT(
