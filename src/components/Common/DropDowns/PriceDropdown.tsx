@@ -15,7 +15,7 @@ import { useTranslation } from "react-i18next";
 import { IoIosArrowUp } from "react-icons/io";
 
 const PriceDropdown = ({ onPriceChange }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [toggleDropdown, setToggleDropdown] = useState(true);
 
   const [selectedPrice, setSelectedPrice] = useState<[number, number]>([
@@ -42,20 +42,27 @@ const PriceDropdown = ({ onPriceChange }) => {
   };
 
   return (
-    <Paper shadow="sm" radius="md" withBorder>
+    <Paper shadow="sm" radius="md"  withBorder>
       {/* Header */}
       <Flex
         align="center"
         justify="space-between"
         px="md"
-        py="sm"
+        py="xs"
+        mb="lg"
+        dir={i18n.language === "ar" ? "rtl" : "ltr"}
         onClick={() => setToggleDropdown(!toggleDropdown)}
-        style={{ cursor: "pointer" }}
-      >
-        <Text fw={500}>{t("price")}</Text>
+        style={{ 
+          cursor: "pointer", 
+          backgroundColor: "black", 
+          borderTopLeftRadius: "5px", 
+          borderTopRightRadius: "5px" 
+        }}
+              >
+        <Text c={"white"} fw={500}>{t("price")}</Text>
         <ActionIcon
           variant="subtle"
-          color="dark"
+          color="white"
           size="md"
           aria-label="Toggle price dropdown"
           style={{
@@ -77,7 +84,7 @@ const PriceDropdown = ({ onPriceChange }) => {
             max={1500}
             step={1}
             size="sm"
-            color="blue"
+            color="black"
             thumbSize={18}
           />
 
@@ -117,7 +124,7 @@ const PriceDropdown = ({ onPriceChange }) => {
               min={selectedPrice[0]}
               max={1500}
               step={1}
-               radius="md"
+              radius="md"
               size="xs"
               hideControls={true}
               leftSection={

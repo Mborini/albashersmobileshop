@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import BrandDropdown from "./BrandDropdown";
-import ColorsDropdwon from "./ColorsDropdwon";
-import PriceDropdown from "./PriceDropdown";
+
 import Image from "next/image";
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
@@ -18,6 +16,9 @@ import { TextInput } from "@mantine/core";
 import { IoGridOutline } from "react-icons/io5";
 import { TbLayoutList } from "react-icons/tb";
 import { useTranslation } from "react-i18next";
+import BrandDropdown from "../Common/DropDowns/BrandDropdown";
+import PriceDropdown from "../Common/DropDowns/PriceDropdown";
+import ColorsDropdown from "../Common/DropDowns/ColorsDropdwon";
 const NewArrivalProduct = () => {
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
@@ -190,7 +191,7 @@ const NewArrivalProduct = () => {
                   {/* <!-- gender box --> */}
 
                   {/* // <!-- color box --> */}
-                  <ColorsDropdwon
+                  <ColorsDropdown
                     colors={colors}
                     onColorChange={setSelectedColor}
                   />

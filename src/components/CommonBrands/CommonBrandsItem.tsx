@@ -28,11 +28,11 @@ const CommonBrandItem = ({ item }: { item: Brand }) => {
             {item.name}
           </span>
 
-          <h2 className="font-medium text-dark text-lg sm:text-xl ease-out duration-200 mb-4 hover:text-blue w-full text-center">
+          <h2 className="font-medium text-dark text-lg sm:text-xl ease-out duration-200 mb-4  w-full text-center">
             {item.title}
           </h2>
 
-          <span className="text-blue font-semibold">{t("shop_now")}</span>
+          <span className="text-black font-semibold">{t("shop_now")}</span>
         </div>
       </Link>
     </div>

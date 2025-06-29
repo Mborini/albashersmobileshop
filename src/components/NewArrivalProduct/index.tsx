@@ -1,10 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-
-import BrandDropdown from "./BrandDropdown";
-import ColorsDropdwon from "./ColorsDropdwon";
-import PriceDropdown from "./PriceDropdown";
 import Image from "next/image";
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";
@@ -18,6 +14,9 @@ import Pagination from "../Common/pagination";
 import { TextInput } from "@mantine/core";
 import { IoGridOutline } from "react-icons/io5";
 import { TbLayoutList } from "react-icons/tb";
+import BrandDropdown from "../Common/DropDowns/BrandDropdown";
+import PriceDropdown from "../Common/DropDowns/PriceDropdown";
+import ColorsDropdown from "../Common/DropDowns/ColorsDropdwon";
 const NewArrivalProduct = () => {
   const [productStyle, setProductStyle] = useState("grid");
   const [productSidebar, setProductSidebar] = useState(false);
@@ -184,21 +183,16 @@ const NewArrivalProduct = () => {
                     brands={brands}
                     onBrandChange={setSelectedBrands}
                   />
-                  {/* <!-- gender box --> */}
-
                   {/* // <!-- color box --> */}
-                  <ColorsDropdwon
+                  <ColorsDropdown
                     colors={colors}
                     onColorChange={setSelectedColor}
                   />
-
                   {/* // <!-- price range box --> */}
                   <PriceDropdown onPriceChange={setSelectedPrice} />
                 </div>
               </form>
             </div>
-            {/* // <!-- Sidebar End --> */}
-
             {/* // <!-- Content Start --> */}
             <div className="xl:max-w-[870px] w-full">
               <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">

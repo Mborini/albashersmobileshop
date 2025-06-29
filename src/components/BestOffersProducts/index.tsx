@@ -1,9 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
-import BrandDropdown from "./BrandDropdown";
-import ColorsDropdwon from "./ColorsDropdwon";
-import PriceDropdown from "./PriceDropdown";
+import PriceDropdown from "../Common/DropDowns/PriceDropdown";
+import ColorsDropdwon from "../Common/DropDowns/ColorsDropdwon";
+import BrandDropdown from "../Common/DropDowns/BrandDropdown";
 import Image from "next/image";
 import SingleGridItem from "../Shop/SingleGridItem";
 import SingleListItem from "../Shop/SingleListItem";

@@ -12,11 +12,12 @@ import {
   Group,
 } from "@mantine/core";
 import { IoIosArrowUp } from "react-icons/io";
+import { useTranslation } from "react-i18next";
 
 const ColorsDropdown = ({ colors, onColorChange }) => {
   const [toggleDropdown, setToggleDropdown] = useState(true);
   const [activeColor, setActiveColor] = useState<string | null>(null);
-
+const { t, i18n } = useTranslation();
   const handleColorChange = (color: string | null) => {
     setActiveColor(color);
     onColorChange(color);
@@ -26,17 +27,24 @@ const ColorsDropdown = ({ colors, onColorChange }) => {
     <Paper shadow="sm" radius="md" withBorder>
       {/* Header */}
       <Flex
+      direction={i18n.language === "ar" ? "row-reverse" : "row"}
         align="center"
         justify="space-between"
         px="md"
-        py="sm"
-        onClick={() => setToggleDropdown((prev) => !prev)}
-        style={{ cursor: "pointer" }}
-      >
-        <Text fw={500}>Colors</Text>
+        py="xs"
+        mb="sm"
+        onClick={() => setToggleDropdown(!toggleDropdown)}
+        style={{ 
+          cursor: "pointer", 
+          backgroundColor: "black", 
+          borderTopLeftRadius: "5px", 
+          borderTopRightRadius: "5px" 
+        }}
+              >
+        <Text c={"white"} fw={500}>{t("colors")}</Text>
         <ActionIcon
           variant="subtle"
-          color="dark"
+          color="white"
           size="xs"
           aria-label="Toggle color dropdown"
           style={{
@@ -49,7 +57,9 @@ const ColorsDropdown = ({ colors, onColorChange }) => {
       </Flex>
 
       {/* Color Circles */}
-      <Collapse in={toggleDropdown}>
+      <Collapse 
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+      in={toggleDropdown}>
         <Box px="md" py="sm">
           <Group gap="xs" wrap="wrap">
             {/* All option inside a circle */}

@@ -176,14 +176,20 @@ const Checkout = () => {
                             <div>
                               <p className="text-dark">{item.title}</p>
                               <div className="text-custom-sm flex items-center gap-2 mb-1">
-                                <p>
-                                  {item.color ? t("color") : t("no_color")} :
-                                </p>
-                                <span
-                                  style={{ backgroundColor: item.color }}
-                                  className="w-4 h-4 rounded-full cursor-pointer hover:scale-110 transition-transform"
-                                ></span>
+                                {item.color && (
+                                  <>
+                                    <p className="text-gray-700 dark:text-gray-300 font-medium">
+                                      {t("color")}:
+                                    </p>
+                                    <span
+                                      title={item.color}
+                                      style={{ backgroundColor: item.color }}
+                                      className="w-5 h-5 rounded-full border border-gray-300 shadow-sm cursor-pointer hover:scale-110 transition-transform duration-200"
+                                    ></span>
+                                  </>
+                                )}
                               </div>
+
                               <p className="text-sm text-gray-600">
                                 {t("quantity")} : {item.quantity}
                               </p>

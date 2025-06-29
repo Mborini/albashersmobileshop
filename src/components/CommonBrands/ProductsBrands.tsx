@@ -12,8 +12,8 @@ import Pagination from "../Common/pagination";
 import { TextInput } from "@mantine/core";
 import { IoGridOutline } from "react-icons/io5";
 import { TbLayoutList } from "react-icons/tb";
-import PriceDropdown from "./PriceDropdown";
-import ColorsDropdwon from "./ColorsDropdwon";
+import PriceDropdown from "../Common/DropDowns/PriceDropdown";
+import ColorsDropdwon from "../Common/DropDowns/ColorsDropdwon";
 
 const ProductsBrands = ({ id }: { id: string }) => {
   const [productStyle, setProductStyle] = useState("grid");
@@ -52,9 +52,9 @@ const ProductsBrands = ({ id }: { id: string }) => {
       try {
         const response = await fetch(`/api/products-by-brand/${id}`);
         if (!response.ok) throw new Error("Failed to fetch product");
-  
+
         const data = await response.json();
-        console.log ("Fetched data:", data);
+        console.log("Fetched data:", data);
         setProduct(data.products);
         setBrands(data.brands);
         setColors(data.colors);
@@ -64,12 +64,11 @@ const ProductsBrands = ({ id }: { id: string }) => {
         setLoading(false);
       }
     };
-  
+
     if (id) {
       fetchData();
     }
   }, [id]);
-  
 
   useEffect(() => {
     setCurrentPage(1);
@@ -88,7 +87,7 @@ const ProductsBrands = ({ id }: { id: string }) => {
         (p.colors || []).some((c) => c.hex_code === selectedColor)
       );
     }
-    
+
     if (selectedBrands.length > 0) {
       filtered = filtered.filter((p) => selectedBrands.includes(p.brand_name));
     }
@@ -128,52 +127,52 @@ const ProductsBrands = ({ id }: { id: string }) => {
 
   return (
     <>
-     <Breadcrumb
+      <Breadcrumb
         title={paginatedProducts[0]?.brand_name}
         pages={["Common Brands / ", paginatedProducts[0]?.brand_name]}
       />
       <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
-                <div className="flex items-center justify-between">
-                  {/* <!-- top bar left --> */}
-                  <div className="flex flex-wrap items-center gap-4">
-                    <TextInput
-                      variant="filled"
-                      radius="md"
-                      placeholder="Search products"
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.currentTarget.value)}
-                    />
-                  </div>
-                  {/* <!-- top bar right --> */}
-                  <div className="flex items-center gap-2.5">
-                    <button
-                      onClick={() => setProductStyle("grid")}
-                      aria-label="button for product grid tab"
-                      className={`${
-                        productStyle === "grid"
-                          ? "bg-blue border-blue text-white"
-                          : "text-dark bg-gray-1 border-gray-3"
-                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
-                    >
-                      <IoGridOutline size={20} />
-                    </button>
-
-                    <button
-                      onClick={() => setProductStyle("list")}
-                      aria-label="button for product list tab"
-                      className={`${
-                        productStyle === "list"
-                          ? "bg-blue border-blue text-white"
-                          : "text-dark bg-gray-1 border-gray-3"
-                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-blue hover:border-blue hover:text-white`}
-                    >
-                      <TbLayoutList size={20} />
-                    </button>
-                  </div>
-                </div>
+          <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
+            <div className="flex items-center justify-between">
+              {/* <!-- top bar left --> */}
+              <div className="flex flex-wrap items-center gap-4">
+                <TextInput
+                  variant="filled"
+                  radius="md"
+                  placeholder="Search products"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                />
               </div>
+              {/* <!-- top bar right --> */}
+              <div className="flex items-center gap-2.5">
+                <button
+                  onClick={() => setProductStyle("grid")}
+                  aria-label="button for product grid tab"
+                  className={`${
+                    productStyle === "grid"
+                      ? "bg-black text-white"
+                      : "bg-black text-white"
+                  } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
+                >
+                  <IoGridOutline size={20} />
+                </button>
+
+                <button
+                  onClick={() => setProductStyle("list")}
+                  aria-label="button for product list tab"
+                  className={`${
+                    productStyle === "list"
+                      ? "bg-black text-white"
+                      : "bg-black text-white"
+                  } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
+                >
+                  <TbLayoutList size={20} />
+                </button>
+              </div>
+            </div>
+          </div>
           <div className="flex gap-7.5">
             {/* <!-- Sidebar Start --> */}
             <div
@@ -217,9 +216,11 @@ const ProductsBrands = ({ id }: { id: string }) => {
 
               <form onSubmit={(e) => e.preventDefault()}>
                 <div className="flex flex-col gap-6">
-                 
                   {/* // <!-- color box --> */}
-                  <ColorsDropdwon colors={colors} onColorChange={setSelectedColor} />
+                  <ColorsDropdwon
+                    colors={colors}
+                    onColorChange={setSelectedColor}
+                  />
 
                   {/* // <!-- price range box --> */}
                   <PriceDropdown onPriceChange={setSelectedPrice} />
@@ -230,8 +231,6 @@ const ProductsBrands = ({ id }: { id: string }) => {
 
             {/* // <!-- Content Start --> */}
             <div className="xl:max-w-[870px] w-full">
-            
-
               {loading ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
                   {Array.from({ length: 12 }).map((_, idx) => (
@@ -282,21 +281,20 @@ const ProductsBrands = ({ id }: { id: string }) => {
                 </div>
               ) : (
                 <div
-                className={`${
-                  productStyle === "grid"
-                    ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4"
-                    : "flex flex-col gap-4"
-                }`}
-              >
-                {paginatedProducts.map((item, key) =>
-                  productStyle === "grid" ? (
-                    <SingleGridItem item={item} key={key} />
-                  ) : (
-                    <SingleListItem item={item} key={key} />
-                  )
-                )}
-              </div>
-              
+                  className={`${
+                    productStyle === "grid"
+                      ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-4"
+                      : "flex flex-col gap-4"
+                  }`}
+                >
+                  {paginatedProducts.map((item, key) =>
+                    productStyle === "grid" ? (
+                      <SingleGridItem item={item} key={key} />
+                    ) : (
+                      <SingleListItem item={item} key={key} />
+                    )
+                  )}
+                </div>
               )}
 
               {/* <!-- Products Grid Tab Content End --> */}
@@ -311,7 +309,7 @@ const ProductsBrands = ({ id }: { id: string }) => {
               ) : (
                 ""
               )}
-            </div>         
+            </div>
           </div>
         </div>
       </section>
