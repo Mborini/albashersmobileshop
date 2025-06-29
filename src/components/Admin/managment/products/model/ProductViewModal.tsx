@@ -62,7 +62,7 @@ export default function ProductViewModal({ opened, onClose, product }) {
               <span>No</span>
             </>
           ) : (
-            <span>{attr.value}</span>
+            <span>{String(attr.value)}</span>
           )}
         </div>
       </List.Item>
