@@ -10,8 +10,8 @@ export function generateOtpEmail({
   lang?: "ar" | "en";
 }) {
   const t = (key: keyof (typeof emailTranslations)["ar"]) =>
-    emailTranslations[lang][key];
-
+    emailTranslations[lang]?.[key] ?? key; 
+  
   const logoUrl =
     "https://res.cloudinary.com/do1etuooh/image/upload/v1750775950/476908956_642303014852206_4219799890360416472_n_lrbqco.jpg";
 
