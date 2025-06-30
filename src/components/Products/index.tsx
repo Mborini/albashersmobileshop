@@ -248,16 +248,16 @@ const NewArrivalProduct = () => {
               </div>
 
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {Array.from({ length: 12 }).map((_, idx) => (
+                  <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-10 sm:gap-y-6">
+                  {Array.from({ length: 9 }).map((_, idx) => (
                     <div
                       key={idx}
-                      className="flex flex-col items-center sm:items-start gap-3"
+                      className="flex flex-col items-center sm:items-start gap-3 w-full"
                     >
-                      <div className="relative">
+                      <div className="relative w-[140px] sm:w-[260px]">
                         <Skeleton
-                          width={260}
-                          height={260}
+                          width={"100%"}
+                          height={140}
                           baseColor="#d1d5db"
                           highlightColor="#f3f4f6"
                           borderRadius={8}
@@ -267,22 +267,22 @@ const NewArrivalProduct = () => {
                             src="/images/logo/AlbsherLOGO.png"
                             alt=""
                             className="opacity-25"
-                            width={130}
-                            height={130}
+                            width={70}
+                            height={70}
                           />
                         </div>
                       </div>
-                      <div className="flex flex-col items-start gap-1">
+                      <div className="flex flex-col  gap-1 w-full max-w-[140px] sm:max-w-[260px]">
                         <Skeleton
-                          width={80}
-                          height={12}
+                          width="50%"
+                          height={10}
                           borderRadius={4}
                           baseColor="#d1d5db"
                           highlightColor="#f3f4f6"
                         />
                         <Skeleton
-                          width={130}
-                          height={12}
+                          width="70%"
+                          height={10}
                           borderRadius={4}
                           baseColor="#d1d5db"
                           highlightColor="#f3f4f6"

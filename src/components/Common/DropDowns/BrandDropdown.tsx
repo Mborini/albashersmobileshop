@@ -84,7 +84,7 @@ const BrandDropdown = ({ brands, onBrandChange }) => {
                       <Text>{brand.name}</Text>
                       <Box
                         style={{
-                          backgroundColor: "#e0e0e0",
+                          
                           borderRadius: 9999,
                           padding: "0 10px",
                           fontSize: 12,

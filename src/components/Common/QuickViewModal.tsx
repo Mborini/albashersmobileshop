@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-
+import React, { useEffect, useRef, useState } from "react";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { AppDispatch, useAppSelector } from "@/redux/store";
 import { addItemToCart } from "@/redux/features/cart-slice";
@@ -17,13 +16,24 @@ import { MdFavoriteBorder, MdOutlineCancel } from "react-icons/md";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { LuShoppingBag } from "react-icons/lu";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
+import FlyingImage from "./FlyingImage";
 
 const QuickViewModal = () => {
   const { isModalOpen, closeModal } = useModalContext();
   const { openPreviewModal } = usePreviewSlider();
   const [quantity, setQuantity] = useState(1);
   const [selectedColor, setSelectedColor] = useState(null);
+  const [floatingStart, setFloatingStart] = useState<{
+    x: number;
+    y: number;
+  } | null>(null);
 
+  const [flyingImage, setFlyingImage] = useState<{
+    imageSrc: string;
+    startRect: DOMRect;
+  } | null>(null);
+  const addToCartButtonRef = useRef<HTMLButtonElement>(null);
+  
   const dispatch = useDispatch<AppDispatch>();
 
   // get the product data
@@ -37,14 +47,16 @@ const QuickViewModal = () => {
 
     openPreviewModal();
   };
-  // add to cart
-  // add to cart
+
   const handleAddToCart = () => {
-    // إذا المنتج له ألوان ولم يتم اختيار لون
     if (product.colors?.length > 0 && !selectedColor) {
       toast.error("يرجى اختيار لون قبل إضافة المنتج إلى السلة.");
-
       return;
+    }
+
+    if (addToCartButtonRef.current) {
+      const rect = addToCartButtonRef.current.getBoundingClientRect();
+      setFlyingImage({ imageSrc: product.images?.[0] ?? "", startRect: rect });
     }
 
     dispatch(
@@ -55,13 +67,12 @@ const QuickViewModal = () => {
         discountedPrice: product.discountedPrice ?? product.price,
         quantity: quantity,
         color: selectedColor,
-        images: product.images ?? [], // تأكد إنها string[]
+        images: product.images ?? [],
       })
     );
 
-    setSelectedColor(null); // Reset selected color after adding to cart
-
-    closeModal();
+    setSelectedColor(null);
+    
   };
 
   const handleItemToWishList = () => {
@@ -86,7 +97,7 @@ const QuickViewModal = () => {
     );
     setSelectedColor(null); // Reset selected color after adding to wishlist
 
-    closeModal();
+  
   };
 
   useEffect(() => {
@@ -322,8 +333,9 @@ const QuickViewModal = () => {
               </div>
               <div className="flex items-center gap-4 flex-nowrap overflow-auto">
                 <button
+                  ref={addToCartButtonRef}
                   disabled={quantity === 0}
-                  onClick={() => handleAddToCart()}
+                  onClick={handleAddToCart}
                   className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md"
                 >
                   <LuShoppingBag size={18} />
@@ -342,6 +354,16 @@ const QuickViewModal = () => {
           </div>
         </div>
       </div>
+      {flyingImage && (
+      <FlyingImage
+        imageSrc={flyingImage.imageSrc}
+        startRect={flyingImage.startRect}
+        onComplete={() => {
+          setFlyingImage(null);
+          closeModal();
+        }}
+      />
+    )}
     </div>
   );
 };

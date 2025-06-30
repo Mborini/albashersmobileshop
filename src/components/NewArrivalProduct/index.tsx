@@ -196,59 +196,58 @@ const NewArrivalProduct = () => {
             {/* // <!-- Content Start --> */}
             <div className="xl:max-w-[870px] w-full">
               <div className="rounded-lg bg-white shadow-1 pl-3 pr-2.5 py-2.5 mb-6">
-              <div className="flex items-center justify-between">
-  {/* <!-- top bar left --> */}
-  <div className="flex flex-wrap items-center gap-4">
-    <TextInput
-      variant="filled"
-      radius="md"
-      placeholder="Search products"
-      value={searchTerm}
-      onChange={(e) => setSearchTerm(e.currentTarget.value)}
-    />
-  </div>
+                <div className="flex items-center justify-between">
+                  {/* <!-- top bar left --> */}
+                  <div className="flex flex-wrap items-center gap-4">
+                    <TextInput
+                      variant="filled"
+                      radius="md"
+                      placeholder="Search products"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.currentTarget.value)}
+                    />
+                  </div>
 
-  {/* <!-- top bar right --> */}
-  <div className="flex items-center gap-2.5">
-    <button
-      onClick={() => setProductStyle("grid")}
-      aria-label="button for product grid tab"
-      className={`${
-        productStyle === "grid"
-          ? "bg-black text-white"
-          : "bg-black text-white"
-      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
-    >
-      <IoGridOutline size={20} />
-    </button>
+                  {/* <!-- top bar right --> */}
+                  <div className="flex items-center gap-2.5">
+                    <button
+                      onClick={() => setProductStyle("grid")}
+                      aria-label="button for product grid tab"
+                      className={`${
+                        productStyle === "grid"
+                          ? "bg-black text-white"
+                          : "bg-black text-white"
+                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
+                    >
+                      <IoGridOutline size={20} />
+                    </button>
 
-    <button
-      onClick={() => setProductStyle("list")}
-      aria-label="button for product list tab"
-      className={`${
-        productStyle === "list"
-          ? "bg-black text-white"
-          : "bg-black text-white"
-      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
-    >
-      <TbLayoutList size={20} />
-    </button>
-  </div>
-</div>
-
+                    <button
+                      onClick={() => setProductStyle("list")}
+                      aria-label="button for product list tab"
+                      className={`${
+                        productStyle === "list"
+                          ? "bg-black text-white"
+                          : "bg-black text-white"
+                      } flex items-center justify-center w-10.5 h-9 rounded-[5px] border ease-out duration-200 hover:bg-gray-7`}
+                    >
+                      <TbLayoutList size={20} />
+                    </button>
+                  </div>
+                </div>
               </div>
 
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {Array.from({ length: 12 }).map((_, idx) => (
+                <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 xl:grid-cols-3 gap-x-4 gap-y-10 sm:gap-y-6">
+                  {Array.from({ length: 9 }).map((_, idx) => (
                     <div
                       key={idx}
-                      className="flex flex-col items-center sm:items-start gap-3"
+                      className="flex flex-col items-center sm:items-start gap-3 w-full"
                     >
-                      <div className="relative">
+                      <div className="relative w-[140px] sm:w-[260px]">
                         <Skeleton
-                          width={260}
-                          height={260}
+                          width={"100%"}
+                          height={140}
                           baseColor="#d1d5db"
                           highlightColor="#f3f4f6"
                           borderRadius={8}
@@ -258,22 +257,22 @@ const NewArrivalProduct = () => {
                             src="/images/logo/AlbsherLOGO.png"
                             alt=""
                             className="opacity-25"
-                            width={130}
-                            height={130}
+                            width={70}
+                            height={70}
                           />
                         </div>
                       </div>
-                      <div className="flex flex-col items-start gap-1">
+                      <div className="flex flex-col  gap-1 w-full max-w-[140px] sm:max-w-[260px]">
                         <Skeleton
-                          width={80}
-                          height={12}
+                          width="50%"
+                          height={10}
                           borderRadius={4}
                           baseColor="#d1d5db"
                           highlightColor="#f3f4f6"
                         />
                         <Skeleton
-                          width={130}
-                          height={12}
+                          width="70%"
+                          height={10}
                           borderRadius={4}
                           baseColor="#d1d5db"
                           highlightColor="#f3f4f6"

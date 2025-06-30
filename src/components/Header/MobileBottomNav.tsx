@@ -11,7 +11,7 @@ import Flag from "react-world-flags";
 import ChatPopup from "./ChatPopup";
 import { BiSolidOffer } from "react-icons/bi";
 import { TbCategoryFilled } from "react-icons/tb";
-import { FaStarHalfAlt } from "react-icons/fa";
+import { FaHome, FaStarHalfAlt } from "react-icons/fa";
 import { FiShoppingBag } from "react-icons/fi";
 
 const MobileBottomNav = () => {
@@ -25,13 +25,14 @@ const MobileBottomNav = () => {
 
   return (
     // داخل return:
-    <div
-  className="fixed bottom-0 left-0 w-full flex justify-around items-center h-14 z-50 sm:hidden"
+<div
+  className="fixed bottom-0 left-0 w-full flex justify-around items-center h-14 z-50 md:hidden"
   style={{
     backgroundImage:
       "linear-gradient(to top, rgba(0,0,0,1), rgba(0,0,0,0))",
   }}
 >
+
 
       <Link
         href="/?focus=categories"
@@ -76,7 +77,13 @@ const MobileBottomNav = () => {
           </span>
         )}
       </button>
-
+      <Link
+        href="/"
+        className="flex flex-col items-center text-white hover:text-blue-600"
+      >
+        <FaHome size={24} />
+        <span className="text-xs">{t("home")}</span>
+      </Link>
       {/* زر الشات */}
       <ChatPopup />
     </div>
