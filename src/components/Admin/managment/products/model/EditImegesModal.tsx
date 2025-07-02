@@ -91,41 +91,38 @@ export default function EditImagesModal({
       setIsUploading(false);
     }
   };
+const handleDeleteImage = async (imageId: number, imageUrl: string) => {
+  if (!confirm("Are you sure you want to delete this image?")) return;
 
-  const handleDeleteImage = async (imageId: number, imageUrl: string) => {
-    if (!confirm("Are you sure you want to delete this image?")) return;
-  
-    setIsDeleting(true);
-    try {
-      const updatedProductData = await DeleteProductImage(imageId);
-  
-      // تحويل الروابط لكائنات
-      const updatedProductImages = updatedProductData.product_images.map((url: string, index: number) => ({
-        id: Date.now() + index,
-        image_url: url,
-      }));
-  
-      onProductUpdate({
-        ...product,
-        product_images: updatedProductImages,
-      });
-  
-      // هنا استخدم النسخة المحوّلة بدل updatedProductData.product_images مباشرة
-      if (mainImage === imageUrl) {
-        setMainImage(updatedProductImages[0]?.image_url ?? null);
-      }
-    } catch (error) {
-      console.error("Error deleting image:", error);
-      alert(
-        `Failed to delete image: ${
-          error instanceof Error ? error.message : "Unknown error"
-        }`
-      );
-    } finally {
-      setIsDeleting(false);
+  setIsDeleting(true);
+  try {
+    const updatedProductData = await DeleteProductImage(imageId);
+
+    const updatedProductImages = Array.isArray(updatedProductData.images)
+      ? updatedProductData.images
+      : [];
+
+    onProductUpdate({
+      ...product,
+      product_images: updatedProductImages,
+    });
+
+    if (mainImage === imageUrl) {
+      setMainImage(updatedProductImages[0]?.image_url ?? null);
     }
-  };
-  
+  } catch (error) {
+    console.error("Error deleting image:", error);
+    alert(
+      `Failed to delete image: ${
+        error instanceof Error ? error.message : "Unknown error"
+      }`
+    );
+  } finally {
+    setIsDeleting(false);
+  }
+};
+
+
 
   return (
 <Modal

@@ -119,13 +119,22 @@ export async function uploadImage(file: File): Promise<string> {
   const result = await cloudinaryRes.json();
   return result.secure_url; // هذا هو رابط الصورة النهائي
 }
+interface Image {
+  id: number;
+  image_url: string;
+}
+
+interface DeleteProductResponse {
+  success: boolean;
+  images: Image[];
+}
 
 
 export async function DeleteProductImage(
   imageId: number
-): Promise<{ product_images: string[] }> {
+): Promise<DeleteProductResponse> {
   try {
-    const response = await fetch(`${API_URL}/${imageId}/updateImage`, {  // Note the URL uses imageId
+    const response = await fetch(`${API_URL}/${imageId}/updateImage`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
