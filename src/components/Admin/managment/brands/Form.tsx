@@ -7,7 +7,7 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isCommon, setIsCommon] = useState(false); 
+  const [isCommon, setIsCommon] = useState(false);
   const [file, setFile] = useState(null);
   useEffect(() => {
     if (brand) {
@@ -17,7 +17,7 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
     } else {
       setName("");
       setImage("");
-      setIsCommon(false); 
+      setIsCommon(false);
     }
   }, [brand]);
 
@@ -26,11 +26,14 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
     setIsSubmitting(true);
 
     try {
-      const uploadedUrl = file
-      ? await uploadImage(file, brand?.image)
-      : image;
+      const uploadedUrl = file ? await uploadImage(file, brand?.image) : image;
 
-      await onSubmit({ name, image: uploadedUrl, isCommon }); 
+      await onSubmit({
+        name,
+        image: uploadedUrl,
+        isCommon,
+        oldImageUrl: brand?.image,
+      });
       toast.success(brand ? "Brand updated" : "Brand added"),
         {
           position: "top-center",
@@ -46,11 +49,10 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
   return (
     <form onSubmit={handleSubmit}>
       <TextInput
-      variant="filled"
+        variant="filled"
         radius="xl"
         label="Brand Name"
-          labelProps={{ className: "mb-2 " }}
-
+        labelProps={{ className: "mb-2 " }}
         value={name}
         onChange={(e) => setName(e.currentTarget.value)}
         placeholder="Enter Brand name"
@@ -66,16 +68,16 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
         accept="image/*"
       />
       <Checkbox
-  label="Is Common"
-  color="indigo"
-  variant="outline"
-  radius="xl"
-  mt="lg"
-  checked={isCommon}
-  onChange={(e) => setIsCommon(e.currentTarget.checked)}
-/>
-  
-<div className="flex items-center justify-around">
+        label="Is Common"
+        color="indigo"
+        variant="outline"
+        radius="xl"
+        mt="lg"
+        checked={isCommon}
+        onChange={(e) => setIsCommon(e.currentTarget.checked)}
+      />
+
+      <div className="flex items-center justify-around">
         <Button
           type="submit"
           variant="light"
@@ -85,9 +87,7 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
           disabled={isSubmitting}
           radius="xl"
         >
-          
-          { brand
-           ? "Update Brand" : "Add Brand"}
+          {brand ? "Update Brand" : "Add Brand"}
         </Button>
         <Button
           variant="light"
@@ -100,7 +100,6 @@ export default function BrandForm({ brand, onSubmit, onCancel }) {
           Cancel
         </Button>
       </div>
-
     </form>
   );
 }

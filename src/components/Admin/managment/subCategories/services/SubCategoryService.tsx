@@ -43,42 +43,30 @@ export async function deleteSubCategory(id: number) {
 
 
 export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
-  // Step 1: Request signature from your server
-  const signatureData = new FormData();
-  signatureData.append("folder", "subCategories");
-  if (oldImageUrl) {
-    signatureData.append("oldImageUrl", oldImageUrl);
-  }
-
-  const signatureRes = await fetch("/api/Admin/uploadImage", {
-    method: "POST",
-    body: signatureData,
-  });
-
-  if (!signatureRes.ok) {
-    throw new Error("Failed to get Cloudinary signature");
-  }
-
-  const { timestamp, signature, apiKey, cloudName, folder } = await signatureRes.json();
-
-  // Step 2: Upload the file directly to Cloudinary
   const formData = new FormData();
+  formData.append("folder", "subCategories"); // فولدر داخل S3
   formData.append("file", file);
-  formData.append("api_key", apiKey);
-  formData.append("timestamp", timestamp);
-  formData.append("signature", signature);
-  formData.append("folder", folder);
 
-  const cloudinaryRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+  if (oldImageUrl) {
+    formData.append("oldImageUrl", oldImageUrl); // لو في صورة قديمة للحذف
+  }
+
+  const res = await fetch("/api/Admin/uploadImage", {
     method: "POST",
     body: formData,
   });
 
-  if (!cloudinaryRes.ok) {
-    const errText = await cloudinaryRes.text();
-    throw new Error("Cloudinary upload failed: " + errText);
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error("S3 Upload Failed: " + error);
   }
 
-  const result = await cloudinaryRes.json();
-  return result.secure_url; // رابط الصورة النهائي
+  const result = await res.json();
+
+  if (!result.s3Url) {
+    throw new Error("Upload response missing s3Url");
+  }
+
+  return result.s3Url;
 }
+

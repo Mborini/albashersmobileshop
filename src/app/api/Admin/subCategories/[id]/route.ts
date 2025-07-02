@@ -1,5 +1,38 @@
-import { v2 as cloudinary } from 'cloudinary';
 import pool from '../../../../lib/db';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
+
+function extractS3KeyFromUrl(s3Url: string): string | null {
+  const bucket = process.env.AWS_S3_BUCKET_NAME!;
+  const region = process.env.AWS_REGION!;
+  const prefix = `https://${bucket}.s3.${region}.amazonaws.com/`;
+  if (s3Url.startsWith(prefix)) {
+    return s3Url.replace(prefix, '');
+  }
+  return null;
+}
+
+async function deleteFromS3(s3Url: string) {
+  const key = extractS3KeyFromUrl(s3Url);
+  if (!key) return;
+
+  try {
+    await s3.send(new DeleteObjectCommand({
+      Bucket: process.env.AWS_S3_BUCKET_NAME!,
+      Key: key,
+    }));
+    console.log('✅ Deleted from S3:', key);
+  } catch (err) {
+    console.error('❌ Failed to delete from S3:', err);
+  }
+}
 
 export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
@@ -8,11 +41,26 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
 
   try {
     const client = await pool.connect();
+
+    // 1. جلب الصورة القديمة من قاعدة البيانات
+    const oldImageResult = await client.query(
+      'SELECT image FROM "subCategories" WHERE id = $1',
+      [id]
+    );
+    const oldImageUrl = oldImageResult.rows[0]?.image;
+
+    // 2. تحديث البيانات
     const result = await client.query(
       'UPDATE "subCategories" SET name = $1, image = $2, category_id = $3 WHERE id = $4 RETURNING *',
       [name, image, category_id, id]
     );
+
     client.release();
+
+    // 3. حذف الصورة القديمة إذا كانت مختلفة عن الجديدة
+    if (oldImageUrl && oldImageUrl !== image) {
+      await deleteFromS3(oldImageUrl);
+    }
 
     return new Response(JSON.stringify(result.rows[0]), {
       status: 200,
@@ -27,25 +75,16 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
   }
 }
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-function extractPublicId(imageUrl: string) {
-  const parts = imageUrl.split('/');
-  const folderAndId = parts.slice(-2).join('/').split('.')[0];
-  return folderAndId;
-}
 
 export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
   const client = await pool.connect();
 
   try {
-    // 1. تحقق من وجود منتجات مرتبطة
-    const productResult = await client.query('SELECT COUNT(*) FROM "products" WHERE subcategory_id = $1', [id]);
+    const productResult = await client.query(
+      'SELECT COUNT(*) FROM "products" WHERE subcategory_id = $1',
+      [id]
+    );
     const count = parseInt(productResult.rows[0].count, 10);
 
     if (count > 0) {
@@ -54,20 +93,17 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
         { status: 400, headers: { 'Content-Type': 'application/json' } }
       );
     }
-    const subcategoryResult = await client.query('SELECT image FROM "subCategories" WHERE id = $1', [id]);
+
+    const subcategoryResult = await client.query(
+      'SELECT image FROM "subCategories" WHERE id = $1',
+      [id]
+    );
     const imageUrl = subcategoryResult.rows[0]?.image;
 
     if (imageUrl) {
-      const publicId = extractPublicId(imageUrl);
-      try {
-        await cloudinary.uploader.destroy(publicId);
-      
-      } catch (cloudErr) {
-        console.error('Cloudinary Deletion Error:', cloudErr);
-      }
+      await deleteFromS3(imageUrl);
     }
 
-    // 3. حذف السبكاتيجوري من قاعدة البيانات
     await client.query('DELETE FROM "subCategories" WHERE id = $1', [id]);
 
     return new Response(null, { status: 204 });
@@ -78,7 +114,6 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   } finally {
-    client.release();
+    client.release(); // ❗ يستدعى مرة وحدة فقط
   }
 }
-

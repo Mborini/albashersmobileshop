@@ -83,7 +83,7 @@ export async function AddProductImage(id: number, image: string): Promise<Produc
 }
 export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
   const formData = new FormData();
-  formData.append("folder", "categories"); // اسم الفولدر داخل S3
+  formData.append("folder", "products"); // اسم الفولدر داخل S3
   formData.append("file", file);
 
   if (oldImageUrl) {

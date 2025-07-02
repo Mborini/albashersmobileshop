@@ -19,35 +19,29 @@ export async function updateAdsImages(id, AdsImages) {
 export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
   const formData = new FormData();
   formData.append("file", file);
-  if (oldImageUrl) {
-    formData.append("oldImageUrl", oldImageUrl);
-  }
-  formData.append("folder", "Ads");
+  formData.append("folder", "Ads"); // فولدر S3 المطلوب
 
-  const sigRes = await fetch("/api/Admin/uploadImage", {
+  if (oldImageUrl) {
+    formData.append("oldImageUrl", oldImageUrl); // للحذف لو في صورة قديمة
+  }
+
+  const res = await fetch("/api/Admin/uploadImage", {
     method: "POST",
     body: formData,
   });
 
-  if (!sigRes.ok) throw new Error("Failed to get Cloudinary signature");
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error("S3 Upload Failed: " + error);
+  }
 
-  const { timestamp, signature, apiKey, cloudName, folder } = await sigRes.json();
+  const result = await res.json();
 
-  const cloudForm = new FormData();
-  cloudForm.append("file", file);
-  cloudForm.append("api_key", apiKey);
-  cloudForm.append("timestamp", timestamp);
-  cloudForm.append("signature", signature);
-  cloudForm.append("folder", folder);
+  if (!result.s3Url) {
+    throw new Error("Upload response missing s3Url");
+  }
 
-  const uploadRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
-    method: "POST",
-    body: cloudForm,
-  });
-
-  if (!uploadRes.ok) throw new Error("Upload to Cloudinary failed");
-  const data = await uploadRes.json();
-
-  return data.secure_url;
+  return result.s3Url;
 }
+
 

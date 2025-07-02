@@ -18,7 +18,7 @@ export async function addBrand(brand: Brand) {
   return await res.json();
 }
 
-export async function updateBrand(id: number, brand: Brand) {
+export async function updateBrand(id: number,brand: Brand & { oldImageUrl?: string }) {
   const res = await fetch(`${API_URL}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
@@ -35,43 +35,32 @@ export async function deleteBrand(id: number) {
     throw error;
   }
   return true;
-}export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
-  // Step 1: طلب التوقيع من السيرفر
-  const signatureData = new FormData();
-  signatureData.append("folder", "brands");
-  if (oldImageUrl) {
-    signatureData.append("oldImageUrl", oldImageUrl);
-  }
-
-  const signatureRes = await fetch("/api/Admin/uploadImage", {
-    method: "POST",
-    body: signatureData,
-  });
-
-  if (!signatureRes.ok) {
-    throw new Error("Failed to get Cloudinary signature");
-  }
-
-  const { timestamp, signature, apiKey, cloudName, folder } = await signatureRes.json();
-
-  // Step 2: رفع الصورة مباشرة إلى Cloudinary
+}
+export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("api_key", apiKey);
-  formData.append("timestamp", timestamp);
-  formData.append("signature", signature);
-  formData.append("folder", folder);
+  formData.append("folder", "brands"); // فولدر S3 المطلوب
 
-  const cloudinaryRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/auto/upload`, {
+  if (oldImageUrl) {
+    formData.append("oldImageUrl", oldImageUrl); // للحذف لو في صورة قديمة
+  }
+
+  const res = await fetch("/api/Admin/uploadImage", {
     method: "POST",
     body: formData,
   });
 
-  if (!cloudinaryRes.ok) {
-    const errText = await cloudinaryRes.text();
-    throw new Error("Cloudinary upload failed: " + errText);
+  if (!res.ok) {
+    const error = await res.text();
+    throw new Error("S3 Upload Failed: " + error);
   }
 
-  const result = await cloudinaryRes.json();
-  return result.secure_url; // رابط الصورة النهائي
+  const result = await res.json();
+
+  if (!result.s3Url) {
+    throw new Error("Upload response missing s3Url");
+  }
+
+  return result.s3Url;
 }
+

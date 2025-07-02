@@ -71,53 +71,84 @@ function extractPublicId(imageUrl: string) {
   const folderAndId = parts.slice(-2).join('/').split('.')[0];
   return folderAndId;
 }
+import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
+
+const s3 = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
+
+// دالة لاستخراج المفتاح من رابط S3
+function extractS3KeyFromUrl(s3Url: string): string | null {
+  const bucket = process.env.AWS_S3_BUCKET_NAME!;
+  const region = process.env.AWS_REGION!;
+  const prefix = `https://${bucket}.s3.${region}.amazonaws.com/`;
+  if (s3Url.startsWith(prefix)) {
+    return s3Url.replace(prefix, "");
+  }
+  return null;
+}
+
+// دالة لحذف صورة من S3
+async function deleteFromS3(s3Url: string) {
+  const key = extractS3KeyFromUrl(s3Url);
+  if (!key) return;
+
+  try {
+    await s3.send(
+      new DeleteObjectCommand({
+        Bucket: process.env.AWS_S3_BUCKET_NAME!,
+        Key: key,
+      })
+    );
+    console.log("✅ Deleted from S3:", key);
+  } catch (error) {
+    console.error("❌ Failed to delete from S3:", error);
+  }
+}
+
 export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
 
   const client = await pool.connect();
   try {
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
-    // 1. جلب روابط الصور قبل حذفها
+    // 1. جلب روابط الصور من قاعدة البيانات قبل الحذف
     const imagesResult = await client.query(
-      'SELECT image_url FROM product_images WHERE product_id = $1',
+      "SELECT image_url FROM product_images WHERE product_id = $1",
       [id]
     );
     const imageUrls: string[] = imagesResult.rows.map((row) => row.image_url);
 
-    // 2. حذف الصور من Cloudinary
+    // 2. حذف الصور من S3
     for (const url of imageUrls) {
-      const publicId = extractPublicId(url);
-      try {
-        await cloudinary.uploader.destroy(publicId);
-      } catch (cloudErr) {
-        console.error('Cloudinary Deletion Error:', cloudErr);
-      }
+      await deleteFromS3(url);
     }
 
-    // 3. حذف الصور من قاعدة البيانات
-    await client.query('DELETE FROM product_images WHERE product_id = $1', [id]);
+    // 3. حذف السجلات المرتبطة في قاعدة البيانات
+    await client.query("DELETE FROM product_images WHERE product_id = $1", [id]);
+    await client.query("DELETE FROM product_attributes WHERE product_id = $1", [id]);
+    await client.query("DELETE FROM products WHERE id = $1", [id]);
 
-    // 4. حذف الخصائص المرتبطة
-    await client.query('DELETE FROM product_attributes WHERE product_id = $1', [id]);
+    await client.query("COMMIT");
 
-    // 5. حذف المنتج نفسه
-    await client.query('DELETE FROM products WHERE id = $1', [id]);
-
-    await client.query('COMMIT');
-
-    return new Response(JSON.stringify({ message: 'Product and images deleted successfully.' }), {
-      status: 200,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    return new Response(
+      JSON.stringify({ message: "Product and images deleted successfully." }),
+      { status: 200, headers: { "Content-Type": "application/json" } }
+    );
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('Error deleting product:', error);
-    return new Response(JSON.stringify({ error: 'Failed to delete product.' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    await client.query("ROLLBACK");
+    console.error("Error deleting product:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to delete product." }),
+      { status: 500, headers: { "Content-Type": "application/json" } }
+    );
   } finally {
     client.release();
   }
 }
+
