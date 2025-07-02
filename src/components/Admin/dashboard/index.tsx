@@ -11,7 +11,7 @@ export default async function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-6">
+    <div className="min-h-screen bg-gray-50  flex items-center justify-center p-6">
       <ActionsGrid />
     </div>
   );
