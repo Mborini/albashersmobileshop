@@ -4,8 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'res.cloudinary.com',
-        port: '',
+        hostname: 'albasheermblshop.s3.eu-north-1.amazonaws.com',
         pathname: '/**',
       },
     ],
