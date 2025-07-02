@@ -126,7 +126,7 @@ function SubCategoriesCard() {
   return (
     <div className="p-8">
       <Toaster position="top-center" />
-      <div className="flex justify-center items-center">
+      <div className="flex  justify-center items-center">
         <p className="text-2xl font-bold text-gray-800">All SubCategories</p>
       </div>
 
