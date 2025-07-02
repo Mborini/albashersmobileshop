@@ -1,11 +1,5 @@
 import { NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
-  api_key: process.env.CLOUDINARY_API_KEY!,
-  api_secret: process.env.CLOUDINARY_API_SECRET!,
-});
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
 
 export const config = {
   api: {
@@ -13,57 +7,60 @@ export const config = {
   },
 };
 
-function extractPublicId(imageUrl: string) {
-  const afterUpload = imageUrl.split("/upload/")[1];
-  const withoutVersion = afterUpload.replace(/^v\d+\//, "");
-  const publicId = withoutVersion.split(".")[0];
-  return publicId;
-}
+const s3 = new S3Client({
+  region: process.env.AWS_REGION!,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY!,
+  },
+});
 
-async function deleteOldMedia(oldMediaUrl: string | null) {
-  if (!oldMediaUrl) return null;
-
-  const publicId = extractPublicId(oldMediaUrl);
-
-  // تحديد نوع المورد بناءً على امتداد الملف
-  let resourceType: "image" | "video" = "image";
-  if (oldMediaUrl.match(/\.(mp4|mov|avi|wmv|flv|mkv)$/i)) {
-    resourceType = "video";
-  }
+async function uploadToS3(fileBuffer: Buffer, bucketName: string, key: string) {
+  const params = {
+    Bucket: bucketName,
+    Key: key,
+    Body: fileBuffer,
+    ContentType: "image/jpeg", // عدل حسب نوع الملف المرفوع
+  };
 
   try {
-    const result = await cloudinary.uploader.destroy(publicId, { resource_type: resourceType });
-    return result;
+    const command = new PutObjectCommand(params);
+    await s3.send(command);
+    return `https://${bucketName}.s3.${process.env.AWS_REGION}.amazonaws.com/${key}`;
   } catch (error) {
-    console.error("Error deleting old media:", error);
-    return null;
+    console.error("❌ Error uploading to S3:", error);
+    throw error;
   }
 }
 
 export async function POST(request: Request) {
-  const formData = await request.formData();
-  const oldImageUrl = formData.get("oldImageUrl") as string | null;
-  const folder = (formData.get("folder") as string) || "Ads";
+  try {
+    const formData = await request.formData();
 
+    const file = formData.get("file") as Blob | null;
+    if (!file) {
+      return NextResponse.json({ error: "No file provided" }, { status: 400 });
+    }
 
-  if (oldImageUrl) {
-    await deleteOldMedia(oldImageUrl);
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    const bucketName = process.env.AWS_S3_BUCKET_NAME;
+    if (!bucketName) {
+      throw new Error("Missing AWS_S3_BUCKET_NAME in environment");
+    }
+
+    const fileName = `products/${Date.now()}_${file instanceof File ? file.name : "upload"}`;
+    console.log("📤 Uploading to S3 as:", fileName);
+
+    const s3Url = await uploadToS3(buffer, bucketName, fileName);
+
+    return NextResponse.json({ s3Url });
+  } catch (error) {
+    console.error("🔥 Internal Server Error:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error", message: (error as Error).message },
+      { status: 500 }
+    );
   }
-
-  const timestamp = Math.floor(Date.now() / 1000);
-  const signature = cloudinary.utils.api_sign_request(
-    {
-      timestamp,
-      folder,
-    },
-    cloudinary.config().api_secret!
-  );
-
-  return NextResponse.json({
-    timestamp,
-    signature,
-    apiKey: cloudinary.config().api_key,
-    cloudName: cloudinary.config().cloud_name,
-    folder,
-  });
 }
