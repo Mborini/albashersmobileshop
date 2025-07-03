@@ -13,7 +13,7 @@ import { Badge } from "@mantine/core";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-import FlyingImage from "../Common/FlyingImage"; // ← استدعاء العنصر الطائر
+import FlyingImage from "../Common/FlyingImage";
 
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
@@ -25,6 +25,23 @@ const SingleListItem = ({ item }: { item: Product }) => {
     imageSrc: string;
     startRect: DOMRect;
   } | null>(null);
+
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (item.images.length <= 1) return;
+    setCurrentImageIndex((prev) => (prev + 1) % item.images.length);
+    intervalRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % item.images.length);
+    }, 1000);
+  };
+
+  const handleMouseLeave = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setCurrentImageIndex(0);
+  };
 
   const handleQuickViewUpdate = () => {
     dispatch(updateQuickView({ ...item }));
@@ -46,8 +63,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
         price: item.price,
         discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color:
-          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
       })
     );
@@ -61,8 +77,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
         price: item.price,
         discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color:
-          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
         status: "available",
       })
@@ -71,7 +86,6 @@ const SingleListItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group rounded-lg bg-white shadow-1 relative">
-      {/* صورة طائرة عند الإضافة إلى السلة */}
       {flyingImage && (
         <FlyingImage
           imageSrc={flyingImage.imageSrc}
@@ -82,14 +96,18 @@ const SingleListItem = ({ item }: { item: Product }) => {
 
       <div dir="ltr" className="flex flex-col sm:flex-row">
         {/* Image Section */}
-        <div className="shadow-list relative overflow-hidden flex items-center justify-center w-full sm:max-w-[270px] sm:min-h-[270px] p-4">
-          {item.images[0] && (
+        <div
+          className="shadow-list relative overflow-hidden flex items-center justify-center w-full sm:max-w-[270px] sm:min-h-[270px] h-[270px] bg-gray-100"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {item.images[currentImageIndex] && (
             <Image
               ref={imageRef}
-              src={item.images[0]}
+              src={item.images[currentImageIndex]}
               className="object-cover"
-              width={250}
-              height={250}
+              width={270}
+              height={270}
               alt="Product image"
             />
           )}
@@ -127,7 +145,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
         <div className="w-full flex flex-col gap-3 sm:gap-5 justify-center py-4 px-3 sm:px-7.5 lg:pl-11 lg:pr-12">
           <div>
             <div className="flex flex-wrap items-center justify-between gap-2">
-              <h3 className="font-medium text-dark ease-out duration-200 hover:text-gary-7 mb-1.5">
+              <h3 className="text-lg font-semibold text-dark ease-out duration-200 hover:text-gray-700 mb-2">
                 {item.title}
               </h3>
               <Badge
@@ -139,11 +157,11 @@ const SingleListItem = ({ item }: { item: Product }) => {
               </Badge>
             </div>
 
-            <span className="text-xs sm:text-sm text-dark block">
+            <span className="text-sm sm:text-base text-gray-700 leading-relaxed block mb-2">
               {item.description}
             </span>
 
-            <span className="flex items-center gap-2 mt-1 font-medium text-base sm:text-lg">
+            <span className="flex items-center gap-2 mt-1 font-semibold text-lg sm:text-xl">
               <span className="text-dark">JOD {item.discountedPrice}</span>
               <span className="text-gray-400 line-through text-sm">
                 JOD {item.price}
@@ -154,16 +172,19 @@ const SingleListItem = ({ item }: { item: Product }) => {
           <div className="flex flex-col items-center gap-2.5 mb-2">
             {item.colors?.length > 0 ? (
               <>
-                <h3 className="text-xs sm:text-sm text-center font-medium">
-                  {t("colors")}
-                </h3>
-                <div className="flex gap-2 flex-wrap justify-center">
+                <h3 className="text-sm font-medium text-center">{t("colors")}</h3>
+                <div className="flex gap-3 flex-wrap justify-center">
                   {item.colors.map((color) => (
                     <div
                       key={color.id}
-                      className="w-4 h-4 rounded-full cursor-pointer transition-transform hover:scale-110"
+                      className={`w-6 h-6 rounded-full cursor-pointer border-2 transition-transform duration-200 ${
+                        selectedColor === color.hex_code
+                          ? "scale-125 border-black"
+                          : "border-gray-300 hover:scale-150"
+                      }`}
                       style={{ backgroundColor: color.hex_code }}
                       title={color.name}
+                      onClick={() => setSelectedColor(color.hex_code)}
                     ></div>
                   ))}
                 </div>

@@ -21,10 +21,27 @@ const ProductItem = ({ item }: { item: Product }) => {
   const dispatch = useDispatch<AppDispatch>();
 
   const imageRef = useRef<HTMLImageElement>(null);
+  const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [flyingImage, setFlyingImage] = useState<{
     imageSrc: string;
     startRect: DOMRect;
   } | null>(null);
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+
+  const handleMouseEnter = () => {
+    if (item.images.length <= 1) return;
+    setCurrentImageIndex((prev) => (prev + 1) % item.images.length);
+    intervalRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % item.images.length);
+    }, 1000);
+  };
+
+  const handleMouseLeave = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setCurrentImageIndex(0);
+  };
 
   const handleQuickViewUpdate = () => {
     dispatch(updateQuickView({ ...item }));
@@ -46,8 +63,7 @@ const ProductItem = ({ item }: { item: Product }) => {
         price: item.price,
         discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color:
-          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
       })
     );
@@ -61,8 +77,7 @@ const ProductItem = ({ item }: { item: Product }) => {
         price: item.price,
         discountedPrice: item.discountedPrice ?? item.price,
         quantity: 1,
-        color:
-          item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
+        color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
         status: "available",
       })
@@ -79,16 +94,49 @@ const ProductItem = ({ item }: { item: Product }) => {
         />
       )}
       <div className="group">
-        <div className="relative overflow-hidden flex items-center justify-center rounded-lg bg-[#F5F5F7] shadow-2 border-gray-6 border-1 mb-4">
-          {item.images[0] && (
+        <div
+          className="relative w-full h-[250px] rounded-lg shadow-2 bg-white border-gray-2 border mb-4 overflow-hidden"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+        >
+          {/* Brand badge */}
+          <div className="absolute top-2 left-2 z-10">
+            <Badge
+              size="md"
+              variant="gradient"
+              gradient={{ from: "green", to: "lime", deg: 360 }}
+            >
+              {item.brand_name}
+            </Badge>
+          </div>
+
+          {item.images[currentImageIndex] && (
             <Image
               ref={imageRef}
-              src={item.images[0]}
-              className="object-cover"
-              width={250}
-              height={250}
+              src={item.images[currentImageIndex]}
               alt="Product image"
+              fill
+              className="object-cover transition-opacity duration-500 ease-in-out"
+              onClick={() => {
+                openModal();
+                handleQuickViewUpdate();
+              }}
+              style={{ cursor: "pointer" }}
             />
+          )}
+
+          {/* Image indicators */}
+          {item.images.length > 1 && (
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+              {item.images.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                    index === currentImageIndex ? "bg-blue" : "bg-gray-5"
+                  }`}
+                />
+              ))}
+            </div>
           )}
 
           <div className="absolute left-0 bottom-0 translate-y-full w-full flex items-center justify-center gap-2.5 pb-5 ease-linear duration-200 group-hover:translate-y-0">
@@ -97,7 +145,7 @@ const ProductItem = ({ item }: { item: Product }) => {
                 openModal();
                 handleQuickViewUpdate();
               }}
-              className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
+              className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-black bg-white hover:text-gray-6"
             >
               <IoEyeOutline size={18} />
             </button>
@@ -113,36 +161,35 @@ const ProductItem = ({ item }: { item: Product }) => {
 
             <button
               onClick={handleItemToWishList}
-              className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-dark bg-white hover:text-gray-6"
+              className="flex items-center justify-center w-9 h-9 rounded-[5px] shadow-1 ease-out duration-200 text-black bg-white hover:text-gray-6"
             >
               <MdFavoriteBorder size={18} />
             </button>
           </div>
         </div>
 
-        <div className="flex gap-3 justify-between">
-          <h3 className="font-medium text-black ease-out duration-200 hover:text-gray-6 mb-1.5">
+        <div className="flex items-center justify-between gap-2 mb-1.5">
+          <h3 className="flex-1 text-sm font-medium text-black truncate hover:text-gray-6 duration-200 ease-out">
             {item.title}
           </h3>
-          <Badge
-            size="md"
-            variant="gradient"
-            gradient={{ from: "green", to: "lime", deg: 360 }}
-          >
-            {item.brand_name}
-          </Badge>
         </div>
 
         <div className="flex items-center gap-2.5 mb-2">
           {item.colors?.length ? (
-            <div className="flex gap-3 flex-wrap">
+            <div className="flex flex-wrap">
               {item.colors.map((color) => (
-                <div
-                  key={color.id}
-                  className="w-3 h-3 rounded-full cursor-pointer transition-transform hover:scale-110"
-                  style={{ backgroundColor: color.hex_code }}
-                  title={color.name}
-                ></div>
+                <div key={color.id} className="relative w-6 h-6">
+                  <div
+                    onClick={() => setSelectedColor(color.hex_code)}
+                    className={`absolute inset-0 m-auto w-4 h-4 rounded-full cursor-pointer transition-transform duration-200 hover:scale-150 ${
+                      selectedColor === color.hex_code
+                        ? "scale-125 border-black"
+                        : "border-gray-6"
+                    } border-2`}
+                    style={{ backgroundColor: color.hex_code }}
+                    title={color.name}
+                  ></div>
+                </div>
               ))}
             </div>
           ) : (
@@ -150,11 +197,9 @@ const ProductItem = ({ item }: { item: Product }) => {
           )}
         </div>
 
-        <span className="flex items-center gap-2 font-medium text-lg">
-          <span className="text-dark">JOD {item.price}</span>
-          <span className="text-dark-4 line-through">
-            JOD {item.discountedPrice}
-          </span>
+        <span className="flex items-center gap-2 font-medium">
+          <span className="text-lg text-dark">JOD {item.discountedPrice}</span>
+          <span className="text-md text-dark-4 line-through">JOD {item.price}</span>
         </span>
       </div>
     </>

@@ -38,9 +38,9 @@ const Footer = () => {
                 <div className="flex items-center gap-4.5">
                 <FaPhoneAlt 
                 
-                color="white" size={24} />  
+                color="white" size={20} />  
                
-                  <span dir="ltr">(+965) 79744-0729</span>
+                  <span dir="ltr">(+962) 796 855 578</span>
                 </div>
               </li>
 
@@ -69,7 +69,7 @@ const Footer = () => {
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-blue"
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
                   >
-                  <FaFacebook />
+                  <FaFacebook size={22}/>
                   <span>
                     {t("facebook_page")}
                   </span>
@@ -83,7 +83,7 @@ const Footer = () => {
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-orange"
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
                   >
-                  <FaInstagram />
+                  <FaInstagram size={22}/>
                   <span>
                     {t("instagram_page")}
                   </span>
@@ -98,7 +98,7 @@ const Footer = () => {
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
 
                 >
-                  <FaWhatsapp />
+                  <FaWhatsapp size={22}/>
                   <span>
                     {t("whatsapp_page")}
                   </span>

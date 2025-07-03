@@ -60,16 +60,12 @@ const BrandDropdown = ({ brands, onBrandChange }) => {
       </Flex>
 
       {/* Dropdown content */}
-      <Collapse
-        
-        in={toggleDropdown}
-      >
+      <Collapse in={toggleDropdown}>
         <Box px="md" pb="md">
           <ScrollArea
             style={{
               height: 200,
               backgroundColor: "white",
-
               padding: 12,
             }}
             offsetScrollbars
@@ -84,7 +80,6 @@ const BrandDropdown = ({ brands, onBrandChange }) => {
                       <Text>{brand.name}</Text>
                       <Box
                         style={{
-                          
                           borderRadius: 9999,
                           padding: "0 10px",
                           fontSize: 12,
