@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, hover } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useDisclosure, useDebouncedValue } from "@mantine/hooks";
 import {
@@ -106,7 +106,10 @@ export default function Search() {
             />
             {loading ? (
               <Center>
-                <LuLoader size={24} className="text-black  mt- 12 custom-spin" />
+                <LuLoader
+                  size={24}
+                  className="text-black  mt- 12 custom-spin"
+                />
               </Center>
             ) : (
               <ScrollArea
@@ -143,8 +146,12 @@ export default function Search() {
                           <Box
                             p="xs"
                             mb="xs"
-                            style={{ borderRadius: 8, transition: "0.2s" }}
-                            className="hover:bg-white bg-black cursor-pointer"
+                            style={{
+                              borderRadius: 8,
+                              transition: "0.2s",
+                              backgroundColor: "rgba(255, 255, 255, 0.5)",
+                            }}
+                            className="cursor-pointer hover:bg-gray-2"
                             dir="ltr"
                             onClick={() => {
                               dispatch(updateQuickView(product));
@@ -163,13 +170,14 @@ export default function Search() {
                               )}
 
                               <Stack style={{ flex: 1 }}>
-                                <Group >
-                                  <Text 
-                                   c="dimmed"
-                                  className=" group-hover:text-black transition-colors duration-200"
-                                  fw={500} size="sm">
+                                <Group>
+                                  <Text
+                                    c="dimmed"
+                                    className=" group-hover:text-black transition-colors duration-200"
+                                    fw={500}
+                                    size="sm"
+                                  >
                                     {product.title}
-                                    
                                   </Text>
                                   <Badge
                                     size="xs"

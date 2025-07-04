@@ -42,7 +42,7 @@ export async function GET(req: NextRequest) {
     LEFT JOIN product_colors pc ON pc.product_id = p.id
     LEFT JOIN colors clr ON pc.color_id = clr.id
 
-    WHERE p.title ILIKE $1
+WHERE p.title ILIKE $1 OR b.name ILIKE $1
 
     GROUP BY p.id, b.name, s.name, c.name
   `;

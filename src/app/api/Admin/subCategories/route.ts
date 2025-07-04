@@ -3,12 +3,12 @@ import pool from "../../../lib/db"; // if using relative path
 export async function GET() {
   try {
     const client = await pool.connect();
-    
 
     const res = await client.query(`
       SELECT "subCategories".*, "categories"."name" AS categories_name
       FROM "subCategories"
-      INNER JOIN "categories" ON "categories"."id" = "subCategories"."category_id";
+      INNER JOIN "categories" ON "categories"."id" = "subCategories"."category_id"
+      order by "subCategories"."name" asc
     `);
 
     client.release();

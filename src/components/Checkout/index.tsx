@@ -14,6 +14,7 @@ import Link from "next/link";
 import OtpModal from "./OtpModal"; // استدعاء مودال OTP
 import i18next from "i18next";
 import { useTranslation } from "react-i18next";
+import { MdOutlineShoppingCart } from "react-icons/md";
 type CheckoutFormData = {
   firstName: string;
   lastName: string;
@@ -269,25 +270,15 @@ const Checkout = () => {
           <MailSuccess />
         ) : (
           <div className="text-center mt-8">
-            <div className="mx-auto pb-1">
-              {/* ... SVG هنا كما هو */}
-              <svg
-                className="mx-auto"
-                width="100"
-                height="100"
-                viewBox="0 0 100 100"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                {/* ... (نفس SVG في كودك السابق) */}
-              </svg>
-            </div>
-
-            <p className="pb-6">{t("Your_cart_is_empty")}</p>
-
+           <div className="mx-auto pb-7.5 flex flex-col items-center gap-4">
+               <div className="bg-black rounded-full p-4 inline-flex items-center justify-center">
+                 <MdOutlineShoppingCart size={48} className="text-white" />
+               </div>
+               <p className="py-8">{t("Your_cart_is_empty")}</p>
+             </div>
             <Link
               href={{ pathname: "/", query: { focus: "categories" } }}
-              className="inline-flex items-center gap-2 font-medium text-white bg-blue py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
+              className="inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
             >
               {t("continue_shopping")}
             </Link>

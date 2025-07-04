@@ -5,7 +5,7 @@ export async function GET() {
     const client = await pool.connect();
     
 
-    const res = await client.query("SELECT * FROM brands");
+    const res = await client.query("SELECT * FROM brands ORDER BY name asc");
     client.release();
 
     return new Response(JSON.stringify(res.rows), {
