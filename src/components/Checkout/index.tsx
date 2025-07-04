@@ -41,16 +41,21 @@ const Checkout = () => {
 
   // دالة لإرسال OTP إلى الايميل
   const sendOtp = async (email: string) => {
-    const res = await fetch("/api/send-otp", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, lang: i18n.language }),
-    });
-    if (!res.ok) {
-      const errorData = await res.json();
-      throw new Error(errorData.error || "فشل إرسال رمز التحقق");
-    }
-  };
+  // ناخذ أول جزئين قبل الشرطة -
+  const langCode = i18n.language.split("-")[0]; // هذا يقطع "en-US" إلى "en"
+
+  const res = await fetch("/api/send-otp", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, lang: langCode }),
+  });
+
+  if (!res.ok) {
+    const errorData = await res.json();
+    throw new Error(errorData.error || "فشل إرسال رمز التحقق");
+  }
+};
+
 
   const sender = async (data: any) => {
     try {

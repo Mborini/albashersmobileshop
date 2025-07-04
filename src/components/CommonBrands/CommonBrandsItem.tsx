@@ -29,7 +29,7 @@ const CommonBrandItem = ({
           {/* صورة واسم Apple */}
           <div className="flex items-center gap-2 sm:gap-3">
             <Image
-              src="/images/blog/apple.png"
+            src={item.image}
               alt="apple"
               width={70}
               height={70}

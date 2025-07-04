@@ -3,15 +3,16 @@ import { emailTranslations } from "../emailTranslations";
 export function generateOtpEmail({
   
   otp,
-  lang = "ar",
+  lang ,
 }: {
  
   otp: string;
   lang?: "ar" | "en";
 }) {
-  const t = (key: keyof (typeof emailTranslations)["ar"]) =>
-    emailTranslations[lang]?.[key] ?? key; 
-  
+const selectedLang = lang === "ar" || lang === "en" ? lang : "ar";
+const t = (key: keyof typeof emailTranslations["ar"]) =>
+  emailTranslations[selectedLang][key] ?? key;
+
   const logoUrl =
     "https://res.cloudinary.com/do1etuooh/image/upload/v1750775950/476908956_642303014852206_4219799890360416472_n_lrbqco.jpg";
 

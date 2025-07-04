@@ -14,7 +14,7 @@ export async function POST(request: Request) {
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
-
+console.log("🔍 Sending OTP to:", email, "Language:", lang);
     const otp = generateOTP();
     await pool.query(`
       DELETE FROM otp_codes

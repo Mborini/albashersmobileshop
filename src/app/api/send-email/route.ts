@@ -27,7 +27,6 @@ export async function POST(request: Request) {
       city,
       address,
       note,
-      lang, // تمرير اللغة إلى الدالة
     });
     const transporter = nodemailer.createTransport({
       service: "Gmail",
