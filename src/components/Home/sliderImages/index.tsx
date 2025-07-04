@@ -48,31 +48,33 @@ const SliderImages = () => {
   }
 
   return (
-    <section className="w-full mt-14 h-[40vh] sm:h-[60vh] md:h-[60vh] lg:h-[93vh] overflow-hidden">
-      <Swiper
-        modules={[Autoplay, Pagination, Navigation]}
-        spaceBetween={0}
-        slidesPerView={1}
-        loop={true}
-        autoplay={{ delay: 5000, disableOnInteraction: false }}
-        pagination={{ clickable: true }}
-        className="h-full"
-      >
-        {adsImages.map((img, idx) => (
-          <SwiperSlide key={idx}>
-            <div className="relative w-full h-[40vh] sm:h-[60vh] md:h-[50vh] lg:h-[93vh]">
-              <Image
-                src={img.image_Url || "/fallback.jpg"}
-                alt={`Slider Image ${idx + 1}`}
-                fill
-                priority
-                className="object-cover w-full h-full"
-              />
-            </div>
-          </SwiperSlide>
-        ))}
-      </Swiper>
-    </section>
+<section className="w-full mt-14 h-[70vh] sm:h-[85vh] md:h-[85vh] lg:h-[100vh] overflow-hidden">
+  <Swiper
+    modules={[Autoplay, Pagination, Navigation]}
+    spaceBetween={0}
+    slidesPerView={1}
+    loop={true}
+    autoplay={{ delay: 5000, disableOnInteraction: false }}
+    pagination={{ clickable: true }}
+    className="w-full h-full"
+  >
+    {adsImages.map((img, idx) => (
+      <SwiperSlide key={idx} className="w-full h-full">
+        <div className="relative w-full h-full">
+          <Image
+            src={img.image_Url || "/fallback.jpg"}
+            alt={`Slider Image ${idx + 1}`}
+            fill
+            priority
+            className="object-cover"
+          />
+        </div>
+      </SwiperSlide>
+    ))}
+  </Swiper>
+</section>
+
+
   );
 };
 
