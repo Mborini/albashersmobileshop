@@ -134,7 +134,7 @@ const Footer = () => {
               <li>
                 <a
                   className="ease-out duration-200 hover:text-blue"
-                  href="AllCommon-Brands-Grid"
+                  href="/Brands"
                 >
                   {t("common_Brands")}
                 </a>

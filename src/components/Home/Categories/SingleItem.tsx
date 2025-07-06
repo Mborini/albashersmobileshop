@@ -11,10 +11,10 @@ const SingleItem = ({ item }: { item: Category }) => {
 
   return (
     <motion.div
-    initial={{ opacity: 0, y: 50 }}
-    whileInView={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.6 }}
-    viewport={{ once: false, amount: 0.3 }}
+      initial={{ opacity: 0, y: 50 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      viewport={{ once: false, amount: 0.3 }}
     >
       <Link
         href={`../../SubCategories?categoryId=${item.id}`}
@@ -22,21 +22,22 @@ const SingleItem = ({ item }: { item: Category }) => {
         className="group flex flex-col items-center"
       >
         {/* صورة التصنيف */}
-        <div className="w-[200px] h-[200px] sm:w-[180px] sm:h-[180px] flex items-center justify-center">
-        <Image
+        <div className="w-[250px] h-[250px] sm:w-[220px] sm:h-[220px] flex items-center justify-center">
+          <Image
             src={item.image}
             alt="Category"
-            width={110}
-            height={110}
-            className="sm:w-[110px] sm:h-[110px]"
+            width={160}
+            height={160}
+            className="sm:w-[160px] sm:h-[160px]"
           />
         </div>
 
         {/* اسم التصنيف */}
         <div className="flex justify-center">
-        <h3 className="inline-block text-lg sm:text-xl font-semibold text-center text-dark bg-gradient-to-r from-gray-7 to-gary-7 bg-[length:0px_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px] group-hover:bg-[length:100%_1px] group-hover:text-gray-6">
-        {item.name}
-          </h3>
+         <h3 className="inline-block text-xl sm:text-2xl font-semibold text-center ...">
+  {item.name}
+</h3>
+
         </div>
       </Link>
     </motion.div>

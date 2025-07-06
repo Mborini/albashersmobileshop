@@ -1,5 +1,6 @@
 "use client";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Autoplay } from "swiper/modules"; // 👈 استيراد Autoplay
 import { useCallback, useRef, useEffect, useState } from "react";
 import "swiper/css/navigation";
 import "swiper/css";
@@ -16,6 +17,8 @@ const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const { t, i18n } = useTranslation();
+
+  const priorityNames = ["apple", "anker", "huawei", "wiwu"];
 
   const handlePrev = useCallback(() => {
     if (!sliderRef.current) return;
@@ -52,11 +55,25 @@ const Categories = () => {
     fetchCategories();
   }, []);
 
+  const sortedCategories = [...categories].sort((a, b) => {
+    const aIndex = priorityNames.indexOf(a.name.toLowerCase());
+    const bIndex = priorityNames.indexOf(b.name.toLowerCase());
+
+    if (aIndex !== -1 && bIndex !== -1) {
+      return aIndex - bIndex;
+    } else if (aIndex !== -1) {
+      return -1;
+    } else if (bIndex !== -1) {
+      return 1;
+    } else {
+      return a.name.localeCompare(b.name);
+    }
+  });
+
   return (
     <section className="overflow-hidden pt-5">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0 pb-15 border-b border-gray-3">
         <div className="swiper categories-carousel common-carousel">
-          {/* <!-- section title --> */}
           <div
             dir={i18n.language === "ar" ? "rtl" : "ltr"}
             className="mb-10 flex items-center justify-between"
@@ -103,15 +120,12 @@ const Categories = () => {
             <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-4">
               {Array.from({ length: 5 }).map((_, idx) => (
                 <div key={idx} className="flex flex-col items-center gap-3">
-                  {/* Circle */}
                   <Skeleton
-                    
                     width={130}
                     height={130}
                     baseColor="#d1d5db"
                     highlightColor="#f3f4f6"
                   />
-                  {/* Line */}
                   <Skeleton
                     width={80}
                     height={12}
@@ -125,14 +139,17 @@ const Categories = () => {
           ) : (
             <Swiper
               ref={sliderRef}
-              slidesPerView={5}
+              slidesPerView={3}
+              modules={[Autoplay]}
+              autoplay={{ delay: 3000, disableOnInteraction: false }}
               breakpoints={{
-                0: { slidesPerView: 3 },
-                1000: { slidesPerView: 4 },
-                1200: { slidesPerView: 6 },
+                0: { slidesPerView: 3 }, // ✅ موبايل: 3 عناصر
+                640: { slidesPerView: 3 }, // تابلت صغير
+                1000: { slidesPerView: 4 }, // شاشات متوسطة
+                1200: { slidesPerView: 5 }, // شاشات كبيرة
               }}
             >
-              {categories.map((item, key) => (
+              {sortedCategories.map((item, key) => (
                 <SwiperSlide key={key}>
                   <SingleItem item={item} />
                 </SwiperSlide>

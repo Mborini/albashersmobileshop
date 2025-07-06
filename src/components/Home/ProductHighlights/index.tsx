@@ -14,7 +14,7 @@ export default function ProductHighlights() {
             className="relative block rounded-lg overflow-hidden cursor-pointer mb-4"
           >
             <Image
-              src="/images/ProductHighlights/offer.png"
+              src="/images/ProductHighlights/offers.png"
               alt="Best Seller"
               width={500}
               height={500}
@@ -28,7 +28,7 @@ export default function ProductHighlights() {
             className="relative block rounded-lg overflow-hidden cursor-pointer"
           >
             <Image
-              src="/images/ProductHighlights/new.png"
+              src="/images/ProductHighlights/news.png"
               alt="New Arrival"
               width={500}
               height={215}
