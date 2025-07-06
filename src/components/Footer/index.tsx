@@ -1,6 +1,11 @@
 import React from "react";
 import Image from "next/image";
-import { FaFacebook, FaInstagram, FaPhoneAlt, FaWhatsapp } from "react-icons/fa";
+import {
+  FaFacebook,
+  FaInstagram,
+  FaPhoneAlt,
+  FaWhatsapp,
+} from "react-icons/fa";
 import { useTranslation } from "react-i18next";
 import { CiMail } from "react-icons/ci";
 import { MdLocationPin } from "react-icons/md";
@@ -25,28 +30,22 @@ const Footer = () => {
             <ul className="flex flex-col gap-3">
               <li className="flex gap-4.5">
                 <span className="flex-shrink-0">
-                <MdLocationPin
-                color="white"
-                size={24}
-                />
-
+                  <MdLocationPin color="white" size={24} />
                 </span>
                 {t("Qupa_Circle_Irbid_Jordan")}
               </li>
 
               <li>
                 <div className="flex items-center gap-4.5">
-                <FaPhoneAlt 
-                
-                color="white" size={20} />  
-               
+                  <FaPhoneAlt color="white" size={20} />
+
                   <span dir="ltr">(+962) 796 855 578</span>
                 </div>
               </li>
 
               <li>
                 <div className="flex items-center gap-4.5">
-                <CiMail color="white" size={24}/>
+                  <CiMail color="white" size={24} />
                   albasheermbl@gmail.com{" "}
                 </div>
               </li>
@@ -68,11 +67,9 @@ const Footer = () => {
                   aria-label="Facebook Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-blue"
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
-                  >
-                  <FaFacebook size={22}/>
-                  <span>
-                    {t("facebook_page")}
-                  </span>
+                >
+                  <FaFacebook size={22} />
+                  <span>{t("facebook_page")}</span>
                 </a>
               </li>
 
@@ -82,11 +79,9 @@ const Footer = () => {
                   aria-label="Instagram Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-orange"
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
-                  >
-                  <FaInstagram size={22}/>
-                  <span>
-                    {t("instagram_page")}
-                  </span>
+                >
+                  <FaInstagram size={22} />
+                  <span>{t("instagram_page")}</span>
                 </a>
               </li>
 
@@ -96,12 +91,9 @@ const Footer = () => {
                   aria-label="WhatsApp Social Link"
                   className="flex items-center gap-x-2 ease-out duration-200 hover:text-green"
                   dir={i18n.language === "ar" ? "rtl" : "ltr"}
-
                 >
-                  <FaWhatsapp size={22}/>
-                  <span>
-                    {t("whatsapp_page")}
-                  </span>
+                  <FaWhatsapp size={22} />
+                  <span>{t("whatsapp_page")}</span>
                 </a>
               </li>
             </ul>
@@ -145,16 +137,24 @@ const Footer = () => {
         {/* <!-- footer menu end --> */}
       </div>
 
-      {/* <!-- footer bottom start --> */}
-      <div className="py-5 xl:py-7.5 bg-black">
+      {/* <!-- Footer Bottom Start --> */}
+      <footer className="bg-black py-5 xl:py-7.5">
         <div className="max-w-[1170px] mx-auto px-4 sm:px-8 xl:px-0">
-          <div className="flex gap-5 flex-wrap items-center justify-between">
-            <p className="text-white font-medium">
-              &copy; {year} Mohammad Borini. All rights reserved.
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-center sm:text-left">
+            <p className="text-white text-sm sm:text-base font-medium">
+              &copy; {new Date().getFullYear()} Albasheer Shop. All rights
+              reserved.
+            </p>
+            <p className="text-gray-400 text-sm sm:text-base">
+              Powered by{" "}
+              <span className="text-white hover:text-primary font-semibold transition">
+                MBorini Company
+              </span>
             </p>
           </div>
         </div>
-      </div>
+      </footer>
+
       {/* <!-- footer bottom end --> */}
     </footer>
   );
