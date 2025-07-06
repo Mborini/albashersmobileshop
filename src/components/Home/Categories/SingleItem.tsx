@@ -21,23 +21,21 @@ const SingleItem = ({ item }: { item: Category }) => {
         onClick={() => dispatch(setSelectedCategoryName(item.name))}
         className="group flex flex-col items-center"
       >
-        {/* صورة التصنيف */}
-        <div className="w-[250px] h-[250px] sm:w-[220px] sm:h-[220px] flex items-center justify-center">
+        <div className="w-[100px] h-[100px] md:w-[130px] md:h-[130px] lg:w-[150px] lg:h-[150px] xl:w-[180px] xl:h-[180px] flex items-center justify-center">
           <Image
             src={item.image}
             alt="Category"
             width={160}
             height={160}
-            className="sm:w-[160px] sm:h-[160px]"
+            className="w-full h-full object-contain"
           />
         </div>
 
         {/* اسم التصنيف */}
         <div className="flex justify-center">
-         <h3 className="inline-block text-xl sm:text-2xl font-semibold text-center ...">
-  {item.name}
-</h3>
-
+          <h3 className="inline-block text-base sm:text-lg md:text-xl font-semibold text-center">
+            {item.name}
+          </h3>
         </div>
       </Link>
     </motion.div>
