@@ -134,7 +134,7 @@ const Hero = () => {
                     <span className="font-medium text-xl text-black">
                       JOD {otherImages[2].discounted_Price}
                     </span>
-                    <span className="font-medium text-lg text-dark-4 line-through">
+                    <span className="font-medium text-lg text-gray-4 line-through">
                       JOD {otherImages[2].price}
                     </span>
                   </div>
