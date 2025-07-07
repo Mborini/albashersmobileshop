@@ -1,19 +1,20 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Drawer, Center, Loader } from "@mantine/core";
+import { Drawer, Center, Loader, TextInput } from "@mantine/core";
 import { Toaster, toast } from "react-hot-toast";
-import AttrForm from "./Form";  // نموذج التعديل
+import AttrForm from "./Form";
 import List from "./List";
 import { fetchSubCategories } from "../subCategories/services/SubCategoryService";
 import AddAttrForm from "./AddAttrForm";
 
 function AttrCard() {
   const [opened, { open, close }] = useDisclosure(false);
-  const [editingAttr, setEditingAttr] = useState(null);  // لتعديل
-  const [addingAttrForSubCat, setAddingAttrForSubCat] = useState(null);  // لإضافة جديد
+  const [editingAttr, setEditingAttr] = useState(null);
+  const [addingAttrForSubCat, setAddingAttrForSubCat] = useState(null);
   const [subCategories, setSubCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     async function loadAttrs() {
@@ -48,13 +49,28 @@ function AttrCard() {
     close();
   };
 
+  const filteredSubCategories = subCategories.filter((sub) =>
+    sub.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="p-8">
       <Toaster position="top-center" />
+
       <div className="flex justify-center items-center">
         <p className="text-2xl font-bold text-gray-800">
           Manage Attributes by Subcategories
         </p>
+      </div>
+
+      <div className="max-w-md mx-auto mt-5 my-4">
+        <TextInput
+          variant="filled"
+          radius="xl"
+          placeholder="Search by subcategory name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.currentTarget.value)}
+        />
       </div>
 
       {loading ? (
@@ -74,7 +90,7 @@ function AttrCard() {
             }}
           >
             <List
-              subCategories={subCategories}
+              subCategories={filteredSubCategories}
               onEdit={handleEditClick}
               onAdd={handleAddClick}
             />
@@ -96,16 +112,13 @@ function AttrCard() {
         size="sm"
       >
         {editingAttr && (
-          <AttrForm
-            subCategory={editingAttr}
-            onCancel={handleClose}
-          />
+          <AttrForm subCategory={editingAttr} onCancel={handleClose} />
         )}
         {addingAttrForSubCat && (
           <AddAttrForm
             subCategory={addingAttrForSubCat}
             onCancel={handleClose}
-            onSaved={handleClose}  
+            onSaved={handleClose}
           />
         )}
       </Drawer>

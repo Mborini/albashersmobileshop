@@ -1,7 +1,14 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useDisclosure } from "@mantine/hooks";
-import { Drawer, Divider, Center, Loader, Button } from "@mantine/core";
+import {
+  Drawer,
+  Divider,
+  Center,
+  Loader,
+  Button,
+  TextInput,
+} from "@mantine/core";
 import { Toaster, toast } from "react-hot-toast";
 import CategoryForm from "./Form";
 import {
@@ -16,6 +23,7 @@ function CategoriesCard() {
   const [editingCategory, setEditingCategory] = useState(null);
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     async function loadCategories() {
@@ -62,33 +70,37 @@ function CategoriesCard() {
 
   async function handleDeleteCategory(id: number) {
     const toastId = toast.loading("Deleting Category ...");
-  
+
     try {
       const response = await fetch(`/api/Admin/categories/${id}`, {
         method: "DELETE",
       });
-  
+
       const data = await response.json().catch(() => ({}));
-  
+
       if (!response.ok) {
         throw new Error(data?.error || "Failed to delete category");
       }
-  
+
       setCategories((prev) => prev.filter((cat) => cat.id !== id));
-  
-      toast.success(" Category deleted successfully", { id: toastId });
-    
+
+      toast.success("Category deleted successfully", { id: toastId });
     } catch (error) {
       console.error("Delete category error:", error);
-      toast.error(error.message || "Failed to delete category", { id: toastId });
+      toast.error(error.message || "Failed to delete category", {
+        id: toastId,
+      });
+    }
+  }
 
-  }
-  }
-  
+  const filteredCategories = categories.filter((cat) =>
+    cat.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="p-8">
       <Toaster position="top-center" />
+
       <div className="flex justify-center items-center">
         <p className="text-2xl font-bold text-gray-800">All Categories</p>
       </div>
@@ -108,6 +120,15 @@ function CategoriesCard() {
         }
         labelPosition="right"
       />
+      <div className="max-w-md mx-auto my-4">
+        <TextInput
+          variant="filled"
+          radius="xl"
+          placeholder="Search by name..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.currentTarget.value)}
+        />
+      </div>
 
       {loading ? (
         <Center mt="xl">
@@ -126,7 +147,7 @@ function CategoriesCard() {
             }}
           >
             <List
-              categories={categories}
+              categories={filteredCategories}
               onEdit={handleEditClick}
               onDelete={handleDeleteCategory}
             />

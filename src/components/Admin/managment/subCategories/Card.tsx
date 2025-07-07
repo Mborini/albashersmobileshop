@@ -177,6 +177,7 @@ function SubCategoriesCard() {
         }
         labelPosition="right"
       />
+      <div className="max-w-md mx-auto my-4">
 
       <Group mb="md">
         <TextInput
@@ -203,6 +204,7 @@ function SubCategoriesCard() {
           clearable
         />
       </Group>
+      </div>
 
       {loading ? (
         <Center mt="xl">
