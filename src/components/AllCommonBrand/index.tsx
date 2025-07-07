@@ -17,7 +17,7 @@ const AllCommonBrandsGrid = () => {
         const response = await fetch("/api/commonBrands");
         const data = await response.json();
 
-        const priorityNames = ["apple", "anker", "huawei"];
+        const priorityNames = ["apple", "anker", "belkin", "ravpower", "xiaomi","huawei", "wiwu", "joyroom", "polo","jbl","honor","akg"];
         const normalized = (str?: string) =>
           str ? str.trim().toLowerCase() : "";
 
@@ -58,43 +58,42 @@ const AllCommonBrandsGrid = () => {
       <section className="overflow-hidden py-20 bg-gray-2">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
           {/* جريد ريسبونسيف */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-10 gap-x-6">
-  {loading
-    ? Array.from({ length: 6 }).map((_, i) => (
-        <div
-          key={i}
-          className={`flex flex-col gap-4 ${
-            i === 0
-              ? "sm:col-span-3 lg:col-span-5 col-span-2"
-              : "col-span-1"
-          }`}
-        >
-          <Skeleton height={i === 0 ? 80 : 120} />
-          <Skeleton width={`60%`} height={14} />
-          <Skeleton width={`40%`} height={10} />
-        </div>
-      ))
-    : commonBrands.map((item, key) => {
-        const isApple = item.name.trim().toLowerCase() === "apple";
-        return (
-          <div
-            key={key}
-            className={`${
-              key === 0
-                ? "sm:col-span-3 lg:col-span-5 col-span-2"
-                : "col-span-1"
-            }`}
-          >
-            <CommonBrandItem
-              item={item}
-              isSmall={key === 0}
-              isApple={isApple}
-            />
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-y-10 gap-x-6">
+            {loading
+              ? Array.from({ length: 6 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className={`flex flex-col gap-4 ${
+                      i === 0
+                        ? "sm:col-span-3 lg:col-span-5 col-span-2"
+                        : "col-span-1"
+                    }`}
+                  >
+                    <Skeleton height={i === 0 ? 80 : 120} />
+                    <Skeleton width={`60%`} height={14} />
+                    <Skeleton width={`40%`} height={10} />
+                  </div>
+                ))
+              : commonBrands.map((item, key) => {
+                  const isApple = item.name.trim().toLowerCase() === "apple";
+                  return (
+                    <div
+                      key={key}
+                      className={`${
+                        key === 0
+                          ? "sm:col-span-3 lg:col-span-5 col-span-2"
+                          : "col-span-1"
+                      }`}
+                    >
+                      <CommonBrandItem
+                        item={item}
+                        isSmall={key === 0}
+                        isApple={isApple}
+                      />
+                    </div>
+                  );
+                })}
           </div>
-        );
-      })}
-</div>
-
         </div>
       </section>
     </>

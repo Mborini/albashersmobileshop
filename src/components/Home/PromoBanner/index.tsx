@@ -8,9 +8,7 @@ const PromoBanner = () => {
   return (
     <section className="overflow-hidden py-10 sm:py-20">
       <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
-        {/* promo banner big */}
         <div className="rounded-lg bg-[#F5F5F7] px-4 sm:px-7 lg:px-14 xl:px-20 py-5 sm:py-5 lg:py-2 xl:py-2 flex items-center justify-between flex-row-reverse gap-6 sm:gap-10 mb-8">
-  {/* ✅ الصورة مع الأنيميشن */}
   <motion.div
     initial={{ opacity: 0, x: 100 }}
     whileInView={{ opacity: 1, x: 0 }}
@@ -28,7 +26,6 @@ const PromoBanner = () => {
     />
   </motion.div>
 
-  {/* ✅ النص */}
   <div className="max-w-full sm:max-w-[550px] w-full">
     <h2 className="font-bold text-2xl sm:text-3xl lg:text-4xl xl:text-5xl text-dark mb-4 sm:mb-5">
       AirPods Max

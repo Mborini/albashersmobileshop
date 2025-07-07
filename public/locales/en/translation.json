@@ -80,19 +80,19 @@
   "shop_now": "Shop Now",
   "your_wishlist": "Your Wishlist",
   "action": "Action",
-  "free_shipping": "Free Shipping",
-  "free_shipping_desc": "For all orders",
 
-  "easy_returns": "1 & 1 Returns",
-  "easy_returns_desc": "Cancellation after 3 days",
+  "delivery_time": "Same-Day Delivery",
+  "delivery_time_desc": "Fast and reliable delivery within the same day",
 
-  "secure_payments": "100% Secure Payments",
-  "secure_payments_desc": "Guarantee secure payments",
+  "Quality": "Guaranteed Quality",
+  "Quality_desc": "Every product is tested to ensure top performance",
+
+  "secure_payments": "Cash on Delivery",
+  "secure_payments_desc": "Pay securely when your order arrives at your door",
 
   "support_247": "24/7 Dedicated Support",
-  "support_247_desc": "Anywhere & anytime",
+  "support_247_desc": "We’re here to help anytime, anywhere",
   "chash_on_delivery": "Cash on Delivery",
   "payment_methods": "Payment Methods",
   "image": "Product Image"
-
 }

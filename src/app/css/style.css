@@ -80,6 +80,15 @@ border: 3px outset #ff6550;
 .custom-select select {
   display: none; /*hide original SELECT element: */
 }
+/* اجعل لون النقاط الأخضر */
+.swiper-pagination-bullet {
+  background-color: #22c55e !important; /* Tailwind green-500 */
+}
+
+/* النقطة الفعالة تكون أغمق أو بنفس اللون */
+.swiper-pagination-bullet-active {
+  background-color: #16a34a !important; /* Tailwind green-600 */
+}
 
 .select-selected {
   @apply bg-gray-1 rounded-l-[5px] border border-gray-3 !border-r-0 cursor-pointer text-dark text-custom-sm py-[11px] pl-3.5 pr-8 relative;

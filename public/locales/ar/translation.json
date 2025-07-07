@@ -80,17 +80,17 @@
   "shop_now": "تسوق الآن",
   "your_wishlist": "قائمة المفضلة الخاصة بك",
   "action": "الإجراء",
-  "free_shipping": "شحن مجاني",
-  "free_shipping_desc": "لكل الطلبات",
+ "delivery_time": "توصيل في نفس اليوم",
+  "delivery_time_desc": "توصيل سريع وموثوق لجميع الطلبات",
 
-  "easy_returns": "إرجاع واستبدال خلال يوم",
-  "easy_returns_desc": "إلغاء الطلب بعد ٣ أيام",
+  "Quality": "جودة مضمونة",
+  "Quality_desc": "نختبر كل منتج بدقة لضمان أفضل أداء",
 
-  "secure_payments": "مدفوعات آمنة 100%",
-  "secure_payments_desc": "ضمان أمان الدفع",
+  "secure_payments": "الدفع عند الاستلام",
+  "secure_payments_desc": "ادفع بأمان عند وصول طلبك إلى بابك",
 
-  "support_247": "دعم فني 24/7",
-  "support_247_desc": "في أي وقت ومن أي مكان",
+  "support_247": "دعم فني متواصل 24/7",
+  "support_247_desc": "خدمة متوفرة في أي وقت ومن أي مكان",
   "chash_on_delivery": "الدفع عند الاستلام",
   "payment_methods": "طريقة الدفع",
   "image": "صورة المنتج"

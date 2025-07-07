@@ -24,14 +24,22 @@ import {
   FaCalendarAlt,
   FaEnvelope,
   FaShareAlt,
-
 } from "react-icons/fa";
 import { IconType } from "react-icons";
 import { BiSticker } from "react-icons/bi";
 import { BiSolidCategory } from "react-icons/bi";
+import { FiArrowLeftCircle } from "react-icons/fi";
+import { TiHome } from "react-icons/ti"; // Assuming Tihome is a valid icon import
 interface Option {
   label: string;
-  type: "brand" | "category" | "subcategory" | "root" | "info" | "back" | "main";
+  type:
+    | "brand"
+    | "category"
+    | "subcategory"
+    | "root"
+    | "info"
+    | "back"
+    | "main";
   id?: number;
   icon?: IconType;
 }
@@ -51,8 +59,8 @@ export default function ChatPopup() {
   ]);
 
   const defaultOptions: Option[] = [
-    { label: "العلامات التجارية", type: "root" , icon: BiSticker  },
-    { label: "الأقسام", type: "root" , icon: BiSolidCategory  },
+    { label: "العلامات التجارية", type: "root", icon: BiSticker },
+    { label: "الأقسام", type: "root", icon: BiSolidCategory },
     { label: "الصيانة", type: "info", icon: FaTools },
     { label: "مواعيد العمل", type: "info", icon: FaClock },
     { label: "أيام العمل", type: "info", icon: FaCalendarAlt },
@@ -112,20 +120,28 @@ export default function ChatPopup() {
     }
 
     if (option.type === "root") {
-      if (option.label === "البراندات") {
+      if (option.label === "العلامات التجارية") {
         const brands = await fetchBrands();
         setMessages((prev) => [
           ...prev,
-          { sender: "bot", text: "اختر البراند:" },
+          { sender: "bot", text: "اختر العلامة التجارية:" },
         ]);
-        setOptions([{ label: "🔙 رجوع", type: "back" }, { label: "🏠 القائمة الرئيسية", type: "main" }, ...brands]);
+        setOptions([
+  { label: "رجوع", type: "back", icon: FiArrowLeftCircle },
+          { label: "القائمة الرئيسية", type: "main", icon:TiHome},
+          ...brands,
+        ]);
       } else if (option.label === "الأقسام") {
         const categories = await fetchCategories();
         setMessages((prev) => [
           ...prev,
           { sender: "bot", text: "اختر القسم:" },
         ]);
-        setOptions([{ label: "🔙 رجوع", type: "back" }, { label: "🏠 القائمة الرئيسية", type: "main" }, ...categories]);
+        setOptions([
+  { label: "رجوع", type: "back", icon: FiArrowLeftCircle },
+          { label: "القائمة الرئيسية", type: "main", icon:TiHome},
+          ...categories,
+        ]);
       }
     } else if (option.type === "category" && option.id) {
       const subs = await fetchSubcategories(option.id);
@@ -133,7 +149,11 @@ export default function ChatPopup() {
         ...prev,
         { sender: "bot", text: "اختر الفئة الفرعية:" },
       ]);
-      setOptions([{ label: "🔙 رجوع", type: "back" }, { label: "🏠 القائمة الرئيسية", type: "main" }, ...subs]);
+      setOptions([
+  { label: "رجوع", type: "back", icon: FiArrowLeftCircle },
+        { label: "القائمة الرئيسية", type: "main", icon:TiHome},
+        ...subs,
+      ]);
     } else if (option.type === "subcategory" && option.id) {
       router.push(`/products?subCategoryId=${option.id}`);
       setOpen(false);
@@ -144,13 +164,13 @@ export default function ChatPopup() {
       let response = "";
       switch (option.label) {
         case "الصيانة":
-          response = "لخدمة الصيانة يرجى الاتصال على الرقم: 0796855578.";
+          response ="لخدمة الصيانة يمكنك الاتصال بنا على الرقم 0796855578 "
           break;
         case "مواعيد العمل":
           response = "مواعيد العمل من الساعة 10 صباحاً حتى 12 مساءً.";
           break;
         case "أيام العمل":
-          response = "نعمل طوال أيام الأسبوع ما عدا الجمعة.";
+          response = "من نعمل طوال أيام الأسبوع من الساعة 10 صباحاً حتى 12 مساءً عدا الجمعة من الساعة 4 مساءً حتى الساعة 12 مساءً.";
           break;
         case "أرقام التواصل":
           response = "للتواصل: 0796855578";
@@ -213,10 +233,17 @@ export default function ChatPopup() {
         padding="md"
       >
         <Stack h="100%">
-          <ScrollArea h={isMobile ? 300 : 350} offsetScrollbars scrollbarSize={0}>
+          <ScrollArea
+            h={isMobile ? 300 : 350}
+            offsetScrollbars
+            scrollbarSize={0}
+          >
             <Stack>
               {messages.map((msg, i) => (
-                <div key={i} ref={i === messages.length - 1 ? lastMessageRef : null}>
+                <div
+                  key={i}
+                  ref={i === messages.length - 1 ? lastMessageRef : null}
+                >
                   <Paper
                     p="xs"
                     radius="md"
@@ -225,7 +252,11 @@ export default function ChatPopup() {
                     ml={msg.sender === "user" ? "auto" : undefined}
                     mr={msg.sender === "bot" ? "auto" : undefined}
                   >
-                    <Text size="sm" dir="rtl" style={{ whiteSpace: "pre-line" }}>
+                    <Text
+                      size="sm"
+                      dir="rtl"
+                      style={{ whiteSpace: "pre-line" }}
+                    >
                       {msg.text === "تابعنا على:" ? (
                         <>
                           تابعنا على:
@@ -234,9 +265,20 @@ export default function ChatPopup() {
                               href="https://facebook.com/AlbasherShop"
                               target="_blank"
                               rel="noopener noreferrer"
-                              style={{ color: "#1877F2", textDecoration: "none", display: "block", marginTop: 8 }}
+                              style={{
+                                color: "#1877F2",
+                                textDecoration: "none",
+                                display: "block",
+                                marginTop: 8,
+                              }}
                             >
-                              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                              <span
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 4,
+                                }}
+                              >
                                 <FaFacebook />
                                 AlbasherShop
                               </span>
@@ -245,9 +287,20 @@ export default function ChatPopup() {
                               href="https://www.instagram.com/albasher.jo"
                               target="_blank"
                               rel="noopener noreferrer"
-                              style={{ color: "#E4405F", textDecoration: "none", display: "block", marginTop: 4 }}
+                              style={{
+                                color: "#E4405F",
+                                textDecoration: "none",
+                                display: "block",
+                                marginTop: 4,
+                              }}
                             >
-                              <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                              <span
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  gap: 4,
+                                }}
+                              >
                                 <FaInstagram />
                                 albasher.jo
                               </span>
@@ -259,7 +312,13 @@ export default function ChatPopup() {
                           href="https://wa.me/962796855578"
                           target="_blank"
                           rel="noopener noreferrer"
-                          style={{ color: "#25D366", textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}
+                          style={{
+                            color: "#25D366",
+                            textDecoration: "none",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 6,
+                          }}
                         >
                           <FaWhatsapp /> تحدث معنا على واتساب ,اضغط هنا
                         </a>
@@ -275,7 +334,11 @@ export default function ChatPopup() {
 
           <Divider label="الخيارات" labelPosition="center" />
 
-          <ScrollArea h={isMobile ? 200 : 250} offsetScrollbars scrollbarSize={0}>
+          <ScrollArea
+            h={isMobile ? 200 : 250}
+            offsetScrollbars
+            scrollbarSize={0}
+          >
             <Grid gutter="xs">
               {options
                 .filter((opt) => opt.type !== "back" && opt.type !== "main")
@@ -289,7 +352,15 @@ export default function ChatPopup() {
                       radius="md"
                       className="cursor-pointer hover:bg-gray-100 text-center transition"
                     >
-                      <Text size="xs" style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+                      <Text
+                        size="xs"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          gap: 4,
+                        }}
+                      >
                         {opt.icon && <opt.icon size={18} />}
                         {opt.label}
                       </Text>
@@ -306,15 +377,17 @@ export default function ChatPopup() {
                 .filter((opt) => opt.type === "back" || opt.type === "main")
                 .map((opt, i) => (
                   <Grid.Col span={6} key={i}>
-                    <Button
-                      onClick={() => handleClick(opt)}
-                      fullWidth
-                      variant="light"
-                      color={opt.type === "back" ? "gray" : "green"}
-                      size="xs"
-                    >
-                      {opt.label}
-                    </Button>
+                   <Button
+  onClick={() => handleClick(opt)}
+  fullWidth
+  variant="light"
+  color={opt.type === "back" ? "red" : "green"}
+  size="xs"
+  leftSection={opt.icon ? <opt.icon size={16} /> : null}
+>
+  {opt.label}
+</Button>
+
                   </Grid.Col>
                 ))}
             </Grid>

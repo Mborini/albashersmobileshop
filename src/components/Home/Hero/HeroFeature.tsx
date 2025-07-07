@@ -1,9 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import Image from "next/image";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import {
+  FaShippingFast,
+  FaExchangeAlt,
+  FaLock,
+  FaHeadset,
+  FaRegCheckCircle,
+} from "react-icons/fa";
+import { MdOutlinePayments } from "react-icons/md";
 
 // Hook to detect scroll direction
 function useScrollDirection() {
@@ -29,24 +36,25 @@ const HeroFeature = () => {
   const { t, i18n } = useTranslation();
   const scrollDirection = useScrollDirection();
 
+  // Icons mapped to features
   const featureData = [
     {
-      img: "/images/icons/icon-01.svg",
-      title: t("free_shipping"),
-      description: t("free_shipping_desc"),
+      icon: <FaShippingFast className="text-3xl text-blue-light" />,
+      title: t("delivery_time"),
+      description: t("delivery_time_desc"),
     },
     {
-      img: "/images/icons/icon-02.svg",
-      title: t("easy_returns"),
-      description: t("easy_returns_desc"),
-    },
-    {
-      img: "/images/icons/icon-03.svg",
+      icon: <MdOutlinePayments  className="text-3xl text-yellow-light" />,
       title: t("secure_payments"),
       description: t("secure_payments_desc"),
     },
     {
-      img: "/images/icons/icon-04.svg",
+      icon: <FaRegCheckCircle   className="text-3xl text-green-light" />,
+      title: t("Quality"),
+      description: t("Quality_desc"),
+    },
+    {
+      icon: <FaHeadset  className="text-3xl text-red-light" />,
       title: t("support_247"),
       description: t("support_247_desc"),
     },
@@ -56,7 +64,6 @@ const HeroFeature = () => {
     <div className="max-w-[1060px] w-full mx-auto px-4 sm:px-8 xl:px-0">
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-x-5 gap-y-6 mt-10">
         {featureData.map((item, key) => {
-          // Determine animation direction
           const from =
             key < 2
               ? scrollDirection === "down"
@@ -77,7 +84,9 @@ const HeroFeature = () => {
               transition={{ duration: 0.6 }}
               viewport={{ once: false, amount: 0.4 }}
             >
-              <Image src={item.img} alt="icon" width={40} height={41} />
+              {/* Icon instead of image */}
+              <div className="shrink-0">{item.icon}</div>
+
               <div>
                 <h3 className="font-medium text-sm sm:text-base text-dark">
                   {item.title}

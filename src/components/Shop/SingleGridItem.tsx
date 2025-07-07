@@ -125,7 +125,9 @@ const SingleGridItem = ({ item }: { item: Product }) => {
               <div
                 key={index}
                 className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                  index === currentImageIndex ? "bg-blue" : "bg-gray-5"
+                  index === currentImageIndex
+                    ? "bg-green-dark"
+                    : "bg-green-light-4"
                 }`}
               />
             ))}
@@ -148,7 +150,9 @@ const SingleGridItem = ({ item }: { item: Product }) => {
           <button
             onClick={(e) => {
               handleAddToCart();
-              const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+              const rect = (
+                e.currentTarget as HTMLElement
+              ).getBoundingClientRect();
               setFlyImage({
                 src: item.images[0],
                 rect,
@@ -206,7 +210,9 @@ const SingleGridItem = ({ item }: { item: Product }) => {
       {/* Price */}
       <span className="flex items-center gap-2 font-medium">
         <span className="text-lg text-dark">JOD {item.discountedPrice}</span>
-        <span className="text-md text-dark-4 line-through">JOD {item.price}</span>
+        <span className="text-md text-dark-4 line-through">
+          JOD {item.price}
+        </span>
       </span>
     </div>
   );
