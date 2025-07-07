@@ -23,7 +23,10 @@ export const emailTranslations = {
     "email.otp_message": "مرحباً {name}، رمز التحقق الخاص بك هو:",
     "email.otp_contact": "للاستفسار، تواصل معنا على الرقم:",
     "email.new_otp_subject": "رمز تحقق جديد من البشير شوب",
-    "email.Delivery_Price": " توصيل",
+    "email.Delivery_Price": " شحن",
+     "email.payment_method": "طريقة الدفع",
+  "email.payment_method_cod": "الدفع عند الاستلام",
+  "email.payment_method_click": "الدفع بواسطة كليك"
   },
   en: {
     "email.thanks": "Thank you for your order",
@@ -51,5 +54,8 @@ export const emailTranslations = {
     "email.otp_contact": "For assistance, contact us at:",
     "email.new_otp_subject": "New OTP Code from Albasheer Shop",
     "email.Delivery_Price": "shipping",
+    "email.payment_method": "Payment Method",
+    "email.payment_method_cod": "Cash on Delivery",
+    "email.payment_method_click": "Click Payment",
   },
 };

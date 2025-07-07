@@ -74,7 +74,7 @@ function OrderTable({ orders }) {
   return (
     <>
       <OrderFilters orders={orderList} onFilter={setFilteredOrders} />
-      <Paper shadow="xs" radius="md" withBorder p="md" w="100%">
+      <Paper shadow="xs" radius="md"  withBorder p="md" w="100%">
         <ScrollArea>
           <Table striped highlightOnHover withColumnBorders>
             <thead>
@@ -86,6 +86,7 @@ function OrderTable({ orders }) {
                 <th> Orders Price</th>
                 <th>Delivery Price</th>
                 <th> Total Price </th>
+                <th> Payment Method </th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>Action</th>

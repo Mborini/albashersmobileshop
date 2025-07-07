@@ -6,7 +6,7 @@ import { CiNoWaitingSign } from "react-icons/ci";
 
 function OrderRow({ order, onComplete, onDecline }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
-
+console.log(order);
   const rowStyle = {
     backgroundColor: order.isdeclined
       ? "#f8d7da"
@@ -146,6 +146,13 @@ function OrderRow({ order, onComplete, onDecline }) {
           Number(order.total_price) + Number(order.delivery_price ?? 0)
         ).toFixed(2)}{" "}
         JD
+      </Table.Td>
+      <Table.Td>
+        {order.payment_method === "cod"
+          ? "COD"
+          : order.payment_method === "click"
+          ? "Click "
+          : "Unknown"}
       </Table.Td>
       <Table.Td>{dayjs(order.created_at).format("YYYY-MM-DD HH:mm")}</Table.Td>
       <Table.Td>

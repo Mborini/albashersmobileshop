@@ -96,8 +96,13 @@
   "payment_methods": "Payment Methods",
   "image": "Product Image",
 
-  "add_amount_to_get_delivery_price_en": "Add {{diff}} JD to get delivery for {{price_between}} JD",
-  "add_amount_to_get_free_delivery_en": "Add {{diff}} JD to get free delivery",
-  "note_en": "Note"
-
+  "add_amount_to_get_delivery_price": "Add {{diff}} JD to get delivery for {{price_between}} JD",
+  "add_amount_to_get_free_delivery": "Add {{diff}} JD to get free delivery",
+  "cash_on_delivery": "Cash on Delivery",
+  "click_payment": "Click Payment",
+  "note_en": "Note",
+  "click_payment_instructions_1": "You're amazing! 💛 You can easily transfer the amount via Click to the username:",
+  "click_payment_instructions_2":"Then, please send the payment screenshot on WhatsApp to 0796855578 so we can process your order as quickly as possible!"
+  ,"important_note": "Important Note",
+  "contact_on_whatsapp": "Click here to contact us on WhatsApp"
 }

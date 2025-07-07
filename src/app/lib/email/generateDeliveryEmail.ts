@@ -8,7 +8,8 @@ export function generateDeliveryEmail({
   city,
   address,
   note,
-  delivery_price
+  delivery_price,
+  payment_method = "cod", // default value
 }: {
   name: string;
   phone: string;
@@ -18,14 +19,16 @@ export function generateDeliveryEmail({
   address: string;
   note?: string;
   delivery_price?: number;
+  payment_method?: string;
 }) {
   const t = emailTranslations;
-  const supportPhone = "+962 7 9685 5578";
+  const supportPhone = "0796855578";
 
   const logoUrl =
-    "https://res.cloudinary.com/do1etuooh/image/upload/v1750775950/476908956_642303014852206_4219799890360416472_n_lrbqco.jpg";
+    "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/WhatsApp+Image+2025-07-07+at+17.40.17_b7c8070f.jpg";
+
   const bannerImage =
-    "https://res.cloudinary.com/do1etuooh/image/upload/v1750775946/479965633_642363961512778_4497972418892611363_n_zriu2r.jpg";
+    "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/cover%5B1%5D.png";
 
   const messageEn = t.en["email.order_message"]
     .replace("{name}", name)
@@ -33,6 +36,20 @@ export function generateDeliveryEmail({
   const messageAr = t.ar["email.order_message"]
     .replace("{name}", name)
     .replace("{city}", city);
+
+  const paymentLabelEn =
+    payment_method === "cod"
+      ? "Cash on Delivery"
+      : payment_method === "click"
+      ? "Click Payment"
+      : "Other";
+
+  const paymentLabelAr =
+    payment_method === "cod"
+      ? "الدفع عند الاستلام"
+      : payment_method === "click"
+      ? "دفع من خلال كليك"
+      : "طريقة أخرى";
 
   return `
   <div style="font-family: sans-serif; background-color: #f9f9f9; padding: 20px;">
@@ -52,8 +69,9 @@ export function generateDeliveryEmail({
         <p>${t.en["email.deliver_to"]} ${country}, ${city}, ${address}</p>
 
         <h3>${t.en["email.delivery_pay_info"]}</h3>
-        <p>${t.en["email.pay_on_delivery"]}</p>
-        <p><strong>${t.en["email.total"]}:</strong> JD ${totalPrice.toFixed(2)}</p>
+        <p><strong>Payment Method:</strong> ${paymentLabelEn}</p>
+        <p><strong>${t.en["email.Delivery_Price"]}:</strong> JD ${delivery_price?.toFixed(2) ?? "0.00"}</p>
+        <p><strong>${t.en["email.total"]}:</strong> JD ${(totalPrice + (delivery_price || 0)).toFixed(2)}</p>
 
         ${note ? `<p><strong>${t.en["email.notes"]}:</strong> ${note}</p>` : ""}
 
@@ -69,10 +87,8 @@ export function generateDeliveryEmail({
         <p>${t.ar["email.deliver_to"]} ${country}, ${city}, ${address}</p>
 
         <h3>${t.ar["email.delivery_pay_info"]}</h3>
-        <p>${t.ar["email.pay_on_delivery"]}</p>
-        <p><strong>
-        ${t.ar["email.Delivery_Price"]}:</strong> ${delivery_price ? delivery_price.toFixed(2) : "0.00"} JD</p>
-        </strong>
+        <p><strong>طريقة الدفع:</strong> ${paymentLabelAr}</p>
+        <p><strong>${t.ar["email.Delivery_Price"]}:</strong> ${delivery_price?.toFixed(2) ?? "0.00"} JD</p>
         <p><strong>${t.ar["email.total"]}:</strong> JD ${(totalPrice + (delivery_price || 0)).toFixed(2)}</p>
 
         ${note ? `<p><strong>${t.ar["email.notes"]}:</strong> ${note}</p>` : ""}

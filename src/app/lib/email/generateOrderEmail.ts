@@ -10,7 +10,8 @@ export function generateOrderEmail({
   city,
   address,
   note,
-  deliveryPrice
+  deliveryPrice,
+   paymentMethod,
 }: {
   name: string;
   phone: string;
@@ -22,6 +23,7 @@ export function generateOrderEmail({
   address: string;
   note?: string;
   deliveryPrice?: number;
+  paymentMethod?: string;
 }) {
   const logoUrl =
     "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/WhatsApp+Image+2025-07-07+at+17.40.17_b7c8070f.jpg";
@@ -29,66 +31,76 @@ export function generateOrderEmail({
   const bannerImage =
     "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/cover%5B1%5D.png";
 
-  const generateSection = (lang: "ar" | "en") => {
-    const t = (key: keyof (typeof emailTranslations)["ar"]) =>
-      emailTranslations[lang][key];
+ const generateSection = (lang: "ar" | "en") => {
+  const t = (key: keyof (typeof emailTranslations)["ar"]) =>
+    emailTranslations[lang][key];
 
-    const cartHtml = cartItems
-      .map(
-        (item) => `
-        <tr>
-          <td>${item.quantity}x ${item.title}</td>
-          <td style="text-align: end;">JD ${(
-            item.discountedPrice * item.quantity
-          ).toFixed(2)}</td>
-        </tr>`
-      )
-      .join("");
+  const paymentMethodLabel =
+    paymentMethod === "click"
+      ? t("email.payment_method_click")
+      : t("email.payment_method_cod");
 
-    return `
-      <div dir="${lang === "ar" ? "rtl" : "ltr"}" style="padding: 20px;">
-        <h2 style="text-align: center; color: #333; margin-bottom: 10px;">
-          ${t("email.thanks")} ${name}!
-        </h2>
-        <p style="text-align: center; color: #666;">
-          ${t("email.confirmation_msg")} <b>${phone}</b>
-        </p>
+  const cartHtml = cartItems
+    .map(
+      (item) => `
+      <tr>
+        <td>${item.quantity}x ${item.title}</td>
+        <td style="text-align: end;">JD ${(item.discountedPrice * item.quantity).toFixed(2)}</td>
+      </tr>`
+    )
+    .join("");
 
-        <h3 style="margin-top: 30px; margin-bottom: 10px;">${t(
-          "email.order_details"
-        )}</h3>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tbody>
-            ${cartHtml}
-            <tr>
-              <td>${t("email.shipping")}</td>
-              <td style="text-align: end;"> JD ${deliveryPrice ?? "0.00"}</td>
-            </tr>
-            <tr>
-              <td><strong>${t("email.total")}</strong></td>
-              <td style="text-align: end;"><strong>JD ${totalPrice.toFixed(
-                2
-              )}</strong></td>
-            </tr>
-          </tbody>
-        </table>
+  return `
+    <div dir="${lang === "ar" ? "rtl" : "ltr"}" style="padding: 20px;">
+      <h2 style="text-align: center; color: #333; margin-bottom: 10px;">
+        ${t("email.thanks")} ${name}!
+      </h2>
+      <p style="text-align: center; color: #666;">
+        ${t("email.confirmation_msg")} <b>${phone}</b>
+      </p>
 
-        <p>${t("email.pay_on_delivery")}</p>
-        ${note ? `<p><b>${t("email.notes")}:</b> ${note}</p>` : ""}
+      <h3 style="margin-top: 30px; margin-bottom: 10px;">${t(
+        "email.order_details"
+      )}</h3>
 
-        <h3 style="margin-top: 30px; margin-bottom: 10px;">${t(
-          "email.delivery_info"
-        )}</h3>
-        <p>${t("email.deliver_to")} ${country}, ${city}, ${address}</p>
+      <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px;">
+        <tbody>
+          ${cartHtml}
+          <tr>
+            <td>${t("email.shipping")}</td>
+            <td style="text-align: end;"> JD ${deliveryPrice ?? "0.00"}</td>
+          </tr>
+          <tr>
+            <td><strong>${t("email.total")}</strong></td>
+            <td style="text-align: end;"><strong>JD ${totalPrice.toFixed(
+              2
+            )}</strong></td>
+          </tr>
+        </tbody>
+      </table>
 
-        <h3 style="margin-top: 30px; margin-bottom: 10px;">${t(
-          "email.delivery_pay_info"
-        )}</h3>
- <p>${t("email.pay_on_delivery")} ${country}, ${city}, ${address}</p>
-
+      <div style="
+        background: #e6f4ea; 
+        border: 1px solid #7dc37d; 
+        border-radius: 8px; 
+        padding: 15px; 
+        margin-bottom: 20px; 
+        font-weight: 600;
+        color: #2d662d;
+        ">
+        ${t("email.payment_method")}: <span style="font-weight: 700;">${paymentMethodLabel}</span>
       </div>
-    `;
-  };
+
+      ${note ? `<p><b>${t("email.notes")}:</b> ${note}</p>` : ""}
+
+      <h3 style="margin-top: 30px; margin-bottom: 10px;">${t(
+        "email.delivery_info"
+      )}</h3>
+      <p>${t("email.deliver_to")} ${country}, ${city}, ${address}</p>
+    </div>
+  `;
+};
+
 
   return `
     <div style="font-family: sans-serif; background-color: #f9f9f9; padding: 20px;">

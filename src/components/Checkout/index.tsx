@@ -12,8 +12,7 @@ import { FaCircle, FaSpinner } from "react-icons/fa";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { MdOutlineShoppingCart } from "react-icons/md";
-
-import { Alert } from '@mantine/core';
+import { Radio, Grid, Alert, Badge } from "@mantine/core";
 import { LuBadgeAlert } from "react-icons/lu";
 
 const Checkout = () => {
@@ -21,7 +20,7 @@ const Checkout = () => {
   const totalPrice = useSelector(selectTotalPrice);
   const dispatch = useDispatch();
   const { i18n, t } = useTranslation();
-
+  const [paymentMethod, setPaymentMethod] = useState("cod");
   const [isLoading, setIsLoading] = useState(false);
   const [isOrdered, setIsOrdered] = useState(false);
   const [deliveryPrice, setDeliveryPrice] = useState(0);
@@ -52,7 +51,7 @@ const Checkout = () => {
             const diff = Number(between_x_z_from) - Number(totalPrice);
             setFreeShippingDiff(diff);
             setMessage(
-              t('add_amount_to_get_delivery_price', {
+              t("add_amount_to_get_delivery_price", {
                 diff: diff.toFixed(2),
                 price_between: Number(price_between).toFixed(2),
               })
@@ -65,7 +64,7 @@ const Checkout = () => {
             const diff = Number(between_x_z_to) - Number(totalPrice);
             setFreeShippingDiff(diff);
             setMessage(
-              t('add_amount_to_get_free_delivery', { diff: diff.toFixed(2) })
+              t("add_amount_to_get_free_delivery", { diff: diff.toFixed(2) })
             );
           } else if (totalPrice >= Number(greater_equal_z)) {
             setDeliveryPrice(Number(price_ge_z));
@@ -113,6 +112,7 @@ const Checkout = () => {
           note: data.note,
           lang: i18n.language,
           deliveryPrice: deliveryPrice.toFixed(2),
+          paymentMethod: data.paymentMethod,
         }),
       });
 
@@ -136,7 +136,8 @@ const Checkout = () => {
       ...(Object.fromEntries(formData.entries()) as any),
       cartItems,
       totalPrice,
-      deliveryPrice
+      deliveryPrice,
+       paymentMethod,
     };
 
     await sender(data);
@@ -168,7 +169,9 @@ const Checkout = () => {
 
                     <div className="pt-2.5 pb-8.5 px-4 sm:px-8.5">
                       <div className="flex items-center justify-between py-5 border-b border-gray-3">
-                        <h4 className="font-medium text-dark">{t("product")}</h4>
+                        <h4 className="font-medium text-dark">
+                          {t("product")}
+                        </h4>
                         <h4 className="font-medium text-dark text-right">
                           {t("price")}
                         </h4>
@@ -204,7 +207,7 @@ const Checkout = () => {
                         {message && (
                           <Alert
                             icon={<LuBadgeAlert size={24} />}
-                            title={t('note')}
+                            title={t("note")}
                             color="yellow"
                             radius="md"
                             mt="sm"
@@ -216,21 +219,77 @@ const Checkout = () => {
                         )}
                       </div>
 
-                      <div className="flex items-center border-b border-gray-3 pb-5 justify-between pt-5">
-                        <p className="font-medium text-md text-dark">
-                          {t("payment_methods")}
+                      <div className="flex items-center justify-between  border-b border-gray-3 pb-5 pt-5">
+                        <p className="font-medium text-lg text-dark">
+                          {t("total")}
                         </p>
-                        <p className="font-medium text-md text-dark text-right">
-                          {t("chash_on_delivery")}
-                        </p>
-                      </div>
-
-                      <div className="flex items-center justify-between pt-5">
-                        <p className="font-medium text-lg text-dark">{t("total")}</p>
                         <p className="font-medium text-lg text-dark text-right">
                           JD {grandTotal.toFixed(2)}
                         </p>
                       </div>
+                     <div className="flex flex-col pt-5">
+  <p className="font-medium text-md text-dark mb-2">{t("payment_methods")}</p>
+
+  <Radio.Group
+    name="paymentMethod"
+    value={paymentMethod}
+    onChange={setPaymentMethod}
+    className="mb-4"
+  >
+    <Grid gutter="xs">
+      <Grid.Col span={6}>
+        <Radio
+          value="cod"
+          label={t("cash_on_delivery")}
+          className="text-sm"
+        />
+      </Grid.Col>
+      <Grid.Col span={6}>
+        <Radio
+          value="click"
+          label={t("click_payment")}
+          className="text-sm"
+        />
+      </Grid.Col>
+    </Grid>
+  </Radio.Group>
+
+  {paymentMethod === "click" && (
+    <Alert
+      icon={<LuBadgeAlert size={20} />}
+      title={
+        <span className="font-semibold text-base">{t("important_note")}</span>
+      }
+      color="green"
+      radius="md"
+      variant="light"
+      className="text-sm leading-relaxed space-y-2"
+    >
+      <div>
+        {t("click_payment_instructions1")}{" "}
+         <Badge
+      radius="lg"
+      variant="filled"
+      className="mx-1 text-gray-1 bg-gradient-to-r from-green-light-4 via-green-500 to-green-dark"
+      style={{ backgroundImage: 'linear-gradient(to right, #68D391, #38A169, #2F855A)' }}
+    >
+      albasheer9
+    </Badge>
+        {t("click_payment_instructions2")}
+      </div>
+
+      <a
+        href="https://wa.me/962796855578"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-block text-green-700 hover:text-green-900 underline font-medium"
+      >
+        {t("contact_on_whatsapp")}
+      </a>
+    </Alert>
+  )}
+</div>
+
                     </div>
                   </div>
 

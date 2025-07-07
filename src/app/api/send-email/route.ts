@@ -16,7 +16,8 @@ export async function POST(request: Request) {
       address,
       note,
       lang = "ar", // استقبل اللغة
-      deliveryPrice
+      deliveryPrice,
+      paymentMethod, // استقبل طريقة الدفع
     } = await request.json();
 
     const html = generateOrderEmail({
@@ -28,7 +29,8 @@ export async function POST(request: Request) {
       city,
       address,
       note,
-      deliveryPrice
+      deliveryPrice,
+      paymentMethod
     });
     const transporter = nodemailer.createTransport({
       service: "Gmail",
