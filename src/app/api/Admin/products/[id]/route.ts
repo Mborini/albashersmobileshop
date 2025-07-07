@@ -1,6 +1,6 @@
-import { NextResponse } from 'next/server';
-import pool from '../../../../lib/db';
-import { v2 as cloudinary } from 'cloudinary';
+import { NextResponse } from "next/server";
+import pool from "../../../../lib/db";
+import { v2 as cloudinary } from "cloudinary";
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -8,7 +8,10 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-export async function PUT(req: Request, context: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   const { id } = await context.params;
   const body = await req.json();
   const {
@@ -19,15 +22,16 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
     discountedPrice,
     is_new_arrival,
     is_best_offer,
+    in_stock,
   } = body;
   const client = await pool.connect();
   try {
-    await client.query('BEGIN'); 
+    await client.query("BEGIN");
 
     const updateProductQuery = `
       UPDATE products
-      SET title = $1, brand_id = $2, description = $3, price = $4, "discountedPrice" = $5, "is_new_arrival" = $6, "is_best_offer" = $7
-      WHERE id = $8
+      SET title = $1, brand_id = $2, description = $3, price = $4, "discountedPrice" = $5, "is_new_arrival" = $6, "is_best_offer" = $7,"in_stock" = $8
+      WHERE id = $9
       RETURNING *;
     `;
     const result = await client.query(updateProductQuery, [
@@ -37,38 +41,41 @@ export async function PUT(req: Request, context: { params: Promise<{ id: string 
       price,
       discountedPrice,
       is_new_arrival,
-      is_best_offer, 
+      is_best_offer,
+      in_stock,
       id,
-
     ]);
 
     if (result.rows.length === 0) {
-      return new Response(JSON.stringify({ error: 'Product not found.' }), {
+      return new Response(JSON.stringify({ error: "Product not found." }), {
         status: 404,
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       });
     }
 
-    await client.query('COMMIT'); 
+    await client.query("COMMIT");
     return new Response(JSON.stringify(result.rows[0]), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' },
+      headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    await client.query('ROLLBACK'); 
-    console.error('Error updating product:', error);
-    return new Response(JSON.stringify({ error: 'Failed to update product.' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' },
-    });
+    await client.query("ROLLBACK");
+    console.error("Error updating product:", error);
+    return new Response(
+      JSON.stringify({ error: "Failed to update product." }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   } finally {
-    client.release(); 
+    client.release();
   }
 }
 
 function extractPublicId(imageUrl: string) {
-  const parts = imageUrl.split('/');
-  const folderAndId = parts.slice(-2).join('/').split('.')[0];
+  const parts = imageUrl.split("/");
+  const folderAndId = parts.slice(-2).join("/").split(".")[0];
   return folderAndId;
 }
 import { S3Client, DeleteObjectCommand } from "@aws-sdk/client-s3";
@@ -110,7 +117,10 @@ async function deleteFromS3(s3Url: string) {
   }
 }
 
-export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  req: Request,
+  context: { params: Promise<{ id: string }> }
+) {
   const { id } = await context.params;
 
   const client = await pool.connect();
@@ -130,8 +140,12 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
     }
 
     // 3. حذف السجلات المرتبطة في قاعدة البيانات
-    await client.query("DELETE FROM product_images WHERE product_id = $1", [id]);
-    await client.query("DELETE FROM product_attributes WHERE product_id = $1", [id]);
+    await client.query("DELETE FROM product_images WHERE product_id = $1", [
+      id,
+    ]);
+    await client.query("DELETE FROM product_attributes WHERE product_id = $1", [
+      id,
+    ]);
     await client.query("DELETE FROM products WHERE id = $1", [id]);
 
     await client.query("COMMIT");
@@ -151,4 +165,3 @@ export async function DELETE(req: Request, context: { params: Promise<{ id: stri
     client.release();
   }
 }
-

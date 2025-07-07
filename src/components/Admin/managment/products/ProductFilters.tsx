@@ -50,9 +50,24 @@ function ProductFilter({
           clearable
           onChange={(value) => setFilters({ ...filters, brand: value || "" })}
         />{" "}
-       
+        <Select
+          variant="filled"
+          radius="xl"
+          value={filters.inStock?.toString() || null} // اجعل القيمة string
+          placeholder="Availability"
+          clearable
+          data={[
+            { value: "true", label: "In Stock" },
+            { value: "false", label: "Out of Stock" },
+          ]}
+          onChange={(value) =>
+            setFilters({
+              ...filters,
+              inStock: value === null ? undefined : value === "true", 
+            })
+          }
+        />
       </div>
-
     </>
   );
 }

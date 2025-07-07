@@ -29,6 +29,7 @@ function ProductsCard() {
     category: "",
     subcategory: "",
     brand: "",
+    inStock: true,
   });
 
   const itemsPerPage = 16;
@@ -143,7 +144,8 @@ function ProductsCard() {
       ) &&
       (!filters.category || p.category_name === filters.category) &&
       (!filters.subcategory || p.subcategory_name === filters.subcategory) &&
-      (!filters.brand || p.brand_name === filters.brand)
+      (!filters.brand || p.brand_name === filters.brand)&&
+      (filters.inStock === undefined || p.in_stock === filters.inStock)
     );
   });
 
@@ -156,7 +158,7 @@ function ProductsCard() {
 
   // Reset filters handler
   const resetFilters = () => {
-    setFilters({ name: "", category: "", subcategory: "", brand: "" });
+    setFilters({ name: "", category: "", subcategory: "", brand: "", inStock: true });
     setCurrentPage(1);
   };
 

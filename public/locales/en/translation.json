@@ -95,7 +95,7 @@
   "chash_on_delivery": "Cash on Delivery",
   "payment_methods": "Payment Methods",
   "image": "Product Image",
-
+"out_of_stock": "Out of Stock",
   "add_amount_to_get_delivery_price": "Add {{diff}} JD to get delivery for {{price_between}} JD",
   "add_amount_to_get_free_delivery": "Add {{diff}} JD to get free delivery",
   "cash_on_delivery": "Cash on Delivery",

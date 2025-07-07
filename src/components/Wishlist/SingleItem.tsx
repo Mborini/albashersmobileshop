@@ -15,6 +15,16 @@ const SingleItem = ({ item }) => {
   const handleRemoveFromWishlist = () => {
     dispatch(removeItemFromWishlist({ id: item.id, color: item.color }));
   };
+  const isOutOfStock = !item.in_stock;
+  const buttonLabel = isOutOfStock ? t("out_of_stock") : t("add_to_cart");
+  const buttonClasses = `
+  inline-flex text-white py-2.5 px-6 rounded-md border ease-out duration-200
+  ${
+    isOutOfStock
+      ? "bg-red-light cursor-not-allowed border-red-light-4"
+      : "bg-black hover:bg-gray-800 border-gray-3"
+  }
+`;
 
   const handleAddToCart = () => {
     dispatch(
@@ -75,10 +85,11 @@ const SingleItem = ({ item }) => {
       {/* Action Button */}
       <div className="min-w-[150px] flex justify-center">
         <button
-          onClick={handleAddToCart}
-          className="inline-flex text-white bg-black border border-gray-3 py-2.5 px-6 rounded-md ease-out duration-200 hover:border-gray-3"
+          onClick={() => !isOutOfStock && handleAddToCart()}
+          disabled={isOutOfStock}
+          className={buttonClasses}
         >
-          {t("add_to_cart")}
+          {buttonLabel}
         </button>
       </div>
     </div>

@@ -29,6 +29,17 @@ const SingleListItem = ({ item }: { item: Product }) => {
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isOutOfStock = !item.in_stock;
+  const buttonLabel = isOutOfStock ? t("out_of_stock") : t("add_to_cart");
+  const buttonClasses = `
+  inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px]
+  ${
+    isOutOfStock
+      ? "bg-red-light cursor-not-allowed"
+      : "bg-black hover:bg-gray-800"
+  }
+  text-white ease-out duration-200
+`;
 
   const handleMouseEnter = () => {
     if (item.images.length <= 1) return;
@@ -125,10 +136,11 @@ const SingleListItem = ({ item }: { item: Product }) => {
             </button>
 
             <button
-              onClick={handleAddToCart}
-              className="inline-flex font-medium text-custom-sm py-[7px] px-5 rounded-[5px] bg-black text-white ease-out duration-200 hover:bg--gray-6"
+              onClick={() => !isOutOfStock && handleAddToCart()}
+              disabled={isOutOfStock}
+              className={buttonClasses}
             >
-              {t("add_to_cart")}
+              {buttonLabel}
             </button>
 
             <button
@@ -172,7 +184,9 @@ const SingleListItem = ({ item }: { item: Product }) => {
           <div className="flex flex-col items-center gap-2.5 mb-2">
             {item.colors?.length > 0 ? (
               <>
-                <h3 className="text-sm font-medium text-center">{t("colors")}</h3>
+                <h3 className="text-sm font-medium text-center">
+                  {t("colors")}
+                </h3>
                 <div className="flex gap-3 flex-wrap justify-center">
                   {item.colors.map((color) => (
                     <div

@@ -29,6 +29,14 @@ const ProductItem = ({ item }: { item: Product }) => {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isOutOfStock = !item.in_stock;
+const buttonLabel = isOutOfStock ? t("out_of_stock") : t("add_to_cart");
+const buttonClasses = `
+  inline-flex items-center justify-center font-medium py-[7px] px-5 rounded-[5px]
+  ${isOutOfStock ? "bg-red-light cursor-not-allowed" : "bg-black hover:bg-gray-5"}
+  text-white ease-out duration-200
+  ${i18n.language === "ar" ? "text-[12px]" : "text-custom-sm"}
+`;
 
   const handleMouseEnter = () => {
     if (item.images.length <= 1) return;
@@ -152,14 +160,16 @@ const ProductItem = ({ item }: { item: Product }) => {
               <IoEyeOutline size={18} />
             </button>
 
-            <button
-              onClick={handleAddToCart}
-              className={`inline-flex font-medium py-[7px] px-5 rounded-[5px] bg-black text-white ease-out duration-200 hover:bg--gray-6 ${
-                i18n.language === "ar" ? "text-[12px]" : "text-custom-sm"
-              }`}
-            >
-              {t("add_to_cart")}
-            </button>
+
+<button
+  onClick={handleAddToCart}
+  disabled={isOutOfStock}
+  className={buttonClasses}
+>
+  {buttonLabel}
+</button>
+
+
 
             <button
               onClick={handleItemToWishList}

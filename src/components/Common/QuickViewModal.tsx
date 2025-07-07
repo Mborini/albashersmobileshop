@@ -17,8 +17,11 @@ import { FiMinus, FiPlus } from "react-icons/fi";
 import { LuShoppingBag } from "react-icons/lu";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
 import FlyingImage from "./FlyingImage";
+import { useTranslation } from "react-i18next";
 
 const QuickViewModal = () => {
+    const { t, i18n } = useTranslation();
+  
   const { isModalOpen, closeModal } = useModalContext();
   const { openPreviewModal } = usePreviewSlider();
   const [quantity, setQuantity] = useState(1);
@@ -33,7 +36,7 @@ const QuickViewModal = () => {
     startRect: DOMRect;
   } | null>(null);
   const addToCartButtonRef = useRef<HTMLButtonElement>(null);
-  
+
   const dispatch = useDispatch<AppDispatch>();
 
   // get the product data
@@ -72,7 +75,6 @@ const QuickViewModal = () => {
     );
 
     setSelectedColor(null);
-    
   };
 
   const handleItemToWishList = () => {
@@ -96,8 +98,6 @@ const QuickViewModal = () => {
       })
     );
     setSelectedColor(null); // Reset selected color after adding to wishlist
-
-  
   };
 
   useEffect(() => {
@@ -213,13 +213,22 @@ const QuickViewModal = () => {
                   {product.brand_name}
                 </Badge>
               </div>
-              <div className="flex flex-wrap items-center gap-5 mb-6">
-                <div className="flex items-center gap-2">
-                  <CiCircleCheck color="green" size={20} />
+            <div className="flex flex-wrap items-center gap-5 mb-6">
+  <div className="flex items-center gap-2">
+    {product.in_stock ? (
+      <>
+        <CiCircleCheck color="green" size={20} />
+        <span className="font-medium text-green-700">In Stock</span>
+      </>
+    ) : (
+      <>
+        <VscError color="red" size={20} />
+        <span className="font-medium text-red-600">Out of Stock</span>
+      </>
+    )}
+  </div>
+</div>
 
-                  <span className="font-medium text-dark"> In Stock </span>
-                </div>
-              </div>
               <p>{product.description}</p>
               <div className="mt-5">
                 <h4 className="font-semibold text-lg text-dark mb-3.5">
@@ -334,12 +343,20 @@ const QuickViewModal = () => {
               <div className="flex items-center gap-4 flex-nowrap overflow-auto">
                 <button
                   ref={addToCartButtonRef}
-                  disabled={quantity === 0}
+                  disabled={!product.in_stock || quantity === 0}
                   onClick={handleAddToCart}
-                  className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md"
+                  className={`
+    text-xs sm:text-base inline-flex items-center gap-2 font-medium py-3 px-6 rounded-md
+    ${
+      product.in_stock
+        ? "text-white bg-black hover:bg-gray-800"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed line-through"
+    }
+    transition-colors duration-200
+  `}
                 >
                   <LuShoppingBag size={18} />
-                  Add to Cart
+                  {product.in_stock ? "Add to Cart" : "Out of Stock"}
                 </button>
 
                 <button
@@ -355,15 +372,15 @@ const QuickViewModal = () => {
         </div>
       </div>
       {flyingImage && (
-      <FlyingImage
-        imageSrc={flyingImage.imageSrc}
-        startRect={flyingImage.startRect}
-        onComplete={() => {
-          setFlyingImage(null);
-          closeModal();
-        }}
-      />
-    )}
+        <FlyingImage
+          imageSrc={flyingImage.imageSrc}
+          startRect={flyingImage.startRect}
+          onComplete={() => {
+            setFlyingImage(null);
+            closeModal();
+          }}
+        />
+      )}
     </div>
   );
 };

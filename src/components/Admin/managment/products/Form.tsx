@@ -42,6 +42,7 @@ export default function ProductForm({
   const [discountedPrice, setDiscountedPrice] = useState<number | null>(0);
   const [isArrival, setIsArrival] = useState(false);
   const [isBestOffer, setIsBestOffer] = useState(false);
+  const [inStock, setInStock] = useState(true);
 
   useEffect(() => {
     if (product) {
@@ -58,6 +59,7 @@ export default function ProductForm({
       setIsBestOffer(product.is_best_offer || false);
       setSelectedSubcategoryId(subcat?.id?.toString() || null);
       setSelectedBrandId(brand?.id?.toString() || null);
+      setInStock(product.in_stock ?? true);
     } else {
       setProductName("");
       setDescription("");
@@ -69,6 +71,11 @@ export default function ProductForm({
       setIsBestOffer(false);
     }
   }, [product, brands, subcategories]);
+  useEffect(() => {
+    if (!product && selectedSubcategoryId) {
+      loadAttributes(selectedSubcategoryId);
+    }
+  }, [selectedSubcategoryId]);
 
   async function loadAttributes(id: string | null) {
     if (!id) return;
@@ -89,8 +96,8 @@ export default function ProductForm({
     if (!selectedSubcategoryId && !product)
       return toast.error("Subcategory is required");
     if (!description.trim()) return toast.error("Description is required");
-    if (price! < 0) return toast.error("Price must be non-negative");
-    if (discountedPrice! < 0)
+    if ((price ?? 0) < 0) return toast.error("Price must be non-negative");
+    if ((discountedPrice ?? 0) < 0)
       return toast.error("Discount must be non-negative");
 
     const formData: any = {
@@ -101,6 +108,7 @@ export default function ProductForm({
       discountedPrice,
       is_new_arrival: isArrival,
       is_best_offer: isBestOffer,
+      in_stock: inStock,
     };
 
     if (!product) {
@@ -174,29 +182,30 @@ export default function ProductForm({
           }))}
           value={selectedBrandId}
           onChange={setSelectedBrandId}
-          
           required
           withAsterisk
         />
 
-<NumberInput
-  variant="filled"
-  radius="xl"
-  mb="sm"
-  label="Price"
-  value={price}
-  onChange={(value) => setPrice(typeof value === "number" ? value : 0)}
-  placeholder="Enter product price"
-  withAsterisk
-  min={0}
-/>
+        <NumberInput
+          variant="filled"
+          radius="xl"
+          mb="sm"
+          label="Price"
+          value={price}
+          onChange={(value) => setPrice(typeof value === "number" ? value : 0)}
+          placeholder="Enter product price"
+          withAsterisk
+          min={0}
+        />
 
         <NumberInput
           variant="filled"
           radius="xl"
           label="Discounted Price"
           value={discountedPrice}
-          onChange={(value) => setDiscountedPrice(typeof value === "number" ? value : 0)}
+          onChange={(value) =>
+            setDiscountedPrice(typeof value === "number" ? value : 0)
+          }
           placeholder="Enter discounted price"
           mb="sm"
           withAsterisk
@@ -213,14 +222,26 @@ export default function ProductForm({
           mb="sm"
           withAsterisk
         />
+        <Checkbox
+          label="In stock"
+          radius="lg"
+          mb="sm"
+          color="green"
+          size="sm"
+          checked={inStock}
+          onChange={(e) => setInStock(e.currentTarget.checked)}
+          style={{ color: "green" }}
+        />
 
         <Checkbox
           label="Is New Arrival?"
           radius="lg"
           mb="sm"
           size="sm"
+          color="orange"
           checked={isArrival}
           onChange={(e) => setIsArrival(e.currentTarget.checked)}
+          style={{ color: "orange" }}
         />
 
         <Checkbox
@@ -228,6 +249,8 @@ export default function ProductForm({
           radius="lg"
           mb="sm"
           size="sm"
+          color="red"
+          style={{ color: "red" }}
           checked={isBestOffer}
           onChange={(e) => setIsBestOffer(e.currentTarget.checked)}
         />

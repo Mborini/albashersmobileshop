@@ -13,6 +13,7 @@ export async function GET() {
     p."discountedPrice",
     p."is_new_arrival" AS is_new_arrival,
     p."is_best_offer" AS is_best_offer,
+    p."in_stock" AS in_stock,
     b.name AS brand_name,
     sc.name AS subcategory_name,
     c.name AS category_name,
@@ -66,7 +67,6 @@ ORDER BY p.id;
 
 export async function POST(req: Request) {
   const client = await pool.connect();
-
   try {
     const body = await req.json();
     const {
@@ -79,8 +79,9 @@ export async function POST(req: Request) {
       attributes,
       is_new_arrival,
       is_best_offer,
+      in_stock = true, // Default to true if not provided
     } = body;
-
+    
     if (
       !title ||
       !brand_id ||
@@ -98,9 +99,9 @@ export async function POST(req: Request) {
     const insertProductQuery = `
       INSERT INTO products (
         title, brand_id, subcategory_id,
-        description, price, "discountedPrice","is_new_arrival", "is_best_offer"
+        description, price, "discountedPrice","is_new_arrival", "is_best_offer", "in_stock"
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
       RETURNING *;
     `;
 
@@ -113,6 +114,7 @@ export async function POST(req: Request) {
       discountedPrice,
       is_new_arrival,
       is_best_offer,
+      in_stock, 
     ]);
 
     const product = productResult.rows[0];

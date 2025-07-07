@@ -19,6 +19,7 @@ export type Colors = {
 
 
 export type Product = {
+  in_stock?: boolean;
   product_images: ProductImage[];
   id?: number;
   title: string;
