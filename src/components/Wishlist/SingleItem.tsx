@@ -69,7 +69,7 @@ const SingleItem = ({ item }) => {
 
       {/* Price */}
       <div className="min-w-[205px]">
-        <p className="text-dark">JOD {item.discountedPrice}</p>
+        <p className="text-dark">JD {item.discountedPrice}</p>
       </div>
 
       {/* Action Button */}

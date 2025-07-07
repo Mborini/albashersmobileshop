@@ -37,7 +37,7 @@
   "cart_empty": "عربة التسوق فارغة",
   "total": "المجموع",
   "checkout": "الدفع",
-  "complete_your_order":"اطلب الآن",
+  "complete_your_order": "اطلب الآن",
   "Your_cart_is_empty": "عربة التسوق الخاصة بك فارغة",
   "continue_shopping": "تابع التسوق",
   "color": "اللون",
@@ -80,7 +80,7 @@
   "shop_now": "تسوق الآن",
   "your_wishlist": "قائمة المفضلة الخاصة بك",
   "action": "الإجراء",
- "delivery_time": "توصيل في نفس اليوم",
+  "delivery_time": "توصيل في نفس اليوم",
   "delivery_time_desc": "توصيل سريع وموثوق لجميع الطلبات",
 
   "Quality": "جودة مضمونة",
@@ -93,5 +93,11 @@
   "support_247_desc": "خدمة متوفرة في أي وقت ومن أي مكان",
   "chash_on_delivery": "الدفع عند الاستلام",
   "payment_methods": "طريقة الدفع",
-  "image": "صورة المنتج"
+  "image": "صورة المنتج",
+
+  "add_amount_to_get_delivery_price": "أضف  {{diff}}  دينار لتحصل على توصيل بقيمة  {{price_between}}  دينار",
+
+  "add_amount_to_get_free_delivery": "أضف  {{diff}}  دينار لتحصل على توصيل مجاني",
+
+  "note": "ملاحظة"
 }

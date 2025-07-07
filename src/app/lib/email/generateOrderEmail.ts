@@ -10,6 +10,7 @@ export function generateOrderEmail({
   city,
   address,
   note,
+  deliveryPrice
 }: {
   name: string;
   phone: string;
@@ -20,12 +21,13 @@ export function generateOrderEmail({
   city: string;
   address: string;
   note?: string;
+  deliveryPrice?: number;
 }) {
   const logoUrl =
-    "https://res.cloudinary.com/do1etuooh/image/upload/v1750775950/476908956_642303014852206_4219799890360416472_n_lrbqco.jpg";
+    "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/WhatsApp+Image+2025-07-07+at+17.40.17_b7c8070f.jpg";
 
   const bannerImage =
-    "https://res.cloudinary.com/do1etuooh/image/upload/v1750775946/479965633_642363961512778_4497972418892611363_n_zriu2r.jpg";
+    "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/cover%5B1%5D.png";
 
   const generateSection = (lang: "ar" | "en") => {
     const t = (key: keyof (typeof emailTranslations)["ar"]) =>
@@ -36,7 +38,7 @@ export function generateOrderEmail({
         (item) => `
         <tr>
           <td>${item.quantity}x ${item.title}</td>
-          <td style="text-align: end;">JOD ${(
+          <td style="text-align: end;">JD ${(
             item.discountedPrice * item.quantity
           ).toFixed(2)}</td>
         </tr>`
@@ -60,11 +62,11 @@ export function generateOrderEmail({
             ${cartHtml}
             <tr>
               <td>${t("email.shipping")}</td>
-              <td style="text-align: end;">${t("email.free")}</td>
+              <td style="text-align: end;"> JD ${deliveryPrice ?? "0.00"}</td>
             </tr>
             <tr>
               <td><strong>${t("email.total")}</strong></td>
-              <td style="text-align: end;"><strong>JOD ${totalPrice.toFixed(
+              <td style="text-align: end;"><strong>JD ${totalPrice.toFixed(
                 2
               )}</strong></td>
             </tr>

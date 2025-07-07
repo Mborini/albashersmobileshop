@@ -132,7 +132,7 @@ const Header = () => {
                   {product.length}
                 </span>
 
-                <span>JOD {totalPrice}</span>
+                <span>JD {totalPrice}</span>
               </button>
 
               {/* زر تغيير اللغة */}

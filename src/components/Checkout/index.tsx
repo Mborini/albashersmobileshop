@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import Billing from "./Billing";
 import { selectCartItems, selectTotalPrice } from "@/redux/features/cart-slice";
@@ -8,25 +8,13 @@ import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import MailSuccess from "../MailSuccess";
 import { removeAllItemsFromCart } from "@/redux/features/cart-slice";
-import { FaSpinner } from "react-icons/fa";
+import { FaCircle, FaSpinner } from "react-icons/fa";
 import Link from "next/link";
-
-import OtpModal from "./OtpModal"; // استدعاء مودال OTP
-import i18next from "i18next";
 import { useTranslation } from "react-i18next";
 import { MdOutlineShoppingCart } from "react-icons/md";
-type CheckoutFormData = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  country: string;
-  city: string;
-  address: string;
-  note?: string; // اختياري إذا كان المستخدم ممكن يتركه فاضي
-  cartItems: { title: string; quantity: number; discountedPrice: number }[];
-  totalPrice: number;
-};
+
+import { Alert } from '@mantine/core';
+import { LuBadgeAlert } from "react-icons/lu";
 
 const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
@@ -36,27 +24,68 @@ const Checkout = () => {
 
   const [isLoading, setIsLoading] = useState(false);
   const [isOrdered, setIsOrdered] = useState(false);
-  const [otpModalOpened, setOtpModalOpened] = useState(false); // فتح المودال بشكل افتراضي
-  const [userEmail, setUserEmail] = useState("");
-  const [formDataStored, setFormDataStored] = useState<any>(null); // لتخزين بيانات الفورم حتى بعد فتح المودال
+  const [deliveryPrice, setDeliveryPrice] = useState(0);
+  const [freeShippingDiff, setFreeShippingDiff] = useState<number | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
 
-  // دالة لإرسال OTP إلى الايميل
-  const sendOtp = async (email: string) => {
-  // ناخذ أول جزئين قبل الشرطة -
-  const langCode = i18n.language.split("-")[0]; // هذا يقطع "en-US" إلى "en"
+  const grandTotal = Number(totalPrice) + Number(deliveryPrice);
 
-  const res = await fetch("/api/send-otp", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email, lang: langCode }),
-  });
+  useEffect(() => {
+    const fetchDeliveryConditions = async () => {
+      try {
+        const res = await fetch("/api/Admin/delivery-price");
+        const data = await res.json();
 
-  if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.error || "فشل إرسال رمز التحقق");
-  }
-};
+        if (data) {
+          const {
+            less_than_x,
+            price_lt_x,
+            between_x_z_from,
+            between_x_z_to,
+            price_between,
+            greater_equal_z,
+            price_ge_z,
+          } = data;
 
+          if (totalPrice < Number(less_than_x)) {
+            setDeliveryPrice(Number(price_lt_x));
+            const diff = Number(between_x_z_from) - Number(totalPrice);
+            setFreeShippingDiff(diff);
+            setMessage(
+              t('add_amount_to_get_delivery_price', {
+                diff: diff.toFixed(2),
+                price_between: Number(price_between).toFixed(2),
+              })
+            );
+          } else if (
+            totalPrice >= Number(between_x_z_from) &&
+            totalPrice < Number(between_x_z_to)
+          ) {
+            setDeliveryPrice(Number(price_between));
+            const diff = Number(between_x_z_to) - Number(totalPrice);
+            setFreeShippingDiff(diff);
+            setMessage(
+              t('add_amount_to_get_free_delivery', { diff: diff.toFixed(2) })
+            );
+          } else if (totalPrice >= Number(greater_equal_z)) {
+            setDeliveryPrice(Number(price_ge_z));
+            setFreeShippingDiff(null);
+            setMessage(null);
+          } else {
+            setDeliveryPrice(0);
+            setFreeShippingDiff(null);
+            setMessage(null);
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load delivery pricing", err);
+      }
+    };
+
+    if (cartItems.length) {
+      fetchDeliveryConditions();
+    }
+  }, [totalPrice, cartItems.length, t]);
 
   const sender = async (data: any) => {
     try {
@@ -76,63 +105,41 @@ const Checkout = () => {
           to: data.email,
           name: data.firstName,
           phone: data.phone,
-          totalPrice,
+          totalPrice: grandTotal,
           cartItems,
           country: data.country,
           city: data.city,
           address: data.address,
           note: data.note,
-          lang: i18next.language,
+          lang: i18n.language,
+          deliveryPrice: deliveryPrice.toFixed(2),
         }),
       });
 
       toast.success(t("success"));
       dispatch(removeAllItemsFromCart());
-      setIsLoading(false); // هنا يمكن إزالته أو تركه حسب الحاجة
+      setIsOrdered(true);
     } catch (error: any) {
       console.error("Error:", error);
       toast.error(error.message || t("error"));
+    } finally {
       setIsLoading(false);
-      throw error; // ارفع الخطأ ليتعامل معه onOtpVerified
     }
   };
 
-  const onclose = () => {
-    setOtpModalOpened(false);
-    setIsLoading(false);
-  };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+
     const formData = new FormData(e.currentTarget);
-    const data: CheckoutFormData = {
+    const data = {
       ...(Object.fromEntries(formData.entries()) as any),
       cartItems,
       totalPrice,
+      deliveryPrice
     };
 
-    try {
-      await sendOtp(data.email as string);
-      setUserEmail(data.email as string);
-      setFormDataStored(data);
-      setOtpModalOpened(true); // افتح مودال إدخال OTP
-    } catch (error: any) {
-      toast.error(error.message || t("error"));
-      setIsLoading(false);
-    }
-  };
-
-  // عند نجاح التحقق من OTP
-  const onOtpVerified = async () => {
-    if (!formDataStored) return;
-    setIsLoading(true); // عطّل الزر لأن العملية بدأت
-    try {
-      await sender(formDataStored);
-      setOtpModalOpened(false);
-      setIsOrdered(true); // بعد نجاح العملية، الزر يبقى معطل
-    } catch (error) {
-      setIsLoading(false); // في حال فشل الإرسال، يسمح بالضغط مجددًا
-    }
+    await sender(data);
   };
 
   return (
@@ -161,16 +168,10 @@ const Checkout = () => {
 
                     <div className="pt-2.5 pb-8.5 px-4 sm:px-8.5">
                       <div className="flex items-center justify-between py-5 border-b border-gray-3">
-                        <div>
-                          <h4 className="font-medium text-dark">
-                            {t("product")}
-                          </h4>
-                        </div>
-                        <div>
-                          <h4 className="font-medium text-dark text-right">
-                            {t("price")}
-                          </h4>
-                        </div>
+                        <h4 className="font-medium text-dark">{t("product")}</h4>
+                        <h4 className="font-medium text-dark text-right">
+                          {t("price")}
+                        </h4>
                       </div>
 
                       {cartItems.map((item) => (
@@ -178,80 +179,65 @@ const Checkout = () => {
                           key={item.id}
                           className="flex items-center justify-between py-5 border-b border-gray-3"
                         >
-                          <div className="flex items-center gap-2">
-                            <div>
-                              <p className="text-dark">{item.title}</p>
-                              <div className="text-custom-sm flex items-center gap-2 mb-1">
-                                {item.color && (
-                                  <>
-                                    <p className="text-gray-700 dark:text-gray-300 font-medium">
-                                      {t("color")}:
-                                    </p>
-                                    <span
-                                      title={item.color}
-                                      style={{ backgroundColor: item.color }}
-                                      className="w-5 h-5 rounded-full border border-gray-300 shadow-sm cursor-pointer hover:scale-110 transition-transform duration-200"
-                                    ></span>
-                                  </>
-                                )}
-                              </div>
-
-                              <p className="text-sm text-gray-600">
-                                {t("quantity")} : {item.quantity}
-                              </p>
-                            </div>
+                          <div>
+                            <p className="text-dark">{item.title}</p>
+                            <p className="text-sm text-gray-600">
+                              {t("quantity")} : {item.quantity}
+                            </p>
                           </div>
-
                           <p className="text-dark text-right">
-                            JOD{" "}
+                            JD{" "}
                             {(item.discountedPrice * item.quantity).toFixed(2)}
                           </p>
                         </div>
                       ))}
 
-                      <div className="flex items-center border-b border-gray-3 pb-5 justify-between pt-5">
-                        <div>
+                      <div className="flex flex-col border-b border-gray-3 pb-5 pt-5">
+                        <div className="flex justify-between">
                           <p className="font-medium text-md text-dark">
                             {t("shipping")}
                           </p>
-                        </div>
-                        <div>
                           <p className="font-medium text-md text-dark text-right">
-                            {t("free")}
+                            JD {deliveryPrice.toFixed(2)}
                           </p>
                         </div>
+                        {message && (
+                          <Alert
+                            icon={<LuBadgeAlert size={24} />}
+                            title={t('note')}
+                            color="yellow"
+                            radius="md"
+                            mt="sm"
+                            variant="light"
+                            className="text-sm"
+                          >
+                            {message}
+                          </Alert>
+                        )}
                       </div>
+
                       <div className="flex items-center border-b border-gray-3 pb-5 justify-between pt-5">
-                        <div>
-                          <p className="font-medium text-md text-dark">
-                            {t("payment_methods")}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-md text-dark text-right">
-                            {t("chash_on_delivery")}
-                          </p>
-                        </div>
+                        <p className="font-medium text-md text-dark">
+                          {t("payment_methods")}
+                        </p>
+                        <p className="font-medium text-md text-dark text-right">
+                          {t("chash_on_delivery")}
+                        </p>
                       </div>
+
                       <div className="flex items-center justify-between pt-5">
-                        <div>
-                          <p className="font-medium text-lg text-dark">
-                            {t("total")}
-                          </p>
-                        </div>
-                        <div>
-                          <p className="font-medium text-lg text-dark text-right">
-                            JOD {totalPrice.toFixed(2)}
-                          </p>
-                        </div>
+                        <p className="font-medium text-lg text-dark">{t("total")}</p>
+                        <p className="font-medium text-lg text-dark text-right">
+                          JD {grandTotal.toFixed(2)}
+                        </p>
                       </div>
                     </div>
                   </div>
 
                   <button
                     type="submit"
-                    disabled={isLoading || isOrdered} // يبقى معطل حتى انتهاء العملية والطلب ناجح
-                    className="w-full flex justify-center items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md ease-out duration-200  mt-7.5 disabled:opacity-70 disabled:cursor-not-allowed"
+                    disabled={isLoading || isOrdered}
+                    className="w-full flex justify-center items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md ease-out duration-200 mt-7.5 disabled:opacity-70 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <>
@@ -270,12 +256,12 @@ const Checkout = () => {
           <MailSuccess />
         ) : (
           <div className="text-center mt-8">
-           <div className="mx-auto pb-7.5 flex flex-col items-center gap-4">
-               <div className="bg-black rounded-full p-4 inline-flex items-center justify-center">
-                 <MdOutlineShoppingCart size={48} className="text-white" />
-               </div>
-               <p className="py-8">{t("Your_cart_is_empty")}</p>
-             </div>
+            <div className="mx-auto pb-7.5 flex flex-col items-center gap-4">
+              <div className="bg-black rounded-full p-4 inline-flex items-center justify-center">
+                <MdOutlineShoppingCart size={48} className="text-white" />
+              </div>
+              <p className="py-8">{t("Your_cart_is_empty")}</p>
+            </div>
             <Link
               href={{ pathname: "/", query: { focus: "categories" } }}
               className="inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
@@ -284,14 +270,6 @@ const Checkout = () => {
             </Link>
           </div>
         )}
-
-        {/* مودال OTP */}
-        <OtpModal
-          opened={otpModalOpened}
-          onClose={onclose}
-          email={userEmail}
-          onVerified={onOtpVerified}
-        />
       </section>
     </>
   );

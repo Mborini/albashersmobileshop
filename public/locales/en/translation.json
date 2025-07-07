@@ -94,5 +94,10 @@
   "support_247_desc": "We’re here to help anytime, anywhere",
   "chash_on_delivery": "Cash on Delivery",
   "payment_methods": "Payment Methods",
-  "image": "Product Image"
+  "image": "Product Image",
+
+  "add_amount_to_get_delivery_price_en": "Add {{diff}} JD to get delivery for {{price_between}} JD",
+  "add_amount_to_get_free_delivery_en": "Add {{diff}} JD to get free delivery",
+  "note_en": "Note"
+
 }

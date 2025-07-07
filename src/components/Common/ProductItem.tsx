@@ -200,9 +200,9 @@ const ProductItem = ({ item }: { item: Product }) => {
         </div>
 
         <span className="flex items-center gap-2 font-medium">
-          <span className="text-lg text-dark">JOD {item.discountedPrice}</span>
+          <span className="text-lg text-dark">JD {item.discountedPrice}</span>
           <span className="text-md text-dark-4 line-through">
-            JOD {item.price}
+            JD {item.price}
           </span>
         </span>
       </div>

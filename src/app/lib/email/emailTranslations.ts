@@ -23,6 +23,7 @@ export const emailTranslations = {
     "email.otp_message": "مرحباً {name}، رمز التحقق الخاص بك هو:",
     "email.otp_contact": "للاستفسار، تواصل معنا على الرقم:",
     "email.new_otp_subject": "رمز تحقق جديد من البشير شوب",
+    "email.Delivery_Price": " توصيل",
   },
   en: {
     "email.thanks": "Thank you for your order",
@@ -49,5 +50,6 @@ export const emailTranslations = {
     "email.otp_message": "Hello {name}, your OTP code is:",
     "email.otp_contact": "For assistance, contact us at:",
     "email.new_otp_subject": "New OTP Code from Albasheer Shop",
+    "email.Delivery_Price": "shipping",
   },
 };

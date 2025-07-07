@@ -11,6 +11,8 @@ import {
 import { FiTag } from "react-icons/fi";
 
 import { useRouter } from "next/navigation";
+import path from "node:path";
+import { TbTruckDelivery } from "react-icons/tb";
 
 const mockdata = [
   {
@@ -50,11 +52,17 @@ const mockdata = [
     path: "managment/orders",
   },
   {
-    title: "Sub Attr",
+    title: "Attributes",
     icon: MdSettings,
     color: "text-orange",
     path: "managment/attributes",
   },
+  {
+    title: "Delivery Price",
+    icon: TbTruckDelivery ,
+    color: "text-blue",
+    path: "managment/deliveryPrice",
+  }
 ];
 
 export default function ActionsGrid() {

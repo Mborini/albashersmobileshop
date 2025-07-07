@@ -27,7 +27,7 @@ export const sendDeleveryEmail = async (order) => {
       name: order.firstname,
       phone: order.phone,
       totalPrice: Number(order.total_price),
-      
+       delivery_price: Number(order.delivery_price) || 0,
       country: order.country,
       city: order.city,
       address: order.address,

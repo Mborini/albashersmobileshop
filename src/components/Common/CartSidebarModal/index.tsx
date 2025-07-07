@@ -66,7 +66,7 @@ const CartSidebarModal = () => {
             >
               <p className="font-medium text-xl text-dark">{t("total")} :</p>
               <p className="font-medium text-xl text-dark">
-                JOD {totalPrice}
+                JD {totalPrice}
               </p>
             </div>
 

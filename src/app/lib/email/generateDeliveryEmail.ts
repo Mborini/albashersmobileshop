@@ -8,6 +8,7 @@ export function generateDeliveryEmail({
   city,
   address,
   note,
+  delivery_price
 }: {
   name: string;
   phone: string;
@@ -16,6 +17,7 @@ export function generateDeliveryEmail({
   city: string;
   address: string;
   note?: string;
+  delivery_price?: number;
 }) {
   const t = emailTranslations;
   const supportPhone = "+962 7 9685 5578";
@@ -51,7 +53,7 @@ export function generateDeliveryEmail({
 
         <h3>${t.en["email.delivery_pay_info"]}</h3>
         <p>${t.en["email.pay_on_delivery"]}</p>
-        <p><strong>${t.en["email.total"]}:</strong> JOD ${totalPrice.toFixed(2)}</p>
+        <p><strong>${t.en["email.total"]}:</strong> JD ${totalPrice.toFixed(2)}</p>
 
         ${note ? `<p><strong>${t.en["email.notes"]}:</strong> ${note}</p>` : ""}
 
@@ -68,7 +70,10 @@ export function generateDeliveryEmail({
 
         <h3>${t.ar["email.delivery_pay_info"]}</h3>
         <p>${t.ar["email.pay_on_delivery"]}</p>
-        <p><strong>${t.ar["email.total"]}:</strong> ${totalPrice.toFixed(2)} دينار</p>
+        <p><strong>
+        ${t.ar["email.Delivery_Price"]}:</strong> ${delivery_price ? delivery_price.toFixed(2) : "0.00"} JD</p>
+        </strong>
+        <p><strong>${t.ar["email.total"]}:</strong> JD ${(totalPrice + (delivery_price || 0)).toFixed(2)}</p>
 
         ${note ? `<p><strong>${t.ar["email.notes"]}:</strong> ${note}</p>` : ""}
 

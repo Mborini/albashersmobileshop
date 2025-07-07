@@ -102,7 +102,7 @@ const PriceDropdown = ({ onPriceChange }) => {
               hideControls={true}
               leftSection={
                 <Text size="xs" c="dimmed" style={{ marginRight: 4 }}>
-                  JOD:
+                  JD:
                 </Text>
               }
               leftSectionWidth={50}
@@ -129,7 +129,7 @@ const PriceDropdown = ({ onPriceChange }) => {
               hideControls={true}
               leftSection={
                 <Text size="xs" c="dimmed" style={{ marginRight: 4 }}>
-                  JOD:
+                  JD:
                 </Text>
               }
               leftSectionWidth={50}

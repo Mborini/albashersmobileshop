@@ -73,7 +73,7 @@ function OrderRow({ order, onComplete, onDecline }) {
                 <span>
                   | Price:{" "}
                   <span className="font-semibold text-black">
-                    {order.cart_items[0].discountedPrice} JOD
+                    {order.cart_items[0].discountedPrice} JD
                   </span>
                 </span>
 
@@ -105,7 +105,7 @@ function OrderRow({ order, onComplete, onDecline }) {
                         {item.title}
                       </Text>
                       <Text size="xs" c="dimmed">
-                        Qty: {item.quantity} | Price: {item.discountedPrice} JOD
+                        Qty: {item.quantity} | Price: {item.discountedPrice} JD
                       </Text>
                       <Text size="xs" c="dimmed">
                         Color:{" "}
@@ -139,7 +139,14 @@ function OrderRow({ order, onComplete, onDecline }) {
         )}
       </Table.Td>
 
-      <Table.Td>{order.total_price} JOD</Table.Td>
+      <Table.Td>{order.total_price} JD</Table.Td>
+      <Table.Td>{order.delivery_price ?? 0} JD</Table.Td>
+      <Table.Td>
+        {(
+          Number(order.total_price) + Number(order.delivery_price ?? 0)
+        ).toFixed(2)}{" "}
+        JD
+      </Table.Td>
       <Table.Td>{dayjs(order.created_at).format("YYYY-MM-DD HH:mm")}</Table.Td>
       <Table.Td>
         <Badge color={order.isCompleted ? "green" : "yellow"}>

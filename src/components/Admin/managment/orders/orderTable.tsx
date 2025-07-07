@@ -2,7 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { Table, ScrollArea, Paper } from "@mantine/core";
-import { completeOrder, declineOrder, sendDeleveryEmail } from "./services/orders";
+import {
+  completeOrder,
+  declineOrder,
+  sendDeleveryEmail,
+} from "./services/orders";
 import OrderFilters from "./OrderFilters";
 import OrderRow from "./OrderRow";
 import ConfirmModal from "./ConfirmModal";
@@ -25,22 +29,22 @@ function OrderTable({ orders }) {
 
   const handleComplete = async () => {
     if (!selectedOrderId || !selectedOrder) return;
-  
+
     try {
       const wasCompleted = selectedOrder.isCompleted;
-  
+
       await completeOrder(selectedOrderId);
-  
+
       if (!wasCompleted) {
         await sendDeleveryEmail(selectedOrder);
       }
-  
+
       const updatedOrders = orderList.map((order) =>
         order.id === selectedOrderId
           ? { ...order, isCompleted: !wasCompleted }
           : order
       );
-  
+
       setOrderList(updatedOrders);
       setFilteredOrders(updatedOrders);
       setSelectedOrderId(null);
@@ -50,7 +54,6 @@ function OrderTable({ orders }) {
       console.error("Failed to complete order:", error);
     }
   };
-  
 
   const handleDecline = async () => {
     if (!selectedOrderId) return;
@@ -80,7 +83,9 @@ function OrderTable({ orders }) {
                 <th>Customer</th>
                 <th>More</th>
                 <th>Items</th>
-                <th>Total</th>
+                <th> Orders Price</th>
+                <th>Delivery Price</th>
+                <th> Total Price </th>
                 <th>Date</th>
                 <th>Status</th>
                 <th>Action</th>

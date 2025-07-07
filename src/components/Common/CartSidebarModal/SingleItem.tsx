@@ -51,10 +51,10 @@ const SingleItem = ({ item, removeItemFromCart }) => {
           </p>
           <p className="text-custom-sm">
             {" "}
-            {t("price")} : JOD {item.discountedPrice}
+            {t("price")} : JD {item.discountedPrice}
           </p>
           <p className="text-custom-sm">
-            {t("total")} : JOD {item.discountedPrice * item.quantity}
+            {t("total")} : JD {item.discountedPrice * item.quantity}
           </p>
         </div>
       </div>

@@ -132,10 +132,10 @@ const Hero = () => {
 
                   <div className="flex items-center gap-4 mt-5">
                     <span className="font-medium text-xl text-black">
-                      JOD {otherImages[2].discounted_Price}
+                      JD {otherImages[2].discounted_Price}
                     </span>
                     <span className="font-medium text-lg text-gray-4 line-through">
-                      JOD {otherImages[2].price}
+                      JD {otherImages[2].price}
                     </span>
                   </div>
                 </div>
@@ -189,10 +189,10 @@ const Card = ({ item }) => (
     </div>
     <span className="flex items-center gap-3 justify-center">
       <span className="font-medium text-xl text-black">
-        JOD {item.discounted_Price}
+        JD {item.discounted_Price}
       </span>
       <span className="font-medium text-lg text-dark-4 line-through">
-        JOD {item.price}
+        JD {item.price}
       </span>
     </span>
   </div>

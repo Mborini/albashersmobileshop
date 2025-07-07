@@ -5,7 +5,7 @@ import { generateDeliveryEmail } from "@/app/lib/email/generateDeliveryEmail";
 
 export async function POST(request: Request) {
   try {
-    const { to, name, phone, totalPrice, country, city, address, note } =
+    const { to, name, phone, totalPrice, country, city, address, note,delivery_price } =
       await request.json();
 
     const html = generateDeliveryEmail({
@@ -15,7 +15,8 @@ export async function POST(request: Request) {
       country,
       city,
       address,
-      note,
+      note, 
+      delivery_price
     });
     const transporter = nodemailer.createTransport({
       service: "Gmail",
