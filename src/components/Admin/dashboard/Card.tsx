@@ -7,6 +7,7 @@ import {
   MdImage,
   MdShoppingCart,
   MdSettings,
+  MdStorage,
 } from "react-icons/md";
 import { FiTag } from "react-icons/fi";
 
@@ -59,10 +60,17 @@ const mockdata = [
   },
   {
     title: "Delivery Price",
-    icon: TbTruckDelivery ,
+    icon: TbTruckDelivery,
     color: "text-blue",
     path: "managment/deliveryPrice",
-  }
+  },
+  {
+    title: "Monitors",
+    icon: MdStorage,
+
+    color: "text-dark",
+    path: "managment/monitors",
+  },
 ];
 
 export default function ActionsGrid() {
