@@ -43,13 +43,17 @@ const SingleItem: React.FC<Props> = React.memo(({ item, onRemove }) => {
               <p>{t("color")}:</p>
               <span
                 style={{ backgroundColor: item.color }}
-                className="w-4 h-4 rounded-full cursor-pointer border-2  hover:scale-110 transition-transform"
+                className="w-4 h-4 rounded-full cursor-pointer border-2 hover:scale-110 transition-transform"
               />
             </div>
           )}
 
-          <p className="text-custom-sm">{t("quantity")} : {item.quantity}</p>
-          <p className="text-custom-sm"> {t("price")} : JD {item.discountedPrice.toFixed(2)}</p>
+          <p className="text-custom-sm">
+            {t("quantity")} : {item.quantity}
+          </p>
+          <p className="text-custom-sm">
+            {t("price")} : JD {item.discountedPrice.toFixed(2)}
+          </p>
           <p className="text-custom-sm">
             {t("total")} : JD {(item.discountedPrice * item.quantity).toFixed(2)}
           </p>
@@ -67,5 +71,7 @@ const SingleItem: React.FC<Props> = React.memo(({ item, onRemove }) => {
     </div>
   );
 });
+
+SingleItem.displayName = "SingleItem";
 
 export default SingleItem;
