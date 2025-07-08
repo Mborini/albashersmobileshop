@@ -108,5 +108,18 @@
   "contact_on_whatsapp": "Click here to contact us on WhatsApp",
   "in_stock": "In Stock",
   "product_attributes": "Product Attributes",
-  "add_to_wishlist": "Add to Wishlist"
+  "add_to_wishlist": "Add to Wishlist",
+  "contactUs": "Contact Us",
+  "name": "Name",
+  "enterYourName": "Enter your name",
+  "email": "Email",
+  "message": "Message",
+  "writeYourMessage": "Write your message",
+  "sendMessage": "Send Message",
+  "messageSentSuccessfully": "Message sent successfully",
+  "errorOccurredWhileSending": "An error occurred while sending",
+  "failedToSendMessage": "Failed to send message",
+  "nameTooShort": "Name is too short",
+  "invalidEmail": "Invalid email",
+  "messageRequired": "Message is required"
 }

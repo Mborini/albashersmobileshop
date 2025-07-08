@@ -109,6 +109,18 @@
   "contact_on_whatsapp": "اضغط هنا للتواصل معنا على واتساب",
   "in_stock": "متوفر في المخزون",
   "product_attributes": "مواصفات المنتج",
-  "add_to_wishlist": "أضف إلى المفضلة"
+  "add_to_wishlist": "أضف إلى المفضلة","contactUs": "تواصل معنا",
+  "name": "الاسم",
+  "enterYourName": "أدخل اسمك",
+  "email": "البريد الإلكتروني",
+  "message": "الرسالة",
+  "writeYourMessage": "اكتب رسالتك هنا",
+  "sendMessage": "إرسال الرسالة",
+  "messageSentSuccessfully": "تم إرسال الرسالة بنجاح",
+  "errorOccurredWhileSending": "حدث خطأ أثناء الإرسال",
+  "failedToSendMessage": "تعذر إرسال الرسالة",
+  "nameTooShort": "الاسم قصير جداً",
+  "invalidEmail": "البريد غير صالح",
+  "messageRequired": "الرسالة مطلوبة"
 
 }

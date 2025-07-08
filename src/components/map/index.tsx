@@ -1,23 +1,24 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl"; // Import Mapbox library
-import "mapbox-gl/dist/mapbox-gl.css"; // Ensure Mapbox CSS is included
+import mapboxgl from "mapbox-gl";
+import "mapbox-gl/dist/mapbox-gl.css";
 
-// Your Mapbox access token
 mapboxgl.accessToken =
   "pk.eyJ1IjoibW9oYm9yaW5pIiwiYSI6ImNtMDNzajUyczAxMHYycnM0cTE4cTV4amoifQ.0KnW_JhYY7pcTx9NVVWFXg";
 
 const Map = () => {
-  const mapContainer = useRef(null); // Reference to the map container
-  const map = useRef(null); // Reference to the map instance
-  const markerRef = useRef(null); // Reference to the marker instance
-  const [lng, setLng] = useState(35.851079147718266); // Default longitude
-  const [lat, setLat] = useState(32.54079165545406); // Default latitude
-  const [zoom, setZoom] = useState(15); // Default zoom level for 3D buildings
+  const mapContainer = useRef(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const markerRef = useRef<mapboxgl.Marker | null>(null);
+
+  const [lng] = useState(35.855630070655124);
+  const [lat] = useState(32.54490897468007);
+  const [zoom] = useState(18);
 
   useEffect(() => {
-    if (map.current) return; // Initialize map only once
+    if (map.current) return;
+
     if (
       !mapboxgl.getRTLTextPluginStatus ||
       mapboxgl.getRTLTextPluginStatus() !== "loaded"
@@ -28,24 +29,24 @@ const Map = () => {
         true
       );
     }
-    // Initialize Mapbox map
+
     map.current = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: "mapbox://styles/mapbox/streets-v11", // Map style with 3D buildings
-      center: [lng, lat], // Center the map based on the coordinates
+      container: mapContainer.current!,
+      style: "mapbox://styles/mapbox/streets-v11",
+      center: [lng, lat],
       zoom: zoom,
-      pitch: 60, // Tilt the map for 3D effect
-      bearing: -17.6, // Rotate for better 3D view
+      pitch: 60,
+      bearing: -17.6,
     });
 
-    // Add 3D buildings using a 'fill-extrusion' layer
     map.current.on("load", () => {
-      map.current.addLayer({
+      // طبقة المباني الثلاثية الأبعاد
+      map.current!.addLayer({
         id: "3d-buildings",
         source: "composite",
         "source-layer": "building",
         type: "fill-extrusion",
-        minzoom: 15, // 3D visible at zoom 15+
+        minzoom: 15,
         paint: {
           "fill-extrusion-color": "#aaa",
           "fill-extrusion-height": [
@@ -69,41 +70,31 @@ const Map = () => {
           "fill-extrusion-opacity": 0.6,
         },
       });
+
+      // إنشاء عنصر HTML كصورة مخصصة للماركر
+      const el = document.createElement("div");
+      el.className = "custom-marker";
+      el.style.backgroundImage = "url('https://albasheermblshop.s3.eu-north-1.amazonaws.com/map/my-marker.png')";
+      el.style.width = "150px";
+      el.style.height = "150px";
+      el.style.backgroundSize = "cover";
+      el.style.borderRadius = "50%";
+      el.style.border = "4px dotted black";
+      el.style.backgroundColor= "rgba(255, 255, 255, 0.5)";
+
+      markerRef.current = new mapboxgl.Marker(el)
+        .setLngLat([lng, lat])
+        .addTo(map.current!);
     });
 
-    // Create a marker at the specified coordinates
-    markerRef.current = new mapboxgl.Marker()
-      .setLngLat([35.851079147718266, 32.54079165545406]) // Your specified location
-      .addTo(map.current);
-
-    // Add zoom and rotation controls to the map
     map.current.addControl(new mapboxgl.NavigationControl());
   }, [lng, lat, zoom]);
 
   return (
-    <section className="relative z-10 pt-8 pm-16 md:py-20 lg:py-28 ">
-      <div className="container">
-        <div className="-mx-4 flex flex-wrap ">
-          <div className="w-full px-4">
-            <p className="text-center text-blue-light text-4xl sm:text-5xl font-bold  mb-12">
-              Find Us On Map
-            </p>
-            <div
-              className="mx-auto max-w-[850px] shadow-xl overflow-hidden rounded-lg"
-              data-wow-delay=".15s"
-            >
-              <div className="relative aspect-[77/40] rounded-lg items-center justify-center border-4 border-blue-light">
-                {/* Map container where Mapbox map will render */}
-                <div
-                  ref={mapContainer}
-                  className="w-full h-[450px] rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div
+      ref={mapContainer}
+      className="w-full h-[450px] rounded-lg shadow-md border border-gray-300"
+    />
   );
 };
 

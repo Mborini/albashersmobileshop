@@ -1,4 +1,5 @@
 
+import Contact from "@/components/Contact";
 import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Al-Basher Shop",
@@ -9,9 +10,7 @@ export const metadata: Metadata = {
 
 const ContactPage = () => {
   return (
-    <main>
-     
-    </main>
+    <Contact/>
   );
 };
 
