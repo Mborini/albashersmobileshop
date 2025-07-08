@@ -3,12 +3,16 @@
 import React, { useState, useEffect } from "react";
 import Breadcrumb from "../Common/Breadcrumb";
 import Billing from "./Billing";
-import { selectCartItems, selectTotalPrice } from "@/redux/features/cart-slice";
+import {
+  selectCartItems,
+  selectTotalPrice,
+  removeItemFromCart,
+  removeAllItemsFromCart,
+} from "@/redux/features/cart-slice";
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import MailSuccess from "../MailSuccess";
-import { removeAllItemsFromCart } from "@/redux/features/cart-slice";
-import { FaCircle, FaSpinner } from "react-icons/fa";
+import { FaSpinner, FaTrashAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import { MdOutlineShoppingCart } from "react-icons/md";
@@ -28,6 +32,7 @@ const Checkout = () => {
   const [message, setMessage] = useState<string | null>(null);
 
   const grandTotal = Number(totalPrice) + Number(deliveryPrice);
+  const isRTL = i18n.language === "ar";
 
   useEffect(() => {
     const fetchDeliveryConditions = async () => {
@@ -137,7 +142,7 @@ const Checkout = () => {
       cartItems,
       totalPrice,
       deliveryPrice,
-       paymentMethod,
+      paymentMethod,
     };
 
     await sender(data);
@@ -157,12 +162,12 @@ const Checkout = () => {
                 </div>
 
                 <div
-                  dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                  dir={isRTL ? "rtl" : "ltr"}
                   className="max-w-[455px] w-full"
                 >
                   <div className="bg-white shadow-1 rounded-[10px]">
                     <div className="border-b border-gray-3 rounded-t-[10px] py-5 px-4 sm:px-8.5 bg-black text-white">
-                      <h2 className="font-medium text-xl ">
+                      <h2 className="font-medium text-xl">
                         {t("order_summary")}
                       </h2>
                     </div>
@@ -188,10 +193,29 @@ const Checkout = () => {
                               {t("quantity")} : {item.quantity}
                             </p>
                           </div>
-                          <p className="text-dark text-right">
-                            JD{" "}
-                            {(item.discountedPrice * item.quantity).toFixed(2)}
-                          </p>
+                          <div className="flex items-center gap-3">
+                            <p className="text-dark text-right">
+                              JD{" "}
+                              {(item.discountedPrice * item.quantity).toFixed(
+                                2
+                              )}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                dispatch(
+                                  removeItemFromCart({
+                                    id: item.id,
+                                    color: item.color,
+                                  })
+                                )
+                              }
+                              aria-label={t("remove_item")}
+                              className="text-red-light hover:text-red-800"
+                            >
+                              <FaTrashAlt size={14} />
+                            </button>
+                          </div>
                         </div>
                       ))}
 
@@ -214,7 +238,26 @@ const Checkout = () => {
                             variant="light"
                             className="text-sm"
                           >
-                            {message}
+                            <div>{message}</div>
+
+                            <Badge
+                              component="button"
+                              onClick={() =>
+                                (window.location.href = "/products")
+                              }
+                              className="mx-1 text-white"
+                              style={{
+                                backgroundImage:
+                                  "linear-gradient(to right, #FFA726, #FB8C00, #F57C00)",
+                                cursor: "pointer",
+                                marginTop: "1rem",
+                              }}
+                              variant="filled"
+                              size="md"
+                              radius="lg"
+                            >
+                              {t("add_more")}
+                            </Badge>
                           </Alert>
                         )}
                       </div>
@@ -227,69 +270,76 @@ const Checkout = () => {
                           JD {grandTotal.toFixed(2)}
                         </p>
                       </div>
-                     <div className="flex flex-col pt-5">
-  <p className="font-medium text-md text-dark mb-2">{t("payment_methods")}</p>
 
-  <Radio.Group
-    name="paymentMethod"
-    value={paymentMethod}
-    onChange={setPaymentMethod}
-    className="mb-4"
-  >
-    <Grid gutter="xs">
-      <Grid.Col span={6}>
-        <Radio
-          value="cod"
-          label={t("cash_on_delivery")}
-          className="text-sm"
-        />
-      </Grid.Col>
-      <Grid.Col span={6}>
-        <Radio
-          value="click"
-          label={t("click_payment")}
-          className="text-sm"
-        />
-      </Grid.Col>
-    </Grid>
-  </Radio.Group>
+                      <div className="flex flex-col pt-5">
+                        <p className="font-medium text-md text-dark mb-2">
+                          {t("payment_methods")}
+                        </p>
 
-  {paymentMethod === "click" && (
-    <Alert
-      icon={<LuBadgeAlert size={20} />}
-      title={
-        <span className="font-semibold text-base">{t("important_note")}</span>
-      }
-      color="green"
-      radius="md"
-      variant="light"
-      className="text-sm leading-relaxed space-y-2"
-    >
-      <div>
-        {t("click_payment_instructions1")}{" "}
-         <Badge
-      radius="lg"
-      variant="filled"
-      className="mx-1 text-gray-1 bg-gradient-to-r from-green-light-4 via-green-500 to-green-dark"
-      style={{ backgroundImage: 'linear-gradient(to right, #68D391, #38A169, #2F855A)' }}
-    >
-      albasheer9
-    </Badge>
-        {t("click_payment_instructions2")}
-      </div>
+                        <Radio.Group
+                          name="paymentMethod"
+                          value={paymentMethod}
+                          onChange={setPaymentMethod}
+                          className="mb-4"
+                        >
+                          <Grid gutter="xs">
+                            <Grid.Col span={6}>
+                              <Radio
+                                value="cod"
+                                label={t("cash_on_delivery")}
+                                className="text-sm"
+                              />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                              <Radio
+                                value="click"
+                                label={t("click_payment")}
+                                className="text-sm"
+                              />
+                            </Grid.Col>
+                          </Grid>
+                        </Radio.Group>
 
-      <a
-        href="https://wa.me/962796855578"
-        target="_blank"
-        rel="noopener noreferrer"
-        className="inline-block text-green-700 hover:text-green-900 underline font-medium"
-      >
-        {t("contact_on_whatsapp")}
-      </a>
-    </Alert>
-  )}
-</div>
+                        {paymentMethod === "click" && (
+                          <Alert
+                            icon={<LuBadgeAlert size={20} />}
+                            title={
+                              <span className="font-semibold text-base">
+                                {t("important_note")}
+                              </span>
+                            }
+                            color="green"
+                            radius="md"
+                            variant="light"
+                            className="text-sm leading-relaxed space-y-2"
+                          >
+                            <div>
+                              {t("click_payment_instructions1")}{" "}
+                              <Badge
+                                radius="lg"
+                                variant="filled"
+                                className="mx-1 text-gray-1 bg-gradient-to-r from-green-light-4 via-green-500 to-green-dark"
+                                style={{
+                                  backgroundImage:
+                                    "linear-gradient(to right, #68D391, #38A169, #2F855A)",
+                                }}
+                              >
+                                albasheer9
+                              </Badge>
+                              {t("click_payment_instructions2")}
+                            </div>
 
+                            <a
+                              href="https://wa.me/962796855578"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-block text-green-700 hover:text-green-900 underline font-medium"
+                            >
+                              {t("contact_on_whatsapp")}
+                            </a>
+                          </Alert>
+                        )}
+                      </div>
                     </div>
                   </div>
 

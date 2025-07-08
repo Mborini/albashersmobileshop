@@ -101,8 +101,12 @@
   "cash_on_delivery": "Cash on Delivery",
   "click_payment": "Click Payment",
   "note_en": "Note",
+  "add_more": "Add More",
   "click_payment_instructions1": "You're amazing! 💛 You can easily transfer the amount via Click to the username:",
   "click_payment_instructions2": "Then, please send the payment screenshot on WhatsApp to 0796855578 so we can process your order as quickly as possible!",
   "important_note": "Important Note",
-  "contact_on_whatsapp": "Click here to contact us on WhatsApp"
+  "contact_on_whatsapp": "Click here to contact us on WhatsApp",
+  "in_stock": "In Stock",
+  "product_attributes": "Product Attributes",
+  "add_to_wishlist": "Add to Wishlist"
 }

@@ -187,7 +187,7 @@ const QuickViewModal = () => {
                     variant="gradient"
                     gradient={{ from: "red", to: "yellow", deg: 360 }}
                   >
-                    Best Offer
+                    {t("best_offers")}
                   </Badge>
                 )}
                 {product.is_new_arrival && (
@@ -196,7 +196,7 @@ const QuickViewModal = () => {
                     variant="gradient"
                     gradient={{ from: "blue", to: "cyan", deg: 360 }}
                   >
-                    New Arrival
+{                      t("new_arrivals")}
                   </Badge>
                 )}
               </div>
@@ -214,32 +214,36 @@ const QuickViewModal = () => {
                 </Badge>
               </div>
             <div className="flex flex-wrap items-center gap-5 mb-6">
-  <div className="flex items-center gap-2">
+  <div className="flex items-center gap-2" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
     {product.in_stock ? (
       <>
         <CiCircleCheck color="green" size={20} />
-        <span className="font-medium text-green-700">In Stock</span>
+        <span className="font-medium text-green-700">
+          {t("in_stock")}
+        </span>
       </>
     ) : (
       <>
         <VscError color="red" size={20} />
-        <span className="font-medium text-red-600">Out of Stock</span>
+        <span className="font-medium text-red-600">
+          {t("out_of_stock")}
+        </span>
       </>
     )}
   </div>
 </div>
 
               <p>{product.description}</p>
-              <div className="mt-5">
+              <div className="mt-5" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
                 <h4 className="font-semibold text-lg text-dark mb-3.5">
-                  Colors
+                  {t("colors")}
                 </h4>
                 {product.colors && product.colors.length > 0 ? (
                   <div className="flex gap-3 flex-wrap">
                     {product.colors.map((color) => (
                       <div
                         key={color.id}
-                        className={`w-4 h-4 rounded-full cursor-pointer transition-transform hover:scale-110 ${
+                        className={`w-4 h-4 rounded-full cursor-pointer border-2 transition-transform hover:scale-110 ${
                           selectedColor === color.hex_code
                             ? "ring-2 ring-black"
                             : ""
@@ -256,9 +260,9 @@ const QuickViewModal = () => {
               </div>
               {product.attributes &&
                 Object.keys(product.attributes).length > 0 && (
-                  <div className="mt-5">
+                  <div className="mt-5" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
                     <h4 className="font-semibold text-lg text-dark mb-3.5">
-                      Attributes
+                    {t("product_attributes")}
                     </h4>
                     <ul className="list-disc pl-5 space-y-1">
                       {Object.entries(product.attributes).map(
@@ -292,10 +296,10 @@ const QuickViewModal = () => {
                     </ul>
                   </div>
                 )}
-              <div className="flex flex-wrap justify-between gap-5 mt-6 mb-7.5">
+              <div className="flex flex-wrap justify-between gap-5 mt-6 mb-7.5" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
                 <div>
                   <h4 className="font-semibold text-lg text-dark mb-3.5">
-                    Price
+                    {t("price")}
                   </h4>
 
                   <span className="flex items-center gap-2">
@@ -310,7 +314,7 @@ const QuickViewModal = () => {
 
                 <div>
                   <h4 className="font-semibold text-lg text-dark mb-3.5">
-                    Quantity
+                    {t("quantity")}
                   </h4>
 
                   <div className="flex items-center gap-3">
@@ -323,7 +327,7 @@ const QuickViewModal = () => {
                       <FiMinus />
                     </button>
 
-                    <span
+                    <span 
                       className="flex items-center justify-center w-20 h-10 rounded-[5px] border border-gray-4 bg-white font-medium text-dark"
                       x-text="quantity"
                     >
@@ -340,7 +344,7 @@ const QuickViewModal = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-4 flex-nowrap overflow-auto">
+              <div className="flex items-center gap-4 flex-nowrap overflow-auto" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
                 <button
                   ref={addToCartButtonRef}
                   disabled={!product.in_stock || quantity === 0}
@@ -356,7 +360,7 @@ const QuickViewModal = () => {
   `}
                 >
                   <LuShoppingBag size={18} />
-                  {product.in_stock ? "Add to Cart" : "Out of Stock"}
+                  {product.in_stock ? `${t("add_to_cart")}` : t("out_of_stock")}
                 </button>
 
                 <button
@@ -364,7 +368,7 @@ const QuickViewModal = () => {
                   className="text-xs sm:text-base inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md"
                 >
                   <MdFavoriteBorder size={18} />
-                  Add to Wishlist
+                  {t("add_to_wishlist")}
                 </button>
               </div>
             </div>
