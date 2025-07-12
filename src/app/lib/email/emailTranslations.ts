@@ -26,7 +26,9 @@ export const emailTranslations = {
     "email.Delivery_Price": " شحن",
      "email.payment_method": "طريقة الدفع",
   "email.payment_method_cod": "الدفع عند الاستلام",
-  "email.payment_method_click": "الدفع بواسطة كليك"
+  "email.payment_method_click": "الدفع بواسطة كليك",
+  "email.discount": "قيمة الخصم",
+  "email.grand_total": "الإجمالي النهائي",
   },
   en: {
     "email.thanks": "Thank you for your order",
@@ -57,5 +59,7 @@ export const emailTranslations = {
     "email.payment_method": "Payment Method",
     "email.payment_method_cod": "Cash on Delivery",
     "email.payment_method_click": "Click Payment",
+    "email.discount": "Discount Amount",
+    "email.grand_total": "Grand Total",
   },
 };

@@ -82,15 +82,14 @@ const Header = () => {
                   />
                 ) : (
                   <li key={i}>
-                    <Link href={menuItem.path} legacyBehavior>
-                      <a
-                        className={`group relative px-2 py-1 text-sm font-medium inline-block overflow-hidden ${
-                          stickyMenu ? "text-black" : "text-black"
-                        }`}
-                      >
-                        {t(menuItem.title)}
-                        <span className="absolute bottom-0 left-0 h-0.5 bg-blue-600 w-0 group-hover:w-full transition-all duration-300 ease-in-out" />
-                      </a>
+                    <Link
+                      href={menuItem.path}
+                      className={`group relative px-2 py-1 text-sm font-medium inline-block overflow-hidden ${
+                        stickyMenu ? "text-black" : "text-black"
+                      }`}
+                    >
+                      {t(menuItem.title)}
+                      <span className="absolute bottom-0 left-0 h-0.5 bg-blue-600 w-0 group-hover:w-full transition-all duration-300 ease-in-out" />
                     </Link>
                   </li>
                 )
@@ -140,7 +139,6 @@ const Header = () => {
                 onClick={() => {
                   changeLanguage(i18n.language === "en" ? "ar" : "en");
                   close();
-                  
                 }}
                 className="flex items-center gap-1 text-sm text-gray-700 hover:text-blue-600"
               >
@@ -163,52 +161,46 @@ const Header = () => {
 
       {/* Drawer للموبايل */}
       <Drawer opened={opened} onClose={close} size="230px" position="right">
-  <div className="flex flex-col mt-2 gap-4">
-    {menuData.map((menuItem, idx) =>
-      menuItem.submenu ? (
-        <Dropdown key={idx} menuItem={menuItem} stickyMenu={stickyMenu} />
-      ) : (
-        <Link
-        key={idx}
-        href={menuItem.path}
-        onClick={close}
-        className="inline-flex items-center justify-center bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
-      >
-        {t(menuItem.title)}
-      </Link>
-      
-      )
-    )}
+        <div className="flex flex-col mt-2 gap-4">
+          {menuData.map((menuItem, idx) =>
+            menuItem.submenu ? (
+              <Dropdown key={idx} menuItem={menuItem} stickyMenu={stickyMenu} />
+            ) : (
+              <Link
+                key={idx}
+                href={menuItem.path}
+                onClick={close}
+                className="inline-flex items-center justify-center bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
+              >
+                {t(menuItem.title)}
+              </Link>
+            )
+          )}
 
-    {/* Wishlist Button Styled */}
-    <Link
-      href="/wishlist"
-      className="text-sm font-bold flex items-center justify-center gap-1 bg-black text-white hover:bg-black px-3 py-2 rounded"
-      
-      onClick={close}
-    >
-     
-      {t("favorit")}
-    </Link>
+          {/* Wishlist Button Styled */}
+          <Link
+            href="/wishlist"
+            className="text-sm font-bold flex items-center justify-center gap-1 bg-black text-white hover:bg-black px-3 py-2 rounded"
+            onClick={close}
+          >
+            {t("favorit")}
+          </Link>
 
-    {/* Language Switch Button Styled */}
-    <button
-  onClick={() => {
-    changeLanguage(i18n.language === "en" ? "ar" : "en");
-  }}
-  className="w-full justify-center flex items-center gap-3 bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
-  
->
-  <Flag
-    code={i18n.language === "en" ? "GB" : "JO"}
-    style={{ width: 18, height: 12 }}
-  />
-  <span>{i18n.language === "en" ? "EN" : "AR"}</span>
-</button>
-
-  </div>
-</Drawer>
-
+          {/* Language Switch Button Styled */}
+          <button
+            onClick={() => {
+              changeLanguage(i18n.language === "en" ? "ar" : "en");
+            }}
+            className="w-full justify-center flex items-center gap-3 bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
+          >
+            <Flag
+              code={i18n.language === "en" ? "GB" : "JO"}
+              style={{ width: 18, height: 12 }}
+            />
+            <span>{i18n.language === "en" ? "EN" : "AR"}</span>
+          </button>
+        </div>
+      </Drawer>
     </header>
   );
 };

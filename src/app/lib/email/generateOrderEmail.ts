@@ -4,6 +4,7 @@ import { emailTranslations } from "./emailTranslations";
 export function generateOrderEmail({
   name,
   phone,
+  email,
   cartItems,
   totalPrice,
   country,
@@ -11,7 +12,9 @@ export function generateOrderEmail({
   address,
   note,
   deliveryPrice,
-   paymentMethod,
+  paymentMethod,
+  grandTotal,
+  discountAmount,
 }: {
   name: string;
   phone: string;
@@ -24,6 +27,8 @@ export function generateOrderEmail({
   note?: string;
   deliveryPrice?: number;
   paymentMethod?: string;
+  grandTotal?: number;
+  discountAmount?: number;
 }) {
   const logoUrl =
     "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/WhatsApp+Image+2025-07-07+at+17.40.17_b7c8070f.jpg";
@@ -31,26 +36,28 @@ export function generateOrderEmail({
   const bannerImage =
     "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/cover%5B1%5D.png";
 
- const generateSection = (lang: "ar" | "en") => {
-  const t = (key: keyof (typeof emailTranslations)["ar"]) =>
-    emailTranslations[lang][key];
+  const generateSection = (lang: "ar" | "en") => {
+    const t = (key: keyof (typeof emailTranslations)["ar"]) =>
+      emailTranslations[lang][key];
 
-  const paymentMethodLabel =
-    paymentMethod === "click"
-      ? t("email.payment_method_click")
-      : t("email.payment_method_cod");
+    const paymentMethodLabel =
+      paymentMethod === "click"
+        ? t("email.payment_method_click")
+        : t("email.payment_method_cod");
 
-  const cartHtml = cartItems
-    .map(
-      (item) => `
+    const cartHtml = cartItems
+      .map(
+        (item) => `
       <tr>
         <td>${item.quantity}x ${item.title}</td>
-        <td style="text-align: end;">JD ${(item.discountedPrice * item.quantity).toFixed(2)}</td>
+        <td style="text-align: end;">JD ${(
+          item.discountedPrice * item.quantity
+        ).toFixed(2)}</td>
       </tr>`
-    )
-    .join("");
+      )
+      .join("");
 
-  return `
+    return `
     <div dir="${lang === "ar" ? "rtl" : "ltr"}" style="padding: 20px;">
       <h2 style="text-align: center; color: #333; margin-bottom: 10px;">
         ${t("email.thanks")} ${name}!
@@ -68,27 +75,29 @@ export function generateOrderEmail({
           ${cartHtml}
           <tr>
             <td>${t("email.shipping")}</td>
-            <td style="text-align: end;"> JD ${deliveryPrice ?? "0.00"}</td>
+            <td style="text-align: end;">JD ${deliveryPrice ?? 0}</td>
           </tr>
+          ${
+            discountAmount && discountAmount > 0
+              ? `
           <tr>
-            <td><strong>${t("email.total")}</strong></td>
-            <td style="text-align: end;"><strong>JD ${totalPrice.toFixed(
-              2
-            )}</strong></td>
+            <td>${t("email.discount")}</td>
+            <td style="text-align: end;">- JD ${discountAmount}</td>
+          </tr>`
+              : ""
+          }
+          <tr>
+            <td><strong>${t("email.grand_total")}</strong></td>
+            <td style="text-align: end;"><strong>JD ${grandTotal}</strong></td>
           </tr>
+          
         </tbody>
       </table>
 
-      <div style="
-        background: #e6f4ea; 
-        border: 1px solid #7dc37d; 
-        border-radius: 8px; 
-        padding: 15px; 
-        margin-bottom: 20px; 
-        font-weight: 600;
-        color: #2d662d;
-        ">
-        ${t("email.payment_method")}: <span style="font-weight: 700;">${paymentMethodLabel}</span>
+      <div style="background: #e6f4ea; border: 1px solid #7dc37d; border-radius: 8px; padding: 15px; margin-bottom: 20px; font-weight: 600; color: #2d662d;">
+        ${t(
+          "email.payment_method"
+        )}: <span style="font-weight: 700;">${paymentMethodLabel}</span>
       </div>
 
       ${note ? `<p><b>${t("email.notes")}:</b> ${note}</p>` : ""}
@@ -99,8 +108,7 @@ export function generateOrderEmail({
       <p>${t("email.deliver_to")} ${country}, ${city}, ${address}</p>
     </div>
   `;
-};
-
+  };
 
   return `
     <div style="font-family: sans-serif; background-color: #f9f9f9; padding: 20px;">
@@ -115,19 +123,19 @@ export function generateOrderEmail({
 
         <div style="text-align: center; padding: 20px;">
           <img 
-            src="https://res.cloudinary.com/do1etuooh/image/upload/v1750954328/albashername_fl4mi5.png" 
+            src="https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/albashername_fl4mi5.png" 
             alt="Side Image" 
-            style="height: 40px;  border-radius: 4px;margin-bottom: 5px"
+            style="height: 40px; border-radius: 4px; margin-bottom: 5px;"
           />
           <div>
             <a href="https://www.facebook.com/AlbasherShop/">
-              <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952618/facebook_u8ghbn.png" alt="Facebook" style="width: 24px;" />
+              <img src="https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/face.png" alt="Facebook" style="width: 24px;" />
             </a>
             <a href="https://www.instagram.com/albasher.jo">
-              <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952620/instagram_sh1qqm.png" alt="Instagram" style="width: 24px;" />
+              <img src="https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/insta.png" alt="Instagram" style="width: 24px;" />
             </a>
             <a href="https://api.whatsapp.com/send?phone=%2B962796855578">
-              <img src="https://res.cloudinary.com/do1etuooh/image/upload/v1750952618/whatsapp_knygrh.png" alt="WhatsApp" style="width: 24px;" />
+              <img src="https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/preview.png" alt="WhatsApp" style="width: 24px;" />
             </a>
           </div>
         </div>
@@ -135,7 +143,8 @@ export function generateOrderEmail({
         <div style="text-align: center;">
           <img src="${bannerImage}" alt="Banner" style="width: 100%;" />
         </div>
-                <div style="background-color: #f2f2f2; padding: 15px; text-align: center; font-size: 12px; color: #777;">
+
+        <div style="background-color: #f2f2f2; padding: 15px; text-align: center; font-size: 12px; color: #777;">
           ${t("email.footer")}
         </div>
       </div>

@@ -126,6 +126,12 @@ const config: Config = {
         light: "#C4B5FD",
         "light-2": "#E0D7FE",
       },
+      lime: {
+        DEFAULT: "#84CC16",
+        dark: "#65A30D",
+        light: "#A3E635",
+        "light-2": "#D9F99D",
+      },
       indigo: {
         DEFAULT: "#6366F1",
         dark: "#4F46E5",

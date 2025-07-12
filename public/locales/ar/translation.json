@@ -121,6 +121,15 @@
   "failedToSendMessage": "تعذر إرسال الرسالة",
   "nameTooShort": "الاسم قصير جداً",
   "invalidEmail": "البريد غير صالح",
-  "messageRequired": "الرسالة مطلوبة"
-
+  "messageRequired": "الرسالة مطلوبة",
+  "promo_code": "كود الخصم",
+  "apply": "تطبيق",
+  "code_applied": "تم تطبيق الكود",
+  "discount": "الخصم",
+  "enter_promo_code": "أدخل كود الخصم",
+  "invalid_promo_code": "كود الخصم غير صالح",
+  "promo_code_applied": "تم تطبيق كود الخصم بنجاح",
+  "error_applying_promo_code": "حدث خطأ أثناء تطبيق كود الخصم"
+,"subtotal": "المجموع الفرعي"
+,"save": "وفر"
 }

@@ -62,7 +62,7 @@ const SingleItem = ({ item }) => {
   {item.color ? (
     <p
       style={{ backgroundColor: item.color }}
-      className="w-4 h-4 rounded-full cursor-pointer hover:scale-110 transition-transform"
+      className="w-4 h-4 border-black rounded-full cursor-pointer hover:scale-110 transition-transform"
     ></p>
   ) : (
     <CiNoWaitingSign size={24} />

@@ -121,5 +121,15 @@
   "failedToSendMessage": "Failed to send message",
   "nameTooShort": "Name is too short",
   "invalidEmail": "Invalid email",
-  "messageRequired": "Message is required"
+  "messageRequired": "Message is required",
+  "promo_code": "Promo Code",
+  "apply": "Apply",
+  "code_applied": "Code Applied",
+  "discount": "Discount",
+  "enter_promo_code": " Enter Promo Code",
+  "invalid_promo_code": "Invalid promo code",
+  "promo_code_applied": "Promo code applied successfully",
+  "error_applying_promo_code": "An error occurred while applying the promo code",
+  "subtotal": "Subtotal",
+  "save": "Save"
 }

@@ -47,7 +47,7 @@ function OrderCard() {
         <Center>
           <div
             style={{
-              maxWidth: 1200,
+             
               width: "100%",
               marginTop: "1rem",
             }}

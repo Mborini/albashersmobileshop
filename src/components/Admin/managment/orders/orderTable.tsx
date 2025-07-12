@@ -76,9 +76,9 @@ function OrderTable({ orders }) {
       <OrderFilters orders={orderList} onFilter={setFilteredOrders} />
       <Paper shadow="xs" radius="md"  withBorder p="md" w="100%">
         <ScrollArea>
-          <Table striped highlightOnHover withColumnBorders>
+          <Table striped highlightOnHover withColumnBorders >
             <thead>
-              <tr>
+              <tr className="text-center text-sm">
                 <th>ID</th>
                 <th>Customer</th>
                 <th>More</th>
@@ -86,6 +86,9 @@ function OrderTable({ orders }) {
                 <th> Orders Price</th>
                 <th>Delivery Price</th>
                 <th> Total Price </th>
+                <th>Discount Amount</th>
+                <th>Promo Code</th>
+                <th>Grand Total</th>
                 <th> Payment Method </th>
                 <th>Date</th>
                 <th>Status</th>
@@ -93,7 +96,7 @@ function OrderTable({ orders }) {
                 <th>Decline</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="text-center text-xs">
               {filteredOrders.map((order) => (
                 <OrderRow
                   key={order.id}

@@ -34,6 +34,8 @@ export const sendDeleveryEmail = async (order) => {
       address: order.address,
       note: order.note,
       lang: order.lang || "ar",
+      grandTotal: order.grand_total,
+      discountAmount: order.discount_amount 
     }),
   });
 

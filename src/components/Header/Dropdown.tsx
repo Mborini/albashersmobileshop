@@ -53,7 +53,7 @@ const Dropdown = ({ menuItem, stickyMenu }) => {
             {menuItem.submenu.map((item, i) => {
               const isCurrent = pathUrl === item.path;
               return (
-                <Link key={i} href={item.path} legacyBehavior>
+                <Link key={i} href={item.path} >
                 <a
                   className={`group relative px-4 py-2 text-sm font-semibold inline-block overflow-hidden ${
                     isCurrent ? "text-blue-600" : "text-black"

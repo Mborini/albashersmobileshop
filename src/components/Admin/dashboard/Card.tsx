@@ -1,12 +1,10 @@
 "use client";
 
 import {
-  MdCategory,
-  MdLayers,
   MdInventory,
   MdImage,
   MdShoppingCart,
-  MdSettings,
+ 
   MdStorage,
 } from "react-icons/md";
 import { FiTag } from "react-icons/fi";
@@ -14,23 +12,28 @@ import { FiTag } from "react-icons/fi";
 import { useRouter } from "next/navigation";
 import path from "node:path";
 import { TbTruckDelivery } from "react-icons/tb";
-
+import { RiDiscountPercentFill } from "react-icons/ri";
+import { IoIosColorPalette } from "react-icons/io";
+import { MdOutlineAccountTree } from "react-icons/md";
+import { FaSitemap } from "react-icons/fa";
+import { TiThListOutline } from "react-icons/ti";
+import { HiTemplate } from "react-icons/hi";
 const mockdata = [
   {
     title: "Categories",
-    icon: MdCategory,
+    icon: MdOutlineAccountTree,
     color: "text-yellow-dark",
     path: "managment/categories",
   },
   {
     title: "Sub Categories",
-    icon: MdLayers,
+    icon: FaSitemap ,
     color: "text-violet",
     path: "managment/subCategories",
   },
   {
     title: "Products",
-    icon: MdInventory,
+    icon: HiTemplate ,
     color: "text-green",
     path: "managment/products",
   },
@@ -54,20 +57,31 @@ const mockdata = [
   },
   {
     title: "Attributes",
-    icon: MdSettings,
+    icon: TiThListOutline ,
     color: "text-orange",
     path: "managment/attributes",
   },
   {
     title: "Delivery Price",
     icon: TbTruckDelivery,
-    color: "text-blue",
+    color: "text-yellow",
     path: "managment/deliveryPrice",
+  },
+  {
+    title: "Colors",
+    icon: IoIosColorPalette,
+    color: "text-lime",
+    path: "managment/colors",
+  },
+  {
+    title: "Promo Codes",
+    icon: RiDiscountPercentFill,
+    color: "text-red",
+    path: "managment/promoCode",
   },
   {
     title: "Monitors",
     icon: MdStorage,
-
     color: "text-dark",
     path: "managment/monitors",
   },
@@ -78,7 +92,7 @@ export default function ActionsGrid() {
 
   return (
     <div className="bg-gray-2 rounded-lg p-6 ">
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 ">
+      <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 ">
         {mockdata.map((item) => (
           <button
             key={item.title}

@@ -15,8 +15,8 @@ import MailSuccess from "../MailSuccess";
 import { FaSpinner, FaTrashAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { MdOutlineShoppingCart } from "react-icons/md";
-import { Radio, Grid, Alert, Badge } from "@mantine/core";
+import { MdOutlineDiscount, MdOutlineShoppingCart } from "react-icons/md";
+import { Radio, Grid, Alert, Badge, TextInput } from "@mantine/core";
 import { LuBadgeAlert } from "react-icons/lu";
 
 const Checkout = () => {
@@ -30,8 +30,10 @@ const Checkout = () => {
   const [deliveryPrice, setDeliveryPrice] = useState(0);
   const [freeShippingDiff, setFreeShippingDiff] = useState<number | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-
-  const grandTotal = Number(totalPrice) + Number(deliveryPrice);
+  const [promoCode, setPromoCode] = useState("");
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const [codePercentage, setCodePercentage] = useState<number | null>(null);
   const isRTL = i18n.language === "ar";
 
   useEffect(() => {
@@ -90,6 +92,46 @@ const Checkout = () => {
       fetchDeliveryConditions();
     }
   }, [totalPrice, cartItems.length, t]);
+  const applyPromoCode = async () => {
+    if (!promoCode) {
+      toast.error(t("enter_promo_code"));
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/Admin/promoCode");
+      const data = await res.json();
+
+      const matchedCode = data.find(
+        (code: { name: string }) => code.name === promoCode
+      );
+
+      if (!matchedCode) {
+        toast.error(t("invalid_promo_code"));
+        return;
+      }
+
+      const discount = (totalPrice * matchedCode.discount) / 100;
+      setDiscountAmount(discount);
+      setCodePercentage(parseInt(matchedCode.discount));
+      setAppliedCode(promoCode);
+      toast.success(t("promo_code_applied"));
+    } catch (err) {
+      console.error("Failed to apply promo code", err);
+      toast.error(t("error_applying_promo_code"));
+    }
+  };
+  const discountedTotal = totalPrice - discountAmount;
+  const grandTotal = Number(discountedTotal) + Number(deliveryPrice);
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (promoCode.length === 6 && !appliedCode) {
+        applyPromoCode();
+      }
+    }, 300); // تأخير بسيط لتجنب التفعيل المتكرر أثناء الكتابة
+
+    return () => clearTimeout(timer);
+  }, [promoCode]);
 
   const sender = async (data: any) => {
     try {
@@ -118,6 +160,8 @@ const Checkout = () => {
           lang: i18n.language,
           deliveryPrice: deliveryPrice.toFixed(2),
           paymentMethod: data.paymentMethod,
+          discountAmount: discountAmount.toFixed(2),
+          grandTotal: grandTotal.toFixed(2),
         }),
       });
 
@@ -143,6 +187,9 @@ const Checkout = () => {
       totalPrice,
       deliveryPrice,
       paymentMethod,
+      grandTotal,
+      discountAmount,
+      promoCode: appliedCode,
     };
 
     await sender(data);
@@ -181,7 +228,6 @@ const Checkout = () => {
                           {t("price")}
                         </h4>
                       </div>
-
                       {cartItems.map((item) => (
                         <div
                           key={item.id}
@@ -218,7 +264,14 @@ const Checkout = () => {
                           </div>
                         </div>
                       ))}
-
+                      <div className="flex items-center justify-between border-b border-gray-3 py-3">
+                        <p className="font-medium text-md text-dark">
+                          {t("subtotal")}
+                        </p>
+                        <p className="font-medium text-md text-dark text-right">
+                          JD {totalPrice.toFixed(2)}
+                        </p>
+                      </div>{" "}
                       <div className="flex flex-col border-b border-gray-3 pb-5 pt-5">
                         <div className="flex justify-between">
                           <p className="font-medium text-md text-dark">
@@ -261,7 +314,61 @@ const Checkout = () => {
                           </Alert>
                         )}
                       </div>
+                      <div className="flex flex-col justify-between border-b border-gray-3 pb-5 pt-5">
+                        <Alert
+                          icon={<MdOutlineDiscount size={22} />}
+                          title={
+                            <span className="text-md font-semibold text-blue-700">
+                              {t("promo_code")}
+                            </span>
+                          }
+                          color="blue"
+                          radius="md"
+                          variant="light"
+                          className="text-sm"
+                        >
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <TextInput
+                              radius="md"
+                              variant="filled"
+                              placeholder={t("enter_promo_code")}
+                              value={promoCode}
+                              onChange={(e) => setPromoCode(e.target.value)}
+                              disabled={!!appliedCode}
+                              classNames={{
+                                input: "bg-white text-dark",
+                              }}
+                              className="w-full sm:w-[200px]"
+                            />
 
+                            {appliedCode && (
+                              <Badge
+                                className="text-white"
+                                style={{
+                                  backgroundImage:
+                                    "linear-gradient(to right, #3B82F6, #2563EB, #1D4ED8)",
+                                }}
+                                variant="filled"
+                                size="lg"
+                                radius="lg"
+                              >
+                                {t("save")}{" "}
+                                {codePercentage !== null ? codePercentage : 0}%
+                              </Badge>
+                            )}
+                          </div>
+                        </Alert>
+                      </div>
+                      {discountAmount > 0 && (
+                        <div className="flex items-center justify-between border-b border-gray-3 py-3">
+                          <p className="font-medium text-md text-dark">
+                            {t("discount")}
+                          </p>
+                          <p className="font-medium text-md text-dark text-right">
+                            JD - {discountAmount.toFixed(2)}
+                          </p>
+                        </div>
+                      )}
                       <div className="flex items-center justify-between  border-b border-gray-3 pb-5 pt-5">
                         <p className="font-medium text-lg text-dark">
                           {t("total")}
@@ -270,7 +377,6 @@ const Checkout = () => {
                           JD {grandTotal.toFixed(2)}
                         </p>
                       </div>
-
                       <div className="flex flex-col pt-5">
                         <p className="font-medium text-md text-dark mb-2">
                           {t("payment_methods")}

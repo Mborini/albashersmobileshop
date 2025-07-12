@@ -6,7 +6,7 @@ import { CiNoWaitingSign } from "react-icons/ci";
 
 function OrderRow({ order, onComplete, onDecline }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
-console.log(order);
+  console.log(order);
   const rowStyle = {
     backgroundColor: order.isdeclined
       ? "#f8d7da"
@@ -36,8 +36,7 @@ console.log(order);
               size="xs"
               leftSection={<FaInfo size={16} />}
               onClick={() => setPopoverOpened((prev) => !prev)}
-            >
-              Info
+            >             
             </Button>
           </Popover.Target>
           <Popover.Dropdown>
@@ -60,10 +59,12 @@ console.log(order);
         </Popover>
       </Table.Td>
 
-      <Table.Td>
+      <Table.Td
+      
+      >
         {order.cart_items.length > 0 ? (
           <Group gap={4}>
-            <div className="space-y-1">
+            <div className="space-y-1 text-start text-xs" >
               <Text size="sm" fw={600} className="text-gray-900">
                 {order.cart_items[0].title}
               </Text>
@@ -82,7 +83,7 @@ console.log(order);
                   {order.cart_items[0].color ? (
                     <span
                       style={{ backgroundColor: order.cart_items[0].color }}
-                      className="w-4 h-4 rounded-full border border-gray-300 shadow-sm cursor-pointer hover:scale-110 transition-transform"
+                      className="w-3 h-3 rounded-full border border-gray-300 shadow-sm cursor-pointer hover:scale-110 transition-transform"
                     ></span>
                   ) : (
                     <CiNoWaitingSign className="text-gray-400" size={16} />
@@ -146,6 +147,23 @@ console.log(order);
           Number(order.total_price) + Number(order.delivery_price ?? 0)
         ).toFixed(2)}{" "}
         JD
+      </Table.Td>
+      <Table.Td>
+        {order.discount_amount ? (
+          <span className="text-red-500">-{order.discount_amount} JD</span>
+        ) : (
+          <span className="text-green-500">-</span>
+        )}
+      </Table.Td>
+      <Table.Td>
+        {order.promocode ? (
+          <span className="text-blue-500">{order.promocode}</span>
+        ) : (
+          <span className="text-gray-500">-</span>
+        )}
+      </Table.Td>
+      <Table.Td>
+        {order.grand_total ? order.grand_total + " JD" : "N/A"}
       </Table.Td>
       <Table.Td>
         {order.payment_method === "cod"

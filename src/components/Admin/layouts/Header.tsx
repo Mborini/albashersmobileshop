@@ -17,14 +17,14 @@ export default function AdminHeader() {
 
         {/* Right links */}
         <div className="flex flex-1 justify-end gap-6">
-          <Link href="/dashboard" legacyBehavior passHref>
+          <Link href="/dashboard"  passHref>
             <span
               className="text-dark font-medium no-underline cursor-pointer transition-colors duration-150 hover:text-blue-300 hover:underline"
             >
               Dashboard
             </span>
           </Link>
-          <Link href="/" legacyBehavior passHref>
+          <Link href="/"  passHref>
             <span
               className="text-dark font-medium no-underline cursor-pointer transition-colors duration-150 hover:text-blue-300 hover:underline"
             >

@@ -15,21 +15,26 @@ export async function POST(req) {
       city,
       phone,
       deliveryPrice,
-      paymentMethod  
+      paymentMethod,
+      grandTotal, // أضف هذا هنا
+      discountAmount, // أضف هذا هنا
+      promoCode, // إذا كنت تستخدم رمز ترويجي
         } = body;
-
+console.log("Received data:", body);
     const client = await pool.connect();
     const result = await client.query(
       `
       INSERT INTO checkouts (
         firstName, lastName, email, address, country, note,
         cart_items, total_price, delivery_price, created_at,
-        "isCompleted", city, phone, isdeclined, payment_method
+        "isCompleted", city, phone, isdeclined, payment_method,
+        grand_total, discount_amount, promoCode
       )
       VALUES (
         $1, $2, $3, $4, $5, $6,
         $7, $8, $9, NOW(),
-        false, $10, $11, false, $12
+        false, $10, $11, false, $12,
+        $13, $14, $15
       )
       RETURNING *;
       `,
@@ -45,7 +50,10 @@ export async function POST(req) {
         deliveryPrice,
         city,
         phone,
-        paymentMethod  // أضف هذا هنا أيضاً
+        paymentMethod , // أضف هذا هنا أيضاً
+        grandTotal, // أضف هذا هنا
+        discountAmount, // أضف هذا هنا
+        promoCode, // إذا كنت تستخدم رمز ترويجي
       ]
     );
 
