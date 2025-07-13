@@ -9,7 +9,6 @@ export const metadata: Metadata = {
   description:
     "متجر متخصص في بيع أجهزة iPhone الأصلية واكسسواراتها في إربد. شواحن، ساعات، كابلات، وملحقات من Apple، Anker، Google، والمزيد. توصيل سريع وخدمة احترافية.",
   keywords: [
-    // الاسم والعلامة التجارية
     "البشير شوب",
     "Al-Basher Shop",
     "Albasher Shop",
@@ -20,8 +19,6 @@ export const metadata: Metadata = {
     "متجر آيفون الأردن",
     "محلات البشير",
     "محلات البشير شوب",
-
-    // الموقع الجغرافي
     "iPhone إربد",
     "ايفون الأردن",
     "متجر آيفون إربد",
@@ -31,8 +28,6 @@ export const metadata: Metadata = {
     "Apple Irbid",
     "buy iPhone Irbid",
     "buy Apple products Jordan",
-
-    // المنتجات باللغة العربية
     "ايفون أصلي",
     "اكسسوارات آيفون",
     "ساعات آبل",
@@ -49,8 +44,6 @@ export const metadata: Metadata = {
     "سماعات AirPods",
     "قلم آبل",
     "ملحقات أبل الأصلية",
-
-    // المنتجات باللغة الإنجليزية
     "original iPhone",
     "iPhone accessories",
     "Apple Watch Jordan",
@@ -67,8 +60,6 @@ export const metadata: Metadata = {
     "Apple Pencil",
     "Apple cases and covers",
     "Apple MagSafe accessories",
-
-    // منتجات أبل حسب الاسم
     "iPhone 15 Pro Max",
     "iPhone 15 Pro",
     "iPhone 15",
@@ -99,8 +90,6 @@ export const metadata: Metadata = {
     "AirPods Max",
     "Apple TV 4K",
     "Apple Pencil 2nd Gen",
-
-    // الماركات والعلامات التجارية
     "Anker Jordan",
     "Anker accessories",
     "Jerome accessories",
@@ -110,8 +99,6 @@ export const metadata: Metadata = {
     "أنكر شواحن",
     "أنكر كابلات",
     "اكسسوارات Google",
-
-    // عامة وتحسينات SEO
     "smartphone accessories Irbid",
     "mobile accessories Jordan",
     "tech store Irbid",
@@ -131,7 +118,7 @@ export const metadata: Metadata = {
     siteName: "Al-Basher Shop",
     images: [
       {
-        url: "https://www.albashershop.com/",
+        url: "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/cover%5B1%5D.png",
         width: 1200,
         height: 630,
         alt: "متجر الآيفون في إربد - Al-Basher Shop",
@@ -140,14 +127,18 @@ export const metadata: Metadata = {
     locale: "ar_JO",
     type: "website",
   },
+
   twitter: {
     card: "summary_large_image",
     site: "@AlbasherShop",
     title: "متجر البشير شوب | iPhone واكسسوارات أصلية في إربد",
     description:
       "أفضل متجر في إربد لأجهزة iPhone واكسسواراتها الأصلية. منتجات Apple، Anker، Google، والمزيد.",
-    images: ["https://www.albashershop.com/"],
+    images: [
+      "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/cover%5B1%5D.png",
+    ],
   },
+
   robots: {
     index: true,
     follow: true,
@@ -159,6 +150,7 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
     },
   },
+
   metadataBase: new URL("https://www.albashershop.com"),
 };
 
@@ -235,13 +227,14 @@ export default function HomePage() {
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
             name: "Al-Basher Shop",
-            image: "https://www.albashershop.com/logo.png",
+            image:
+              "https://albasheermblshop.s3.eu-north-1.amazonaws.com/Email/cover%5B1%5D.png",
             "@id": "https://www.albashershop.com",
             url: "https://www.albashershop.com",
             telephone: "+962796855578",
             address: {
               "@type": "PostalAddress",
-              streetAddress: "  اربد دوار القبة",
+              streetAddress: "اربد دوار القبة",
               addressLocality: "Irbid",
               addressRegion: "إربد",
               postalCode: "21110",
@@ -303,13 +296,13 @@ export default function HomePage() {
               },
               {
                 "@type": "ListItem",
-                position: 2,
+                position: 3,
                 name: "افضل العروض",
                 item: "https://www.albashershop.com/best-offers-products",
               },
               {
                 "@type": "ListItem",
-                position: 3,
+                position: 4,
                 name: "apple",
                 item: "https://www.albashershop.com/products/ProductsBrands/27",
               },
