@@ -1,11 +1,8 @@
 import { NextRequest } from "next/server";
 import pool from "@/app/lib/db";
 
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const id = params.id;
+export async function DELETE(req: Request, context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
 
   if (!id) {
     return new Response(JSON.stringify({ error: "Promo code ID is required" }), {
