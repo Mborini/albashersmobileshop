@@ -142,69 +142,75 @@ export default function PromoCodeTable() {
           Add Promo Code
         </Button>
       </Group>
-
-      <Table
-        striped
-        highlightOnHover
-        withTableBorder
-        withColumnBorders
-        className="rounded-xl overflow-hidden shadow-md text-sm"
-      >
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="text-left px-4 py-3">Name</th>
-            <th className="text-center px-4 py-3">Discount (%)</th>
-            <th className="text-center px-4 py-3">Created At</th>
-            <th className="text-center px-4 py-3">Actions</th>
+<div className="overflow-x-auto rounded-xl border border-gray-2 shadow-sm">
+  <Table
+    striped
+    highlightOnHover
+    withTableBorder
+    withColumnBorders
+    className="text-sm min-w-[600px]"
+  >
+    <thead className="bg-gray-100 text-gray-700 uppercase tracking-wider">
+      <tr>
+        <th className="text-left px-4 py-3">Promo Code</th>
+        <th className="text-center px-4 py-3">Discount</th>
+        <th className="text-center px-4 py-3">Created</th>
+        <th className="text-center px-4 py-3">Actions</th>
+      </tr>
+    </thead>
+    <tbody className="text-center text-gray-800">
+      {promoCodes.length > 0 ? (
+        promoCodes.map((code) => (
+          <tr
+            key={code.id}
+            className="hover:bg-gray-50 transition-colors duration-200"
+          >
+            <td className="text-left px-4 py-3 font-medium">{code.name}</td>
+            <td className="px-4 py-3 text-green-700 font-semibold">
+              {Number(code.discount).toFixed(0)}%
+            </td>
+            <td className="px-4 py-3 text-gray-600">
+              {code.created_at
+                ? new Date(code.created_at).toLocaleDateString()
+                : "-"}
+            </td>
+            <td className="px-4 py-3">
+              <Group gap="xs" justify="center">
+                <Tooltip label="Edit">
+                  <ActionIcon
+                    onClick={() => handleEdit(code)}
+                    color="orange"
+                    variant="light"
+                    radius="xl"
+                  >
+                    <FaEdit size={16} />
+                  </ActionIcon>
+                </Tooltip>
+                <Tooltip label="Delete">
+                  <ActionIcon
+                    onClick={() => handleDelete(code.id)}
+                    color="red"
+                    variant="light"
+                    radius="xl"
+                  >
+                    <FaTrash size={16} />
+                  </ActionIcon>
+                </Tooltip>
+              </Group>
+            </td>
           </tr>
-        </thead>
-        <tbody className="text-center">
-          {promoCodes.length > 0 ? (
-            promoCodes.map((code) => (
-              <tr
-                key={code.id}
-                className="hover:bg-gray-50 transition-colors duration-200"
-              >
-                <td className="text-left px-4 py-2 font-medium">{code.name}</td>
-                <td className="px-4 py-2">{code.discount}%</td>
-                <td className="px-4 py-2 text-gray-600">
-                  {code.created_at
-                    ? new Date(code.created_at).toLocaleString()
-                    : "-"}
-                </td>
-                <td className="px-4 py-2">
-                  <Group gap="xs" justify="center">
-                    <Tooltip label="Edit">
-                      <ActionIcon
-                        onClick={() => handleEdit(code)}
-                        color="orange"
-                        variant="light"
-                      >
-                        <FaEdit size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                    <Tooltip label="Delete">
-                      <ActionIcon
-                        onClick={() => handleDelete(code.id)}
-                        color="red"
-                        variant="light"
-                      >
-                        <FaTrash size={16} />
-                      </ActionIcon>
-                    </Tooltip>
-                  </Group>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan={4} className="text-center py-6 text-gray-500">
-                No promo codes yet.
-              </td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+        ))
+      ) : (
+        <tr>
+          <td colSpan={4} className="text-center py-6 text-gray-500">
+            No promo codes yet.
+          </td>
+        </tr>
+      )}
+    </tbody>
+  </Table>
+</div>
+
 
       {/* Drawer for Add/Edit */}
       <Drawer
