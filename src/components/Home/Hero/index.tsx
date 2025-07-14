@@ -169,7 +169,6 @@ const Hero = () => {
           ))}
         </div>
       </div>
-      <HeroFeature />
     </section>
   );
 };

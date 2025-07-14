@@ -11,6 +11,7 @@ import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { useTranslation } from "react-i18next";
 import { motion } from "framer-motion";
+import HeroFeature from "../Hero/HeroFeature";
 
 const Categories = () => {
   const sliderRef = useRef(null);
@@ -158,6 +159,7 @@ const Categories = () => {
           )}
         </div>
       </div>
+      <HeroFeature />
     </section>
   );
 };
