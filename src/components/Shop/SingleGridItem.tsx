@@ -68,6 +68,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         quantity: 1,
         color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
+        brandId: item.brand_id,
       })
     );
   };
@@ -219,11 +220,15 @@ const SingleGridItem = ({ item }: { item: Product }) => {
 
       {/* Price */}
       <span className="flex items-center gap-2 font-medium">
-        <span className="text-lg text-dark">JD {item.discountedPrice}</span>
-        <span className="text-md text-dark-4 line-through">
-          JD {item.price}
-        </span>
-      </span>
+  <span className="text-lg text-dark">JD {item.discountedPrice}</span>
+
+  {Number(item.discountedPrice) !== Number(item.price) && (
+    <span className="text-md text-dark-4 line-through">
+      JD {item.price}
+    </span>
+  )}
+</span>
+
     </div>
   );
 };

@@ -201,7 +201,7 @@ function SubCategoriesCard() {
           style={{ width: 200 }}
           placeholder="Select Category"
           searchable
-          clearable
+          
         />
       </Group>
       </div>

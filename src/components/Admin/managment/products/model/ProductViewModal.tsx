@@ -38,7 +38,7 @@ export default function ProductViewModal({ opened, onClose, product }) {
       <Text mb="xs" fw={500}>
         Description
       </Text>
-      <Text mb="md" size="sm">
+      <Text mb="md" size="sm" style={{ whiteSpace: "pre-line" }}>
         {product.description || "No description provided."}
       </Text>
 

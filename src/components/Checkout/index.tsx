@@ -35,7 +35,7 @@ const Checkout = () => {
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [codePercentage, setCodePercentage] = useState<number | null>(null);
   const isRTL = i18n.language === "ar";
-
+  console.log("cartItems", cartItems);
   useEffect(() => {
     const fetchDeliveryConditions = async () => {
       try {
@@ -102,6 +102,7 @@ const Checkout = () => {
       const res = await fetch("/api/Admin/promoCode");
       const data = await res.json();
 
+      // ابحث عن الكود
       const matchedCode = data.find(
         (code: { name: string }) => code.name === promoCode
       );
@@ -111,7 +112,20 @@ const Checkout = () => {
         return;
       }
 
-      const discount = (totalPrice * matchedCode.discount) / 100;
+      // احسب المجموع الخاص بالبراند فقط
+      const brandId = matchedCode.brandId;
+      const brandTotal = cartItems
+        .filter((item) => item.brandId === brandId)
+        .reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
+
+      if (brandTotal === 0) {
+        toast.error(t("promo_code_not_applicable_for_cart_brand"));
+        return;
+      }
+
+      // احسب قيمة الخصم
+      const discount = (brandTotal * matchedCode.discount) / 100;
+
       setDiscountAmount(discount);
       setCodePercentage(parseInt(matchedCode.discount));
       setAppliedCode(promoCode);
@@ -121,6 +135,7 @@ const Checkout = () => {
       toast.error(t("error_applying_promo_code"));
     }
   };
+
   const discountedTotal = totalPrice - discountAmount;
   const grandTotal = Number(discountedTotal) + Number(deliveryPrice);
   useEffect(() => {

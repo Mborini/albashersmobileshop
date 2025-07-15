@@ -9,6 +9,7 @@ export type CartItem = {
   quantity: number;
   images: string[];
   color: string; 
+   brandId?: number; 
   
 };
 
@@ -59,8 +60,12 @@ export const cart = createSlice({
   reducers: {
     addItemToCart: (state, action: PayloadAction<CartItem>) => {
       const existingItem = state.items.find(
-        (item) => item.id === action.payload.id && item.color === action.payload.color
-      );
+  (item) =>
+    item.id === action.payload.id &&
+    item.color === action.payload.color &&
+    item.brandId === action.payload.brandId
+);
+
             if (existingItem) {
         existingItem.quantity += action.payload.quantity;
       } else {

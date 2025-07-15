@@ -22,6 +22,7 @@ export type Product = {
   brand_name?: string;
   colors?: Colors[];     // مصفوفة الألوان، ممكن تكون فارغة أو غير موجودة
   images?: string[];     // مصفوفة روابط الصور (مثلاً: ["img1.jpg", "img2.jpg"])
+  brand_id?: number; // معرف العلامة التجارية
 };
 
 const SingleListProductBrand = ({ item }: { item: Product }) => {
@@ -42,6 +43,7 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
         quantity: 1,
         color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
         images: item.images ?? [],
+        brandId: item.brand_id,
       })
     );
   };
@@ -175,13 +177,15 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
       <h3 className="font-medium text-dark ease-out duration-200 hover:text-blue mb-1.5">
         <Link href="/shop-details"> {item.title} </Link>
       </h3>
+<span className="flex items-center gap-2 font-medium text-lg">
+  <span className="text-dark">JD {item.price}</span>
+  {item.price !== item.discountedPrice && (
+    <span className="text-dark-4 line-through">
+      JD {item.discountedPrice}
+    </span>
+  )}
+</span>
 
-      <span className="flex items-center gap-2 font-medium text-lg">
-        <span className="text-dark">JD {item.price}</span>
-        <span className="text-dark-4 line-through">
-          JD {item.discountedPrice}
-        </span>
-      </span>
     </div>
   );
 };

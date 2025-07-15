@@ -30,10 +30,14 @@ const ProductItem = ({ item }: { item: Product }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isOutOfStock = !item.in_stock;
-const buttonLabel = isOutOfStock ? t("out_of_stock") : t("add_to_cart");
-const buttonClasses = `
+  const buttonLabel = isOutOfStock ? t("out_of_stock") : t("add_to_cart");
+  const buttonClasses = `
   inline-flex items-center justify-center font-medium py-[7px] px-5 rounded-[5px]
-  ${isOutOfStock ? "bg-red-light cursor-not-allowed" : "bg-black hover:bg-gray-5"}
+  ${
+    isOutOfStock
+      ? "bg-red-light cursor-not-allowed"
+      : "bg-black hover:bg-gray-5"
+  }
   text-white ease-out duration-200
   ${i18n.language === "ar" ? "text-[12px]" : "text-custom-sm"}
 `;
@@ -73,6 +77,7 @@ const buttonClasses = `
         quantity: 1,
         color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
+        brandId: item.brand_id,
       })
     );
   };
@@ -140,9 +145,9 @@ const buttonClasses = `
                 <div
                   key={index}
                   className={`w-2 h-2 rounded-full transition-all duration-200 ${
-                   index === currentImageIndex
-                    ? "bg-green-dark"
-                    : "bg-green-light-4"
+                    index === currentImageIndex
+                      ? "bg-green-dark"
+                      : "bg-green-light-4"
                   }`}
                 />
               ))}
@@ -160,16 +165,13 @@ const buttonClasses = `
               <IoEyeOutline size={18} />
             </button>
 
-
-<button
-  onClick={handleAddToCart}
-  disabled={isOutOfStock}
-  className={buttonClasses}
->
-  {buttonLabel}
-</button>
-
-
+            <button
+              onClick={handleAddToCart}
+              disabled={isOutOfStock}
+              className={buttonClasses}
+            >
+              {buttonLabel}
+            </button>
 
             <button
               onClick={handleItemToWishList}
@@ -209,12 +211,15 @@ const buttonClasses = `
           )}
         </div>
 
-        <span className="flex items-center gap-2 font-medium">
-          <span className="text-lg text-dark">JD {item.discountedPrice}</span>
-          <span className="text-md text-dark-4 line-through">
-            JD {item.price}
-          </span>
-        </span>
+       <span className="flex items-center gap-2 font-medium">
+  <span className="text-lg text-dark">JD {item.discountedPrice}</span>
+  {Number(item.discountedPrice) !== Number(item.price) && (
+    <span className="text-md text-dark-4 line-through">
+      JD {item.price}
+    </span>
+  )}
+</span>
+
       </div>
     </>
   );

@@ -20,8 +20,8 @@ import FlyingImage from "./FlyingImage";
 import { useTranslation } from "react-i18next";
 
 const QuickViewModal = () => {
-    const { t, i18n } = useTranslation();
-  
+  const { t, i18n } = useTranslation();
+
   const { isModalOpen, closeModal } = useModalContext();
   const { openPreviewModal } = usePreviewSlider();
   const [quantity, setQuantity] = useState(1);
@@ -71,6 +71,7 @@ const QuickViewModal = () => {
         quantity: quantity,
         color: selectedColor,
         images: product.images ?? [],
+        brandId: product.brand_id,
       })
     );
 
@@ -196,7 +197,7 @@ const QuickViewModal = () => {
                     variant="gradient"
                     gradient={{ from: "blue", to: "cyan", deg: 360 }}
                   >
-{                      t("new_arrivals")}
+                    {t("new_arrivals")}
                   </Badge>
                 )}
               </div>
@@ -213,28 +214,33 @@ const QuickViewModal = () => {
                   {product.brand_name}
                 </Badge>
               </div>
-            <div className="flex flex-wrap items-center gap-5 mb-6">
-  <div className="flex items-center gap-2" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-    {product.in_stock ? (
-      <>
-        <CiCircleCheck color="green" size={20} />
-        <span className="font-medium text-green-700">
-          {t("in_stock")}
-        </span>
-      </>
-    ) : (
-      <>
-        <VscError color="red" size={20} />
-        <span className="font-medium text-red-600">
-          {t("out_of_stock")}
-        </span>
-      </>
-    )}
-  </div>
-</div>
-
-              <p>{product.description}</p>
-              <div className="mt-5" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+              <div className="flex flex-wrap items-center gap-5 mb-6">
+                <div
+                  className="flex items-center gap-2"
+                  dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                >
+                  {product.in_stock ? (
+                    <>
+                      <CiCircleCheck color="green" size={20} />
+                      <span className="font-medium text-green-700">
+                        {t("in_stock")}
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <VscError color="red" size={20} />
+                      <span className="font-medium text-red-600">
+                        {t("out_of_stock")}
+                      </span>
+                    </>
+                  )}
+                </div>
+              </div>
+              <p className="whitespace-pre-line">{product.description}</p>
+              <div
+                className="mt-5"
+                dir={i18n.language === "ar" ? "rtl" : "ltr"}
+              >
                 <h4 className="font-semibold text-lg text-dark mb-3.5">
                   {t("colors")}
                 </h4>
@@ -260,9 +266,12 @@ const QuickViewModal = () => {
               </div>
               {product.attributes &&
                 Object.keys(product.attributes).length > 0 && (
-                  <div className="mt-5" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+                  <div
+                    className="mt-5"
+                    dir={i18n.language === "ar" ? "rtl" : "ltr"}
+                  >
                     <h4 className="font-semibold text-lg text-dark mb-3.5">
-                    {t("product_attributes")}
+                      {t("product_attributes")}
                     </h4>
                     <ul className="list-disc pl-5 space-y-1">
                       {Object.entries(product.attributes).map(
@@ -296,7 +305,10 @@ const QuickViewModal = () => {
                     </ul>
                   </div>
                 )}
-              <div className="flex flex-wrap justify-between gap-5 mt-6 mb-7.5" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+              <div
+                className="flex flex-wrap justify-between gap-5 mt-6 mb-7.5"
+                dir={i18n.language === "ar" ? "rtl" : "ltr"}
+              >
                 <div>
                   <h4 className="font-semibold text-lg text-dark mb-3.5">
                     {t("price")}
@@ -306,9 +318,13 @@ const QuickViewModal = () => {
                     <span className="font-semibold text-dark text-xl xl:text-heading-4">
                       JD {product.discountedPrice}
                     </span>
-                    <span className="font-medium text-dark-4 text-lg xl:text-2xl line-through">
-                      JD {product.price}
-                    </span>
+
+                    {Number(product.discountedPrice) !==
+                      Number(product.price) && (
+                      <span className="font-medium text-dark-4 text-lg xl:text-2xl line-through">
+                        JD {product.price}
+                      </span>
+                    )}
                   </span>
                 </div>
 
@@ -327,7 +343,7 @@ const QuickViewModal = () => {
                       <FiMinus />
                     </button>
 
-                    <span 
+                    <span
                       className="flex items-center justify-center w-20 h-10 rounded-[5px] border border-gray-4 bg-white font-medium text-dark"
                       x-text="quantity"
                     >
@@ -344,7 +360,10 @@ const QuickViewModal = () => {
                   </div>
                 </div>
               </div>
-              <div className="flex items-center gap-4 flex-nowrap overflow-auto" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+              <div
+                className="flex items-center gap-4 flex-nowrap overflow-auto"
+                dir={i18n.language === "ar" ? "rtl" : "ltr"}
+              >
                 <button
                   ref={addToCartButtonRef}
                   disabled={!product.in_stock || quantity === 0}

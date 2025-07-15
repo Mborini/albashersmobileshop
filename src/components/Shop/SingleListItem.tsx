@@ -76,6 +76,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
         quantity: 1,
         color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
+        brandId: item.brand_id,
       })
     );
   };
@@ -173,12 +174,15 @@ const SingleListItem = ({ item }: { item: Product }) => {
               {item.description}
             </span>
 
-            <span className="flex items-center gap-2 mt-1 font-semibold text-lg sm:text-xl">
-              <span className="text-dark">JD {item.discountedPrice}</span>
-              <span className="text-gray-400 line-through text-sm">
-                JD {item.price}
-              </span>
-            </span>
+           <span className="flex items-center gap-2 mt-1 font-semibold text-lg sm:text-xl">
+  <span className="text-dark">JD {item.discountedPrice}</span>
+  {Number(item.discountedPrice) !== Number(item.price) && (
+    <span className="text-gray-400 line-through text-sm">
+      JD {item.price}
+    </span>
+  )}
+</span>
+
           </div>
 
           <div className="flex flex-col items-center gap-2.5 mb-2">

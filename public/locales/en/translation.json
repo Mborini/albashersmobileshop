@@ -131,5 +131,6 @@
   "promo_code_applied": "Promo code applied successfully",
   "error_applying_promo_code": "An error occurred while applying the promo code",
   "subtotal": "Subtotal",
-  "save": "Save"
+  "save": "Save",
+  "promo_code_not_applicable_for_cart" : "Promo code not applicable for your cart"
 }

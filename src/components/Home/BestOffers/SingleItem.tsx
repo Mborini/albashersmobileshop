@@ -92,9 +92,12 @@ const SingleItem = ({ item }: { item: Product }) => {
           </h3>
 
           <span className="flex items-center justify-center gap-2 font-medium text-lg">
-            <span className="text-dark">JD {item.discountedPrice}</span>
-            <span className="text-dark-4 line-through">JD {item.price}</span>
-          </span>
+  <span className="text-dark">JD {item.discountedPrice}</span>
+  {item.discountedPrice !== item.price && (
+    <span className="text-dark-4 line-through">JD {item.price}</span>
+  )}
+</span>
+
         </div>
 
       

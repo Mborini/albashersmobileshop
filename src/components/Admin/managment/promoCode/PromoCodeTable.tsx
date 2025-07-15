@@ -11,6 +11,7 @@ import {
   ActionIcon,
   Tooltip,
   Modal,
+  Select,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
@@ -20,8 +21,14 @@ import toast, { Toaster } from "react-hot-toast";
 export interface PromoCode {
   id: string;
   name: string;
+  brandId?: string;
+  brand_name?: string; // Optional for displaying brand name
   discount: number;
   created_at?: string;
+}
+interface Brand {
+  id: string;
+  name: string;
 }
 
 export default function PromoCodeTable() {
@@ -29,13 +36,26 @@ export default function PromoCodeTable() {
   const [promoCodes, setPromoCodes] = useState<PromoCode[]>([]);
   const [editing, setEditing] = useState<PromoCode | null>(null);
   const [deleteId, setDeleteId] = useState<string | null>(null);
+  const [brands, setBrands] = useState<Brand[]>([]);
+  const [brandId, setBrandId] = useState<string | null>(null);
 
   const [name, setName] = useState("");
   const [discount, setDiscount] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     fetchPromoCodes();
+    fetchBrands();
   }, []);
+
+  const fetchBrands = async () => {
+    try {
+      const res = await fetch("/api/Admin/brands");
+      const data = await res.json();
+      setBrands(data);
+    } catch (err) {
+      console.error("Failed to load brands", err);
+    }
+  };
 
   const fetchPromoCodes = async () => {
     try {
@@ -64,14 +84,16 @@ export default function PromoCodeTable() {
       return;
     }
 
-    const promoData = { name, discount };
+    const promoData = { name, discount, brandId };
 
     try {
       const method = editing ? "PUT" : "POST";
       const response = await fetch("/api/Admin/promoCode", {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editing ? { ...editing, ...promoData } : promoData),
+        body: JSON.stringify(
+          editing ? { ...editing, ...promoData } : promoData
+        ),
       });
 
       const result = await response.json();
@@ -88,11 +110,11 @@ export default function PromoCodeTable() {
       console.error("Failed to save promo code", err);
     }
   };
-
-  const handleEdit = (code: PromoCode) => {
+  const handleEdit = (code: PromoCode & { brandId?: string | number }) => {
     setEditing(code);
     setName(code.name);
     setDiscount(code.discount);
+    setBrandId(code.brandId ? String(code.brandId) : null);
     open();
   };
 
@@ -142,75 +164,80 @@ export default function PromoCodeTable() {
           Add Promo Code
         </Button>
       </Group>
-<div className="overflow-x-auto rounded-xl border border-gray-2 shadow-sm">
-  <Table
-    striped
-    highlightOnHover
-    withTableBorder
-    withColumnBorders
-    className="text-sm min-w-[600px]"
-  >
-    <thead className="bg-gray-100 text-gray-700 uppercase tracking-wider">
-      <tr>
-        <th className="text-left px-4 py-3">Promo Code</th>
-        <th className="text-center px-4 py-3">Discount</th>
-        <th className="text-center px-4 py-3">Created</th>
-        <th className="text-center px-4 py-3">Actions</th>
-      </tr>
-    </thead>
-    <tbody className="text-center text-gray-800">
-      {promoCodes.length > 0 ? (
-        promoCodes.map((code) => (
-          <tr
-            key={code.id}
-            className="hover:bg-gray-50 transition-colors duration-200"
-          >
-            <td className="text-left px-4 py-3 font-medium">{code.name}</td>
-            <td className="px-4 py-3 text-green-700 font-semibold">
-              {Number(code.discount).toFixed(0)}%
-            </td>
-            <td className="px-4 py-3 text-gray-600">
-              {code.created_at
-                ? new Date(code.created_at).toLocaleDateString()
-                : "-"}
-            </td>
-            <td className="px-4 py-3">
-              <Group gap="xs" justify="center">
-                <Tooltip label="Edit">
-                  <ActionIcon
-                    onClick={() => handleEdit(code)}
-                    color="orange"
-                    variant="light"
-                    radius="xl"
-                  >
-                    <FaEdit size={16} />
-                  </ActionIcon>
-                </Tooltip>
-                <Tooltip label="Delete">
-                  <ActionIcon
-                    onClick={() => handleDelete(code.id)}
-                    color="red"
-                    variant="light"
-                    radius="xl"
-                  >
-                    <FaTrash size={16} />
-                  </ActionIcon>
-                </Tooltip>
-              </Group>
-            </td>
-          </tr>
-        ))
-      ) : (
-        <tr>
-          <td colSpan={4} className="text-center py-6 text-gray-500">
-            No promo codes yet.
-          </td>
-        </tr>
-      )}
-    </tbody>
-  </Table>
-</div>
+      <div className="overflow-x-auto rounded-xl border border-gray-2 shadow-sm">
+        <Table
+          striped
+          highlightOnHover
+          withTableBorder
+          withColumnBorders
+          className="text-sm min-w-[600px]"
+        >
+          <thead className="bg-gray-100 text-gray-700 uppercase tracking-wider">
+            <tr>
+              <th className="text-left px-4 py-3">Promo Code</th>
+              <th className="text-center px-4 py-3">Discount</th>
+              <th className="text-center px-4 py-3">Brand</th>
 
+              <th className="text-center px-4 py-3">Created</th>
+              <th className="text-center px-4 py-3">Actions</th>
+            </tr>
+          </thead>
+          <tbody className="text-center text-gray-800">
+            {promoCodes.length > 0 ? (
+              promoCodes.map((code) => (
+                <tr
+                  key={code.id}
+                  className="hover:bg-gray-50 transition-colors duration-200"
+                >
+                  <td className="text-left px-4 py-3 font-medium">
+                    {code.name}
+                  </td>
+                  <td className="px-4 py-3 text-green-700 font-semibold">
+                    {Number(code.discount).toFixed(0)}%
+                  </td>
+                  <td className="px-4 py-3 text-gray-700">{code.brand_name}</td>
+
+                  <td className="px-4 py-3 text-gray-600">
+                    {code.created_at
+                      ? new Date(code.created_at).toLocaleDateString()
+                      : "-"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <Group gap="xs" justify="center">
+                      <Tooltip label="Edit">
+                        <ActionIcon
+                          onClick={() => handleEdit(code)}
+                          color="orange"
+                          variant="light"
+                          radius="xl"
+                        >
+                          <FaEdit size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                      <Tooltip label="Delete">
+                        <ActionIcon
+                          onClick={() => handleDelete(code.id)}
+                          color="red"
+                          variant="light"
+                          radius="xl"
+                        >
+                          <FaTrash size={16} />
+                        </ActionIcon>
+                      </Tooltip>
+                    </Group>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} className="text-center py-6 text-gray-500">
+                  No promo codes yet.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </Table>
+      </div>
 
       {/* Drawer for Add/Edit */}
       <Drawer
@@ -224,27 +251,47 @@ export default function PromoCodeTable() {
         size="md"
       >
         <TextInput
+          variant="filled"
+          radius={"xl"}
           label="Promo Code Name"
           placeholder="e.g., SAVE10"
           value={name}
           onChange={(e) => setName(e.currentTarget.value)}
           mb="sm"
           description="Must be exactly 6 characters"
-          error={name.length > 0 && name.length !== 6 ? "Must be 6 characters" : undefined}
+          error={
+            name.length > 0 && name.length !== 6
+              ? "Must be 6 characters"
+              : undefined
+          }
         />
 
-       <NumberInput
-  label="Discount (%)"
-  placeholder="e.g., 10"
-  value={discount}
-  onChange={(value) => {
-    if (typeof value === "number") {
-      setDiscount(value);
-    }
-  }}
-  min={0}
-  max={100}
-/>
+        <NumberInput
+          label="Discount (%)"
+          placeholder="e.g., 10"
+          variant="filled"
+          radius={"xl"}
+          value={discount}
+          onChange={(value) => {
+            if (typeof value === "number") {
+              setDiscount(value);
+            }
+          }}
+          min={0}
+          max={100}
+        />
+        <Select
+          label="Brand"
+          variant="filled"
+          radius="xl"
+          placeholder="Select brand"
+          data={brands.map((b) => ({ value: String(b.id), label: b.name }))}
+          value={brandId ?? ""}
+          onChange={(value) => setBrandId(value)} // value هي دائمًا string
+          searchable
+          required
+          mb="sm"
+        />
 
         <Group mt="md" justify="end">
           <Button onClick={handleSubmit}>{editing ? "Update" : "Add"}</Button>

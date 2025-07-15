@@ -131,13 +131,16 @@ const Hero = () => {
                   </p>
 
                   <div className="flex items-center gap-4 mt-5">
-                    <span className="font-medium text-xl text-black">
-                      JD {otherImages[2].discounted_Price}
-                    </span>
-                    <span className="font-medium text-lg text-dark-4 line-through">
-                      JD {otherImages[2].price}
-                    </span>
-                  </div>
+  <span className="font-medium text-xl text-black">
+    JD {otherImages[2].discounted_Price}
+  </span>
+  {otherImages[2].discounted_Price !== otherImages[2].price && (
+    <span className="font-medium text-lg text-dark-4 line-through">
+      JD {otherImages[2].price}
+    </span>
+  )}
+</div>
+
                 </div>
 
                 {/* IMAGE */}
@@ -186,14 +189,17 @@ const Card = ({ item }) => (
         className="w-full h-auto object-contain"
       />
     </div>
-    <span className="flex items-center gap-3 justify-center">
-      <span className="font-medium text-xl text-black">
-        JD {item.discounted_Price}
-      </span>
-      <span className="font-medium text-lg text-dark-4 line-through">
-        JD {item.price}
-      </span>
+   <span className="flex items-center gap-3 justify-center">
+  <span className="font-medium text-xl text-black">
+    JD {item.discounted_Price}
+  </span>
+  {item.discounted_Price !== item.price && (
+    <span className="font-medium text-lg text-dark-4 line-through">
+      JD {item.price}
     </span>
+  )}
+</span>
+
   </div>
 );
 

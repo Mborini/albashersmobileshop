@@ -156,6 +156,7 @@ export default function ProductForm({
           radius="xl"
           mb="sm"
           withAsterisk
+          placeholder="Select Subcategory"
           label="Subcategory"
           data={subcategories.map((sub) => ({
             value: sub.id.toString(),
@@ -167,7 +168,7 @@ export default function ProductForm({
               setSelectedSubcategoryId(value);
               loadAttributes(value);
             }
-          }}
+          }} searchable
           disabled={!!product}
           required
         />
@@ -176,6 +177,8 @@ export default function ProductForm({
           radius="xl"
           mb="sm"
           label="Brand"
+          placeholder="Select Brand"
+          searchable
           data={brands.map((brand) => ({
             value: brand.id.toString(),
             label: brand.name,

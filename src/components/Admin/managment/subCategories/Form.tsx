@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { TextInput, Button, FileInput, NativeSelect } from "@mantine/core";
+import { TextInput, Button, FileInput, NativeSelect, Select } from "@mantine/core";
 import { toast } from "react-hot-toast";
 import { uploadImage } from "./services/SubCategoryService";
 
@@ -63,23 +63,22 @@ export default function SubCategoryForm({
         mb="sm"
         required
       />
-      <NativeSelect
-        variant="filled"
-        radius="xl"
-        label="Category"
-        labelProps={{ className: "mb-2" }}
-        value={categoryId}
-        onChange={(e) => setCategoryId(e.currentTarget.value)}
-        withAsterisk
-        data={[
-          { value: "", label: "Select Category", disabled: true },
-          ...categories.map((cat) => ({
-            value: cat.id.toString(),
-            label: cat.name,
-          })),
-        ]}
-        required
-      />
+   <Select
+  variant="filled"
+  radius="xl"
+  label="Category"
+  labelProps={{ className: "mb-2" }}
+  value={categoryId}
+  onChange={(val) => setCategoryId(val)}
+  withAsterisk
+  searchable
+  placeholder="Select Category"
+  data={categories.map((cat) => ({
+    value: cat.id.toString(),
+    label: cat.name,
+  }))}
+  required
+/>
 
       <FileInput
         variant="filled"
