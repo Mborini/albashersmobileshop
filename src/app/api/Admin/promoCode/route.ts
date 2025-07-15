@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 
   const client = await pool.connect();
   const result = await client.query(
-    `INSERT INTO promo_codes (name, discount, brandId) VALUES ($1, $2, $3) RETURNING *`,
+    `INSERT INTO promo_codes (name, discount, "brandId") VALUES ($1, $2, $3) RETURNING *`,
     [name, discount, brandId]
   );
   client.release();
