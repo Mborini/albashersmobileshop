@@ -1,5 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
+import Script from "next/script";
+
 import "../css/euclid-circular-a-font.css";
 import "../css/style.css";
 
@@ -19,6 +21,7 @@ import PreLoader from "@/components/Common/PreLoader";
 import { Toaster } from "react-hot-toast";
 import MobileBottomNav from "@/components/Header/MobileBottomNav";
 import ChatPopup from "@/components/Header/ChatPopup";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function SiteLayout({
   children,
@@ -32,7 +35,24 @@ export default function SiteLayout({
   }, []);
 
   return (
-    <html suppressHydrationWarning={true}>
+    <html suppressHydrationWarning={true} lang="ar">
+      <head>
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-P16MQLCZYG"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-P16MQLCZYG', {
+              page_path: window.location.pathname,
+            });
+          `}
+        </Script>
+      </head>
       <body>
         {loading ? (
           <PreLoader />
@@ -42,6 +62,7 @@ export default function SiteLayout({
               <CartModalProvider>
                 <ModalProvider>
                   <PreviewSliderProvider>
+                    <Analytics /> {/* Vercel Analytics */}
                     <Header />
                     <ChatPopup />
                     {children}
@@ -53,6 +74,7 @@ export default function SiteLayout({
                 </ModalProvider>
               </CartModalProvider>
             </ReduxProvider>
+
             <Toaster
               position="top-center"
               toastOptions={{
