@@ -2,6 +2,7 @@ import ChatPopup from "@/components/Header/ChatPopup";
 import Home from "@/components/Home";
 import { Metadata } from "next";
 import Script from "next/script";
+import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
   title:
@@ -159,7 +160,7 @@ export default function HomePage() {
     <>
       <Home />
       <ChatPopup />
-
+<Analytics />
       {/* ✅ Structured Data - المتجر */}
       <Script
         id="store-jsonld"
