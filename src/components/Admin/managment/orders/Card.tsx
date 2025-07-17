@@ -4,6 +4,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Center, Loader } from "@mantine/core";
 import { Toaster, toast } from "react-hot-toast";
+
+import Pagination from "@/components/Common/pagination";
 import { fetchOrders } from "./services/orders";
 import OrderTable from "./orderTable";
 
@@ -39,12 +41,8 @@ function OrderCard() {
         const newOrders = await fetchOrders();
         setOrders(newOrders);
 
-        if (
-          prevOrdersCount.current &&
-          newOrders.length > prevOrdersCount.current
-        ) {
-          toast.success("🚨 طلب جديد!");
-
+        if (prevOrdersCount.current && newOrders.length > prevOrdersCount.current) {
+          toast.success("🚨 طلب جديد!")
           if (hasInteracted && audioRef.current) {
             audioRef.current.play().catch((err) => {
               console.log("فشل تشغيل الصوت:", err);
@@ -75,7 +73,6 @@ function OrderCard() {
   return (
     <>
       <OrderTable orders={orders} />
-      
       <Toaster />
     </>
   );
