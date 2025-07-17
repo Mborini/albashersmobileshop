@@ -9,7 +9,7 @@ import Pagination from "@/components/Common/pagination";
 import { fetchOrders } from "./services/orders";
 import OrderTable from "./orderTable";
 
-const POLLING_INTERVAL = 10000;
+const POLLING_INTERVAL = 180000;
 
 function OrderCard() {
   const [orders, setOrders] = useState([]);
@@ -21,7 +21,7 @@ function OrderCard() {
   // إعداد Tone.Player وتحميل الصوت
   useEffect(() => {
     playerRef.current = new Tone.Player({
-      url: "/sounds/cashsound(2).mp3",
+      url: "/sounds/cashsound.mp3",
       autostart: false,
     }).toDestination();
   }, []);
