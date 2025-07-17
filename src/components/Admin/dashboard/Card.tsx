@@ -98,42 +98,30 @@ export default function ActionsGrid() {
   return (
     <div className="bg-gray-2 rounded-lg p-6 ">
       <div className="grid grid-cols-2 sm:grid-cols-6 gap-3 ">
- {mockdata.map((item) => {
-  const isExternal = item.path.startsWith("http");
-  const isDisabled = item.title === "Google Analytics";
-
-  return (
-    <button
-      key={`${item.title}-${item.path}`}
-      onClick={() => {
-        if (isDisabled) return;
-        if (isExternal) {
-          window.open(item.path, "_blank");
-        } else {
-          router.push(`/${item.path}`);
-        }
-      }}
-      className={`flex flex-col items-center p-6 rounded-lg bg-white transform duration-200 ${
-        isDisabled
-          ? "cursor-not-allowed opacity-50"
-          : "hover:cursor-pointer hover:scale-105 hover:shadow-md"
-      }`}
-      disabled={isDisabled}
-    >
-      {item.image ? (
-        <img
-          src={item.image}
-          alt={item.title}
-          className="w-12 h-12 object-contain"
-        />
-      ) : (
-        <item.icon size={48} className={`${item.color}`} />
-      )}
-      <span className="text-sm mt-3 font-medium">{item.title}</span>
-    </button>
-  );
-})}
-
+      {mockdata.map((item) => (
+  <button
+    key={`${item.title}-${item.path}`}
+    onClick={() => {
+      if (item.path.startsWith("http")) {
+        window.open(item.path, "_blank");
+      } else {
+        router.push(`/${item.path}`);
+      }
+    }}
+    className="flex flex-col items-center p-6 rounded-lg bg-white hover:cursor-pointer hover:scale-105 transform duration-200 hover:shadow-md"
+  >
+    {item.image ? (
+      <img
+        src={item.image}
+        alt={item.title}
+        className="w-12 h-12 object-contain"
+      />
+    ) : (
+      <item.icon size={48} className={`${item.color}`} />
+    )}
+    <span className="text-sm mt-3 font-medium">{item.title}</span>
+  </button>
+))}
 
       </div>
     </div>
