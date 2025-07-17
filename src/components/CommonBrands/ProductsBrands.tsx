@@ -54,7 +54,6 @@ const ProductsBrands = ({ id }: { id: string }) => {
         if (!response.ok) throw new Error("Failed to fetch product");
 
         const data = await response.json();
-        console.log("Fetched data:", data);
         setProduct(data.products);
         setBrands(data.brands);
         setColors(data.colors);

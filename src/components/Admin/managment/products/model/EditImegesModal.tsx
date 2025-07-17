@@ -67,7 +67,6 @@ export default function EditImagesModal({
     setIsUploading(true);
     try {
       const imageUrl = await uploadImage(newImage);
-      console.log("🚀 ~ imageUrl:", imageUrl); 
 
       const updatedProductData = await AddProductImage(
         product.product_id,

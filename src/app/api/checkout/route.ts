@@ -20,7 +20,6 @@ export async function POST(req) {
       discountAmount, // أضف هذا هنا
       promoCode, // إذا كنت تستخدم رمز ترويجي
         } = body;
-console.log("Received data:", body);
     const client = await pool.connect();
     const result = await client.query(
       `

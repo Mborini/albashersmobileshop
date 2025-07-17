@@ -1,68 +1,83 @@
+
 "use client";
-import React, { useState, useEffect } from "react";
-import { useDisclosure } from "@mantine/hooks";
-import { Drawer, Center, Loader, Button } from "@mantine/core";
+
+import React, { useState, useEffect, useRef } from "react";
+import { Center, Loader } from "@mantine/core";
 import { Toaster, toast } from "react-hot-toast";
-
-import Pagination from "@/components/Common/pagination";
-
 import { fetchOrders } from "./services/orders";
 import OrderTable from "./orderTable";
 
+const POLLING_INTERVAL = 10000;
+
 function OrderCard() {
-  const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 16;
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const prevOrdersCount = useRef(0);
 
+  // Set up audio element
   useEffect(() => {
-    async function loadOrders() {
-      setLoading(true);
-      try {
-        const data = await fetchOrders();
-        setProducts(data);
-      } catch (error) {
-        console.error(error);
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadOrders();
+    audioRef.current = new Audio("/sounds/cashsound.mp3");
   }, []);
 
-  const indexOfLastProduct = currentPage * itemsPerPage;
-  const indexOfFirstProduct = indexOfLastProduct - itemsPerPage;
-  const currentProducts = products.slice(indexOfFirstProduct, indexOfLastProduct);
+  // Track user interaction once
+  useEffect(() => {
+    const enableSound = () => {
+      setHasInteracted(true);
+      window.removeEventListener("click", enableSound);
+    };
+
+    window.addEventListener("click", enableSound);
+    return () => window.removeEventListener("click", enableSound);
+  }, []);
+
+  // Polling for orders
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const newOrders = await fetchOrders();
+        setOrders(newOrders);
+
+        if (
+          prevOrdersCount.current &&
+          newOrders.length > prevOrdersCount.current
+        ) {
+          toast.success("🚨 طلب جديد!");
+
+          if (hasInteracted && audioRef.current) {
+            audioRef.current.play().catch((err) => {
+              console.log("فشل تشغيل الصوت:", err);
+            });
+          }
+        }
+
+        prevOrdersCount.current = newOrders.length;
+        setLoading(false);
+      } catch (error) {
+        toast.error("فشل تحميل الطلبات");
+      }
+    };
+
+    loadOrders();
+    const interval = setInterval(loadOrders, POLLING_INTERVAL);
+    return () => clearInterval(interval);
+  }, [hasInteracted]);
+
+  if (loading) {
+    return (
+      <Center mt="xl">
+        <Loader />
+      </Center>
+    );
+  }
 
   return (
-    <div className="p-8">
-      <Toaster position="top-center" />
-
-      {loading ? (
-        <Center mt="xl">
-          <Loader size="lg" />
-        </Center>
-      ) : (
-        <Center>
-          <div
-            style={{
-             
-              width: "100%",
-              marginTop: "1rem",
-            }}
-          >
-            <OrderTable orders={currentProducts} />
-          </div>
-        </Center>
-      )}
-
-      <Pagination
-        currentPage={currentPage}
-        totalPages={Math.ceil(products.length / itemsPerPage)}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
-    </div>
+    <>
+      <OrderTable orders={orders} />
+      
+      <Toaster />
+    </>
   );
 }
 

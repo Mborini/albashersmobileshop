@@ -6,7 +6,6 @@ import { CiNoWaitingSign } from "react-icons/ci";
 
 function OrderRow({ order, onComplete, onDecline }) {
   const [popoverOpened, setPopoverOpened] = useState(false);
-  console.log(order);
   const rowStyle = {
     backgroundColor: order.isdeclined
       ? "#f8d7da"

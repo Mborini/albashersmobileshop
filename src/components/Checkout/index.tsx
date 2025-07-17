@@ -35,7 +35,6 @@ const Checkout = () => {
   const [appliedCode, setAppliedCode] = useState<string | null>(null);
   const [codePercentage, setCodePercentage] = useState<number | null>(null);
   const isRTL = i18n.language === "ar";
-  console.log("cartItems", cartItems);
   useEffect(() => {
     const fetchDeliveryConditions = async () => {
       try {

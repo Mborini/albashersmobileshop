@@ -12,7 +12,6 @@ import OrderRow from "./OrderRow";
 import ConfirmModal from "./ConfirmModal";
 
 function OrderTable({ orders }) {
-  console.log(orders);
   const [orderList, setOrderList] = useState(orders);
   const [filteredOrders, setFilteredOrders] = useState(orders);
 
