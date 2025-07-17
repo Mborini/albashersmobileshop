@@ -53,6 +53,7 @@
     "react-redux": "^9.2.0",
     "react-world-flags": "^1.6.0",
     "swiper": "^11.2.8",
+    "tone": "^15.1.22",
     "twilio": "^5.7.0",
     "use-sound": "^5.0.0"
   },

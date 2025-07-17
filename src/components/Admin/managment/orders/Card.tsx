@@ -1,9 +1,9 @@
-
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
 import { Center, Loader } from "@mantine/core";
 import { Toaster, toast } from "react-hot-toast";
+import * as Tone from "tone";
 
 import Pagination from "@/components/Common/pagination";
 import { fetchOrders } from "./services/orders";
@@ -15,38 +15,58 @@ function OrderCard() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hasInteracted, setHasInteracted] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const playerRef = useRef<Tone.Player | null>(null);
   const prevOrdersCount = useRef(0);
 
-  // Set up audio element
+  // إعداد Tone.Player وتحميل الصوت
   useEffect(() => {
-    audioRef.current = new Audio("/sounds/cashsound.mp3");
+    playerRef.current = new Tone.Player({
+      url: "/sounds/cashsound(2).mp3",
+      autostart: false,
+    }).toDestination();
   }, []);
 
-  // Track user interaction once
+  // تفعيل الصوت بعد التفاعل
   useEffect(() => {
-    const enableSound = () => {
+    const enableSound = async () => {
+      await Tone.start(); // هذا هو المفتاح لتجاوز السياسات
       setHasInteracted(true);
+
+      // إزالة المستمعين بعد التفاعل
       window.removeEventListener("click", enableSound);
+      window.removeEventListener("keydown", enableSound);
+      window.removeEventListener("touchstart", enableSound);
     };
 
     window.addEventListener("click", enableSound);
-    return () => window.removeEventListener("click", enableSound);
+    window.addEventListener("keydown", enableSound);
+    window.addEventListener("touchstart", enableSound);
+
+    return () => {
+      window.removeEventListener("click", enableSound);
+      window.removeEventListener("keydown", enableSound);
+      window.removeEventListener("touchstart", enableSound);
+    };
   }, []);
 
-  // Polling for orders
+  // استعلام الطلبات وتشغيل الصوت عند وصول طلب جديد
   useEffect(() => {
     const loadOrders = async () => {
       try {
         const newOrders = await fetchOrders();
         setOrders(newOrders);
 
-        if (prevOrdersCount.current && newOrders.length > prevOrdersCount.current) {
-          toast.success("🚨 طلب جديد!")
-          if (hasInteracted && audioRef.current) {
-            audioRef.current.play().catch((err) => {
-              console.log("فشل تشغيل الصوت:", err);
-            });
+        const isNewOrder = prevOrdersCount.current && newOrders.length > prevOrdersCount.current;
+
+        if (isNewOrder) {
+          toast.success("🚨 طلب جديد!");
+
+          if (hasInteracted && playerRef.current) {
+            try {
+              playerRef.current.start(); // تشغيل الصوت عبر Tone
+            } catch (err) {
+              console.log("فشل تشغيل الصوت عبر Tone:", err);
+            }
           }
         }
 
