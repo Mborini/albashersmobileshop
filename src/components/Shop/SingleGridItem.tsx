@@ -13,19 +13,13 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { Badge } from "@mantine/core";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
-import FlyingImage from "../Common/FlyingImage";
+import toast from "react-hot-toast";
 
 const SingleGridItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const { t, i18n } = useTranslation();
   const dispatch = useDispatch<AppDispatch>();
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const imageRef = useRef<HTMLImageElement>(null);
-  const [flyImage, setFlyImage] = useState<{
-    src: string;
-    rect: DOMRect;
-  } | null>(null);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isOutOfStock = !item.in_stock;
@@ -71,6 +65,12 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         brandId: item.brand_id,
       })
     );
+    toast.success(t("added_to_cart", { itemName: item.title }), {
+      duration: 4000,
+      style: {
+        direction: i18n.language === "ar" ? "rtl" : "ltr",
+      },
+    });
   };
 
   const handleItemToWishList = () => {
@@ -86,18 +86,17 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         status: "available",
       })
     );
+    toast.success(t("added_to_wishlist", { itemName: item.title }), {
+      duration: 4000,
+      icon: "❤️",
+      style: {
+        direction: i18n.language === "ar" ? "rtl" : "ltr",
+      },
+    });
   };
 
   return (
     <div className="group relative">
-      {flyImage && (
-        <FlyingImage
-          imageSrc={flyImage.src}
-          startRect={flyImage.rect}
-          onComplete={() => setFlyImage(null)}
-        />
-      )}
-
       <div
         className="relative w-full h-[250px] rounded-lg shadow-2 bg-white border-gray-2 border mb-4 overflow-hidden"
         onMouseEnter={handleMouseEnter}
@@ -117,7 +116,6 @@ const SingleGridItem = ({ item }: { item: Product }) => {
         {/* Product Image */}
         {item.images[currentImageIndex] && (
           <Image
-            ref={imageRef}
             src={item.images[currentImageIndex]}
             alt="Product image"
             fill
@@ -165,10 +163,6 @@ const SingleGridItem = ({ item }: { item: Product }) => {
               const rect = (
                 e.currentTarget as HTMLElement
               ).getBoundingClientRect();
-              setFlyImage({
-                src: item.images[0],
-                rect,
-              });
             }}
             disabled={isOutOfStock}
             className={buttonClasses}

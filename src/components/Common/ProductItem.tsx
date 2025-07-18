@@ -13,20 +13,13 @@ import { CiNoWaitingSign } from "react-icons/ci";
 import { IoEyeOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
 import { Badge } from "@mantine/core";
-import FlyingImage from "../Common/FlyingImage";
+import toast from "react-hot-toast";
 
 const ProductItem = ({ item }: { item: Product }) => {
   const { t, i18n } = useTranslation();
   const { openModal } = useModalContext();
   const dispatch = useDispatch<AppDispatch>();
-
-  const imageRef = useRef<HTMLImageElement>(null);
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
-  const [flyingImage, setFlyingImage] = useState<{
-    imageSrc: string;
-    startRect: DOMRect;
-  } | null>(null);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const isOutOfStock = !item.in_stock;
@@ -60,14 +53,7 @@ const ProductItem = ({ item }: { item: Product }) => {
   };
 
   const handleAddToCart = () => {
-    if (imageRef.current) {
-      const rect = imageRef.current.getBoundingClientRect();
-      setFlyingImage({
-        imageSrc: item.images?.[0] ?? "",
-        startRect: rect,
-      });
-    }
-
+    
     dispatch(
       addItemToCart({
         id: item.id,
@@ -80,6 +66,15 @@ const ProductItem = ({ item }: { item: Product }) => {
         brandId: item.brand_id,
       })
     );
+toast.success(t("added_to_cart", { itemName: item.title }), {
+  duration: 4000,
+  
+  style: {
+    direction: i18n.language === "ar" ? "rtl" : "ltr",
+  },
+});
+
+
   };
 
   const handleItemToWishList = () => {
@@ -95,17 +90,18 @@ const ProductItem = ({ item }: { item: Product }) => {
         status: "available",
       })
     );
+    toast.success(t("added_to_wishlist", { itemName: item.title }), {
+      duration: 4000,
+      icon: "❤️",
+      style: {
+        direction: i18n.language === "ar" ? "rtl" : "ltr",
+      },
+    });
   };
 
   return (
     <>
-      {flyingImage && (
-        <FlyingImage
-          imageSrc={flyingImage.imageSrc}
-          startRect={flyingImage.startRect}
-          onComplete={() => setFlyingImage(null)}
-        />
-      )}
+      
       <div className="group">
         <div
           className="relative w-full h-[250px] rounded-lg shadow-2 bg-white border-gray-2 border mb-4 overflow-hidden"
@@ -125,7 +121,6 @@ const ProductItem = ({ item }: { item: Product }) => {
 
           {item.images[currentImageIndex] && (
             <Image
-              ref={imageRef}
               src={item.images[currentImageIndex]}
               alt="Product image"
               fill

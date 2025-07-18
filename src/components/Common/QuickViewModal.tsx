@@ -16,7 +16,6 @@ import { MdFavoriteBorder, MdOutlineCancel } from "react-icons/md";
 import { FiMinus, FiPlus } from "react-icons/fi";
 import { LuShoppingBag } from "react-icons/lu";
 import { addItemToWishlist } from "@/redux/features/wishlist-slice";
-import FlyingImage from "./FlyingImage";
 import { useTranslation } from "react-i18next";
 
 const QuickViewModal = () => {
@@ -30,12 +29,6 @@ const QuickViewModal = () => {
     x: number;
     y: number;
   } | null>(null);
-
-  const [flyingImage, setFlyingImage] = useState<{
-    imageSrc: string;
-    startRect: DOMRect;
-  } | null>(null);
-  const addToCartButtonRef = useRef<HTMLButtonElement>(null);
 
   const dispatch = useDispatch<AppDispatch>();
 
@@ -57,11 +50,6 @@ const QuickViewModal = () => {
       return;
     }
 
-    if (addToCartButtonRef.current) {
-      const rect = addToCartButtonRef.current.getBoundingClientRect();
-      setFlyingImage({ imageSrc: product.images?.[0] ?? "", startRect: rect });
-    }
-
     dispatch(
       addItemToCart({
         id: product.id,
@@ -76,6 +64,15 @@ const QuickViewModal = () => {
     );
 
     setSelectedColor(null);
+   toast.success(t("added_to_cart", { itemName: product.title }), {
+  duration: 4000,
+  
+  style: {
+    direction: i18n.language === "ar" ? "rtl" : "ltr",
+  },
+});
+closeModal();
+setQuantity(1);
   };
 
   const handleItemToWishList = () => {
@@ -99,6 +96,14 @@ const QuickViewModal = () => {
       })
     );
     setSelectedColor(null); // Reset selected color after adding to wishlist
+     toast.success(t("added_to_wishlist", { itemName: product.title }), {
+          duration: 4000,
+          icon: "❤️",
+          style: {
+            direction: i18n.language === "ar" ? "rtl" : "ltr",
+          },
+        });
+        closeModal();
   };
 
   useEffect(() => {
@@ -365,7 +370,6 @@ const QuickViewModal = () => {
                 dir={i18n.language === "ar" ? "rtl" : "ltr"}
               >
                 <button
-                  ref={addToCartButtonRef}
                   disabled={!product.in_stock || quantity === 0}
                   onClick={handleAddToCart}
                   className={`
@@ -394,16 +398,6 @@ const QuickViewModal = () => {
           </div>
         </div>
       </div>
-      {flyingImage && (
-        <FlyingImage
-          imageSrc={flyingImage.imageSrc}
-          startRect={flyingImage.startRect}
-          onComplete={() => {
-            setFlyingImage(null);
-            closeModal();
-          }}
-        />
-      )}
     </div>
   );
 };

@@ -132,5 +132,7 @@
   "error_applying_promo_code": "An error occurred while applying the promo code",
   "subtotal": "Subtotal",
   "save": "Save",
-  "promo_code_not_applicable_for_cart" : "Promo code not applicable for your cart"
+  "promo_code_not_applicable_for_cart" : "Promo code not applicable for your cart",
+  "added_to_cart": "{{itemName}} has been added to the cart",
+  "added_to_wishlist": "{{itemName}} has been added to your wishlist"
 }

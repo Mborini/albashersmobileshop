@@ -14,18 +14,12 @@ import { IoEyeOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import FlyingImage from "../Common/FlyingImage";
+import toast from "react-hot-toast";
 
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
   const dispatch = useDispatch<AppDispatch>();
   const { t } = useTranslation();
-
-  const imageRef = useRef<HTMLImageElement>(null);
-  const [flyingImage, setFlyingImage] = useState<{
-    imageSrc: string;
-    startRect: DOMRect;
-  } | null>(null);
-
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -59,14 +53,6 @@ const SingleListItem = ({ item }: { item: Product }) => {
   };
 
   const handleAddToCart = () => {
-    if (imageRef.current) {
-      const rect = imageRef.current.getBoundingClientRect();
-      setFlyingImage({
-        imageSrc: item.images?.[0] ?? "",
-        startRect: rect,
-      });
-    }
-
     dispatch(
       addItemToCart({
         id: item.id,
@@ -79,6 +65,12 @@ const SingleListItem = ({ item }: { item: Product }) => {
         brandId: item.brand_id,
       })
     );
+    toast.success(t("added_to_cart", { itemName: item.title }), {
+      duration: 4000,
+      style: {
+        direction: "ltr",
+      },
+    });
   };
 
   const handleItemToWishList = () => {
@@ -98,14 +90,6 @@ const SingleListItem = ({ item }: { item: Product }) => {
 
   return (
     <div className="group rounded-lg bg-white shadow-1 relative">
-      {flyingImage && (
-        <FlyingImage
-          imageSrc={flyingImage.imageSrc}
-          startRect={flyingImage.startRect}
-          onComplete={() => setFlyingImage(null)}
-        />
-      )}
-
       <div dir="ltr" className="flex flex-col sm:flex-row">
         {/* Image Section */}
         <div
@@ -115,7 +99,6 @@ const SingleListItem = ({ item }: { item: Product }) => {
         >
           {item.images[currentImageIndex] && (
             <Image
-              ref={imageRef}
               src={item.images[currentImageIndex]}
               className="object-cover"
               width={270}
@@ -174,15 +157,14 @@ const SingleListItem = ({ item }: { item: Product }) => {
               {item.description}
             </span>
 
-           <span className="flex items-center gap-2 mt-1 font-semibold text-lg sm:text-xl">
-  <span className="text-dark">JD {item.discountedPrice}</span>
-  {Number(item.discountedPrice) !== Number(item.price) && (
-    <span className="text-gray-400 line-through text-sm">
-      JD {item.price}
-    </span>
-  )}
-</span>
-
+            <span className="flex items-center gap-2 mt-1 font-semibold text-lg sm:text-xl">
+              <span className="text-dark">JD {item.discountedPrice}</span>
+              {Number(item.discountedPrice) !== Number(item.price) && (
+                <span className="text-gray-400 line-through text-sm">
+                  JD {item.price}
+                </span>
+              )}
+            </span>
           </div>
 
           <div className="flex flex-col items-center gap-2.5 mb-2">

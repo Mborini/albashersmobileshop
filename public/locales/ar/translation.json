@@ -133,5 +133,7 @@
   "error_applying_promo_code": "حدث خطأ أثناء تطبيق كود الخصم",
   "subtotal": "المجموع الفرعي",
   "save": "وفر",
-  "promo_code_not_applicable_for_cart_brand": "كود الخصم غير قابل للتطبيق على سلتك"
+  "promo_code_not_applicable_for_cart_brand": "كود الخصم غير قابل للتطبيق على سلتك",
+   "added_to_cart": "{{itemName}} تم إضافته إلى السلة ",
+  "added_to_wishlist": "{{itemName}} تمت إضافته إلى المفضلة "
 }
