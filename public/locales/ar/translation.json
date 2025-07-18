@@ -63,7 +63,7 @@
   "billing.country": "البلد",
   "billing.city": "المدينة",
   "billing.address": "عنوان الشارع",
-  "billing.addressPlaceholder": "رقم المنزل واسم الشارع",
+  "billing.addressPlaceholder": "رقم المنزل او اسم الشارع",
   "billing.notes": "ملاحظات (اختياري)",
   "billing.notesPlaceholder": "ملاحظات حول طلبك، مثل تعليمات التوصيل الخاصة.",
   "product": "المنتج",
@@ -135,5 +135,6 @@
   "save": "وفر",
   "promo_code_not_applicable_for_cart_brand": "كود الخصم غير قابل للتطبيق على سلتك",
    "added_to_cart": "{{itemName}} تم إضافته إلى السلة ",
-  "added_to_wishlist": "{{itemName}} تمت إضافته إلى المفضلة "
+  "added_to_wishlist": "{{itemName}} تمت إضافته إلى المفضلة ",
+  "billing.confirmSend": "استلام طلبي عبر البريد الإلكتروني؟"
 }
