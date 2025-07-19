@@ -98,7 +98,7 @@ const SingleGridItem = ({ item }: { item: Product }) => {
   return (
     <div className="group relative">
       <div
-        className="relative w-full h-[250px] rounded-lg shadow-2 bg-white border-gray-2 border mb-4 overflow-hidden"
+          className="relative w-full aspect-[3/3] max-h-[300px] rounded-lg shadow-2 bg-white border-gray-2 border mb-4 overflow-hidden"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >

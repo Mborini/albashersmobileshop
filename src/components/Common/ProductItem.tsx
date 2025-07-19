@@ -53,7 +53,6 @@ const ProductItem = ({ item }: { item: Product }) => {
   };
 
   const handleAddToCart = () => {
-    
     dispatch(
       addItemToCart({
         id: item.id,
@@ -66,15 +65,13 @@ const ProductItem = ({ item }: { item: Product }) => {
         brandId: item.brand_id,
       })
     );
-toast.success(t("added_to_cart", { itemName: item.title }), {
-  duration: 4000,
-  
-  style: {
-    direction: i18n.language === "ar" ? "rtl" : "ltr",
-  },
-});
+    toast.success(t("added_to_cart", { itemName: item.title }), {
+      duration: 4000,
 
-
+      style: {
+        direction: i18n.language === "ar" ? "rtl" : "ltr",
+      },
+    });
   };
 
   const handleItemToWishList = () => {
@@ -101,10 +98,9 @@ toast.success(t("added_to_cart", { itemName: item.title }), {
 
   return (
     <>
-      
       <div className="group">
         <div
-          className="relative w-full h-[250px] rounded-lg shadow-2 bg-white border-gray-2 border mb-4 overflow-hidden"
+          className="relative w-full aspect-[3/3] max-h-[300px] rounded-lg shadow-2 bg-white border-gray-2 border mb-4 overflow-hidden"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
@@ -206,15 +202,14 @@ toast.success(t("added_to_cart", { itemName: item.title }), {
           )}
         </div>
 
-       <span className="flex items-center gap-2 font-medium">
-  <span className="text-lg text-dark">JD {item.discountedPrice}</span>
-  {Number(item.discountedPrice) !== Number(item.price) && (
-    <span className="text-md text-dark-4 line-through">
-      JD {item.price}
-    </span>
-  )}
-</span>
-
+        <span className="flex items-center gap-2 font-medium">
+          <span className="text-lg text-dark">JD {item.discountedPrice}</span>
+          {Number(item.discountedPrice) !== Number(item.price) && (
+            <span className="text-md text-dark-4 line-through">
+              JD {item.price}
+            </span>
+          )}
+        </span>
       </div>
     </>
   );
