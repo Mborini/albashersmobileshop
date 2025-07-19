@@ -148,7 +148,7 @@ const Footer = () => {
             <p className="text-gray-400 text-sm sm:text-base">
               Powered by{" "}
               <span className="text-white hover:text-primary font-semibold transition">
-                MBorini Company
+                MBorini
               </span>
             </p>
           </div>

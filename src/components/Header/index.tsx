@@ -84,12 +84,11 @@ const Header = () => {
                   <li key={i}>
                     <Link
                       href={menuItem.path}
-                      className={`group relative px-2 py-1 text-sm font-medium inline-block overflow-hidden ${
+                      className={`group relative px-2 py-1 text-sm font-medium inline-block overflow-hidden  ${
                         stickyMenu ? "text-black" : "text-black"
                       }`}
                     >
                       {t(menuItem.title)}
-                      <span className="absolute bottom-0 left-0 h-0.5 bg-blue-600 w-0 group-hover:w-full transition-all duration-300 ease-in-out" />
                     </Link>
                   </li>
                 )
@@ -170,7 +169,7 @@ const Header = () => {
                 key={idx}
                 href={menuItem.path}
                 onClick={close}
-                className="inline-flex items-center justify-center bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
+                className="inline-flex items-center justify-center bg-black text-white hover:bg-black px-3 py-2 rounded-3xl text-sm"
               >
                 {t(menuItem.title)}
               </Link>
@@ -180,7 +179,7 @@ const Header = () => {
           {/* Wishlist Button Styled */}
           <Link
             href="/wishlist"
-            className="text-sm font-bold flex items-center justify-center gap-1 bg-black text-white hover:bg-black px-3 py-2 rounded"
+            className="text-sm font-bold flex items-center justify-center gap-1 bg-black text-white hover:bg-black px-3 py-2 rounded-3xl "
             onClick={close}
           >
             {t("favorit")}
@@ -191,7 +190,7 @@ const Header = () => {
             onClick={() => {
               changeLanguage(i18n.language === "en" ? "ar" : "en");
             }}
-            className="w-full justify-center flex items-center gap-3 bg-black text-white hover:bg-black px-3 py-2 rounded text-sm"
+            className="w-full justify-center flex items-center gap-3 bg-black text-white hover:bg-black px-3 py-2 rounded-3xl text-sm"
           >
             <Flag
               code={i18n.language === "en" ? "GB" : "JO"}

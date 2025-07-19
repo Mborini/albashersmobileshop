@@ -92,7 +92,7 @@ const NewArrival = () => {
             >
               <Link
                 href="/new-arrivals-products"
-                className="inline-flex font-medium text-custom-sm px-4 py-1 sm:py-2.5 sm:px-4 md:px-6 xl:px-7 rounded-md border border-gray-3 ease-out duration-200 bg-black text-white hover:border-transparent"
+                className="inline-flex font-medium text-custom-sm px-4 py-1 sm:py-2.5 sm:px-4 md:px-6 xl:px-7 rounded-2xl border border-gray-3 ease-out duration-200 bg-black text-white hover:border-transparent"
               >
                 {t("view_all")}
               </Link>
