@@ -127,23 +127,23 @@ const QuickViewModal = () => {
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
     >
       <Flex wrap="wrap" gap="sm" mb="md">
-              {product.is_best_offer && (
+        {product.is_best_offer && (
                 <Badge
                   variant="gradient"
                   gradient={{ from: "red", to: "yellow" }}
                 >
-                  {t("best_offers")}
-                </Badge>
-              )}
-              {product.is_new_arrival && (
+            {t("best_offers")}
+          </Badge>
+        )}
+        {product.is_new_arrival && (
                 <Badge
                   variant="gradient"
                   gradient={{ from: "blue", to: "cyan" }}
                 >
-                  {t("new_arrivals")}
-                </Badge>
-              )}
-            </Flex>
+            {t("new_arrivals")}
+          </Badge>
+        )}
+      </Flex>
       <Flex justify="center" align="center" mt="xs">
         <Flex
           direction={{ base: "column", lg: "row" }}
@@ -154,7 +154,7 @@ const QuickViewModal = () => {
             direction={{
               base: "column-reverse",
               sm: "column-reverse",
-              lg: "row",
+              lg: "column-reverse",
             }}
             gap="md"
             style={{ maxWidth: 700 }}
