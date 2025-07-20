@@ -126,15 +126,51 @@ const QuickViewModal = () => {
       centered
       overlayProps={{ backgroundOpacity: 0.55, blur: 3 }}
     >
-      <Flex justify="center" align="center" mt="xs" >
+      <Flex wrap="wrap" gap="sm" mb="md">
+              {product.is_best_offer && (
+                <Badge
+                  variant="gradient"
+                  gradient={{ from: "red", to: "yellow" }}
+                >
+                  {t("best_offers")}
+                </Badge>
+              )}
+              {product.is_new_arrival && (
+                <Badge
+                  variant="gradient"
+                  gradient={{ from: "blue", to: "cyan" }}
+                >
+                  {t("new_arrivals")}
+                </Badge>
+              )}
+            </Flex>
+      <Flex justify="center" align="center" mt="xs">
         <Flex
           direction={{ base: "column", lg: "row" }}
           align="flex-start"
           gap="xl"
         >
-          <Box style={{ display: "flex", gap: "16px", maxWidth: 700 }}>
+          <Flex
+            direction={{
+              base: "column-reverse",
+              sm: "column-reverse",
+              lg: "row",
+            }}
+            gap="md"
+            style={{ maxWidth: 700 }}
+          >
             {/* الصور المصغرة */}
-            <Stack gap="sm" style={{ flexShrink: 0 }}>
+            {/* الصور المصغرة بشكل أفقي وتعمل Scroll عند العرض على الموبايل */}
+            <Flex
+              gap="sm"
+              direction="row"
+              style={{
+                overflowX: "auto",
+                padding: 8,
+                flexWrap: "nowrap",
+                maxWidth: "100%",
+              }}
+            >
               {product.images
                 ?.filter(
                   (img) => typeof img === "string" && img.startsWith("http")
@@ -142,7 +178,7 @@ const QuickViewModal = () => {
                 .map((image, index) => (
                   <div
                     key={index}
-                    className={`relative w-[60px] h-[60px] cursor-pointer rounded-md overflow-hidden border-2 ${
+                    className={`relative min-w-[60px] min-h-[60px] cursor-pointer rounded-md overflow-hidden border-2 ${
                       activePreview === index
                         ? "border-black scale-110"
                         : "border-transparent"
@@ -161,7 +197,7 @@ const QuickViewModal = () => {
                     />
                   </div>
                 ))}
-            </Stack>
+            </Flex>
 
             {/* الصورة الرئيسية بحجم أكبر */}
             <Box
@@ -188,28 +224,9 @@ const QuickViewModal = () => {
                   />
                 )}
             </Box>
-          </Box>
+          </Flex>
 
           <Box w="100%" style={{ maxWidth: 445 }}>
-            <Flex wrap="wrap" gap="sm" mb="md">
-              {product.is_best_offer && (
-                <Badge
-                  variant="gradient"
-                  gradient={{ from: "red", to: "yellow" }}
-                >
-                  {t("best_offers")}
-                </Badge>
-              )}
-              {product.is_new_arrival && (
-                <Badge
-                  variant="gradient"
-                  gradient={{ from: "blue", to: "cyan" }}
-                >
-                  {t("new_arrivals")}
-                </Badge>
-              )}
-            </Flex>
-
             <Flex align="center" gap="sm" mb="sm">
               <Title order={4}>{product.title}</Title>
               <Badge

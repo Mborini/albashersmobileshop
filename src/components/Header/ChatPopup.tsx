@@ -208,7 +208,7 @@ export default function ChatPopup() {
           position: "fixed",
           bottom: 80,
           left: 20,
-          zIndex: 999,
+          zIndex: 10,
           width: 50,
           height: 50,
           borderRadius: "50%",
