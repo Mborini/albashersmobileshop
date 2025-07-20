@@ -13,10 +13,10 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import MailSuccess from "../MailSuccess";
-import { FaSpinner, FaTrashAlt } from "react-icons/fa";
+import { FaTrashAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { MdOutlineDiscount, MdOutlineShoppingCart } from "react-icons/md";
+import { MdOutlineShoppingCart } from "react-icons/md";
 import {
   Radio,
   Grid,
@@ -240,9 +240,14 @@ const Checkout = () => {
               </Grid.Col>
               <Grid.Col span={{ base: 12, lg: 5 }} dir={isRTL ? "rtl" : "ltr"}>
                 <Paper shadow="sm" radius="lg" withBorder>
-                  <Box bg="black" c="white" p={20} style={{
-                    borderRadius: "18px 18px 0 0 ",
-                  }}>
+                  <Box
+                    bg="black"
+                    c="white"
+                    p={20}
+                    style={{
+                      borderRadius: "18px 18px 0 0 ",
+                    }}
+                  >
                     <Title order={3}>{t("order_summary")}</Title>
                   </Box>
                   {cartItems.map((item) => (

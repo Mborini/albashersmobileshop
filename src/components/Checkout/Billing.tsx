@@ -27,12 +27,14 @@ const Billing = () => {
       <Paper shadow="md" radius="lg" p="md" mb="xl" withBorder>
         <Group grow align="flex-start" mb="md">
           <TextInput
+            name="firstName"
             variant="filled"
             radius="lg"
             required
             placeholder={t("billing.firstName")}
           />
           <TextInput
+            name="lastName"
             variant="filled"
             radius="lg"
             required
@@ -43,6 +45,7 @@ const Billing = () => {
         <Group grow align="flex-start" mb="md">
           <Box w="100%">
             <TextInput
+              name="email"
               variant="filled"
               radius="lg"
               type="email"
@@ -56,7 +59,6 @@ const Billing = () => {
             {email && (
               <Checkbox
                 radius="lg"
-                
                 color="green"
                 size="xs"
                 label={t("billing.confirmSend")}
@@ -69,6 +71,7 @@ const Billing = () => {
           </Box>
 
           <TextInput
+            name="phone"
             variant="filled"
             radius="lg"
             required
@@ -78,12 +81,14 @@ const Billing = () => {
 
         <Group grow align="flex-start" mb="md">
           <TextInput
+            name="country"
             variant="filled"
             radius="lg"
             required
             placeholder={t("billing.country")}
           />
           <TextInput
+            name="city"
             variant="filled"
             radius="lg"
             required
@@ -92,6 +97,7 @@ const Billing = () => {
         </Group>
 
         <TextInput
+          name="address"
           variant="filled"
           radius="lg"
           required
@@ -100,6 +106,7 @@ const Billing = () => {
         />
 
         <Textarea
+          name="notes"
           variant="filled"
           radius="lg"
           placeholder={t("billing.notesPlaceholder")}
