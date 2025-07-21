@@ -142,7 +142,6 @@ const Categories = () => {
               ref={sliderRef}
               slidesPerView={3}
               modules={[Autoplay]}
-              autoplay={{ delay: 3000, disableOnInteraction: false }}
               breakpoints={{
                 0: { slidesPerView: 3 }, // ✅ موبايل: 3 عناصر
                 640: { slidesPerView: 3 }, // تابلت صغير
