@@ -1,4 +1,3 @@
-// Converted Checkout component UI to Mantine
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -13,30 +12,12 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import toast, { Toaster } from "react-hot-toast";
 import MailSuccess from "../MailSuccess";
-import { FaTrashAlt } from "react-icons/fa";
+import { FaSpinner, FaTrashAlt } from "react-icons/fa";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
-import { MdOutlineShoppingCart } from "react-icons/md";
-import {
-  Radio,
-  Grid,
-  Alert,
-  Badge,
-  TextInput,
-  Paper,
-  Box,
-  Button,
-  Title,
-  Text,
-  Group,
-  Divider,
-  Image as MantineImage,
-  Center,
-  ThemeIcon,
-  Stack,
-} from "@mantine/core";
-import { CiNoWaitingSign } from "react-icons/ci";
-import Image from "next/image";
+import { MdOutlineDiscount, MdOutlineShoppingCart } from "react-icons/md";
+import { Radio, Grid, Alert, Badge, TextInput } from "@mantine/core";
+import { LuBadgeAlert } from "react-icons/lu";
 
 const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
@@ -47,14 +28,14 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isOrdered, setIsOrdered] = useState(false);
   const [deliveryPrice, setDeliveryPrice] = useState(0);
-  const [freeShippingDiff, setFreeShippingDiff] = useState(null);
-  const [message, setMessage] = useState(null);
+  const [freeShippingDiff, setFreeShippingDiff] = useState<number | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
   const [promoCode, setPromoCode] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
-  const [appliedCode, setAppliedCode] = useState(null);
-  const [codePercentage, setCodePercentage] = useState(null);
+  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const [codePercentage, setCodePercentage] = useState<number | null>(null);
   const isRTL = i18n.language === "ar";
-
+  console.log("cartItems", cartItems);
   useEffect(() => {
     const fetchDeliveryConditions = async () => {
       try {
@@ -111,7 +92,6 @@ const Checkout = () => {
       fetchDeliveryConditions();
     }
   }, [totalPrice, cartItems.length, t]);
-
   const applyPromoCode = async () => {
     if (!promoCode) {
       toast.error(t("enter_promo_code"));
@@ -122,13 +102,17 @@ const Checkout = () => {
       const res = await fetch("/api/Admin/promoCode");
       const data = await res.json();
 
-      const matchedCode = data.find((code) => code.name === promoCode);
+      // ابحث عن الكود
+      const matchedCode = data.find(
+        (code: { name: string }) => code.name === promoCode
+      );
 
       if (!matchedCode) {
         toast.error(t("invalid_promo_code"));
         return;
       }
 
+      // احسب المجموع الخاص بالبراند فقط
       const brandId = matchedCode.brandId;
       const brandTotal = cartItems
         .filter((item) => item.brandId === brandId)
@@ -139,6 +123,7 @@ const Checkout = () => {
         return;
       }
 
+      // احسب قيمة الخصم
       const discount = (brandTotal * matchedCode.discount) / 100;
 
       setDiscountAmount(discount);
@@ -151,17 +136,19 @@ const Checkout = () => {
     }
   };
 
+  const discountedTotal = totalPrice - discountAmount;
+  const grandTotal = Number(discountedTotal) + Number(deliveryPrice);
   useEffect(() => {
     const timer = setTimeout(() => {
       if (promoCode.length === 6 && !appliedCode) {
         applyPromoCode();
       }
-    }, 300);
+    }, 300); // تأخير بسيط لتجنب التفعيل المتكرر أثناء الكتابة
 
     return () => clearTimeout(timer);
   }, [promoCode]);
 
-  const sender = async (data) => {
+  const sender = async (data: any) => {
     try {
       const res = await fetch("/api/checkout", {
         method: "POST",
@@ -172,33 +159,31 @@ const Checkout = () => {
       const result = await res.json();
       if (!res.ok) throw new Error(result.error);
 
-      if (data.email && data.sendEmail === "on") {
-        await fetch("/api/send-email", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            to: data.email,
-            name: data.firstName,
-            phone: data.phone,
-            totalPrice: grandTotal,
-            cartItems,
-            country: data.country,
-            city: data.city,
-            address: data.address,
-            note: data.note,
-            lang: i18n.language,
-            deliveryPrice: deliveryPrice.toFixed(2),
-            paymentMethod: data.paymentMethod,
-            discountAmount: discountAmount.toFixed(2),
-            grandTotal: grandTotal.toFixed(2),
-          }),
-        });
-      }
+      await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          to: data.email,
+          name: data.firstName,
+          phone: data.phone,
+          totalPrice: grandTotal,
+          cartItems,
+          country: data.country,
+          city: data.city,
+          address: data.address,
+          note: data.note,
+          lang: i18n.language,
+          deliveryPrice: deliveryPrice.toFixed(2),
+          paymentMethod: data.paymentMethod,
+          discountAmount: discountAmount.toFixed(2),
+          grandTotal: grandTotal.toFixed(2),
+        }),
+      });
 
       toast.success(t("success"));
       dispatch(removeAllItemsFromCart());
       setIsOrdered(true);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error:", error);
       toast.error(error.message || t("error"));
     } finally {
@@ -206,15 +191,13 @@ const Checkout = () => {
     }
   };
 
-  const discountedTotal = totalPrice - discountAmount;
-  const grandTotal = Number(discountedTotal) + Number(deliveryPrice);
-
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
+
     const formData = new FormData(e.currentTarget);
     const data = {
-      ...Object.fromEntries(formData.entries()),
+      ...(Object.fromEntries(formData.entries()) as any),
       cartItems,
       totalPrice,
       deliveryPrice,
@@ -223,134 +206,301 @@ const Checkout = () => {
       discountAmount,
       promoCode: appliedCode,
     };
+
     await sender(data);
   };
 
   return (
     <>
       <Breadcrumb title={t("checkout")} pages={["checkout"]} />
-      <Toaster position="top-center" />
+      <section className="overflow-hidden py-20 bg-gray-2">
+        <Toaster position="top-center" />
+        {cartItems.length ? (
+          <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">
+            <form onSubmit={handleSubmit}>
+              <div className="flex flex-col lg:flex-row gap-7.5 xl:gap-11">
+                <div className="lg:max-w-[670px] w-full">
+                  <Billing />
+                </div>
 
-      {cartItems.length ? (
-        <Box maw={1170} mx="auto" px={{ base: 16, sm: 32, xl: 0 }} py={40}>
-          <form onSubmit={handleSubmit}>
-            <Grid gutter={32}>
-              <Grid.Col span={{ base: 12, lg: 7 }}>
-                <Billing />
-              </Grid.Col>
-              <Grid.Col span={{ base: 12, lg: 5 }} dir={isRTL ? "rtl" : "ltr"}>
-                <Paper shadow="sm" radius="lg" withBorder>
-                  <Box
-                    bg="black"
-                    c="white"
-                    p={20}
-                    style={{
-                      borderRadius: "18px 18px 0 0 ",
-                    }}
-                  >
-                    <Title order={3}>{t("order_summary")}</Title>
-                  </Box>
-                  {cartItems.map((item) => (
-                    <Group
-                      key={item.id + item.color}
-                      p="md"
-                      justify="space-between"
-                      wrap="nowrap"
-                    >
-                      <Group gap="md">
-                        <Image
-                          src={item.images[0]}
-                          alt={item.title}
-                          width={50}
-                          height={50}
-                          style={{ borderRadius: "8px" }}
-                        />
-                        <Stack gap={2}>
-                          <Text fw={500} size="sm">
-                            {item.title}
-                          </Text>
-                          <Text size="xs">
-                            {t("price")}: JD {item.discountedPrice}
-                          </Text>
-                          <Text size="xs">
-                            {t("quantity")}: {item.quantity}
-                          </Text>
-                          <Group gap={6}>
-                            <Text size="xs">{t("color")}:</Text>
-                            {item.color ? (
-                              <Box
-                                w={16}
-                                h={16}
-                                style={{
-                                  backgroundColor: item.color,
-                                  border: "1px solid #ccc",
-                                  borderRadius: "50%",
-                                }}
-                              />
-                            ) : (
-                              <CiNoWaitingSign size={20} />
-                            )}
-                          </Group>
-                        </Stack>
-                      </Group>
-                      <Stack gap={4} align="flex-end">
-                        <Text fw={600} size="sm">
-                          JD {(item.discountedPrice * item.quantity).toFixed(2)}
-                        </Text>
-                        <Button
-                          variant="subtle"
-                          color="red"
-                          size="xs"
-                          onClick={() =>
-                            dispatch(
-                              removeItemFromCart({
-                                id: item.id,
-                                color: item.color,
-                              })
-                            )
-                          }
-                          leftSection={<FaTrashAlt size={14} />}
-                        ></Button>
-                      </Stack>
-                    </Group>
-                  ))}
-                </Paper>
-
-                <Button
-                  type="submit"
-                  fullWidth
-                  mt="lg"
-                  radius="xl"
-                  loading={isLoading}
-                  loaderProps={{ type: "dots" }}
-                  disabled={isOrdered}
-                  style={{ backgroundColor: "#000000", color: "#fff" }}
+                <div
+                  dir={isRTL ? "rtl" : "ltr"}
+                  className="max-w-[455px] w-full"
                 >
-                  {isLoading ? t("processing_checkout") : t("order_now")}
-                </Button>
-              </Grid.Col>
-            </Grid>
-          </form>
-        </Box>
-      ) : isOrdered ? (
-        <MailSuccess />
-      ) : (
-        <Center mt="lg">
-          <Stack align="center" gap={24}>
-            <ThemeIcon size={64} radius="xl" color="dark">
-              <MdOutlineShoppingCart size={32} />
-            </ThemeIcon>
-            <Text size="lg">{t("Your_cart_is_empty")}</Text>
-            <Button
-              component={Link}
+                  <div className="bg-white shadow-1 rounded-[10px]">
+                    <div className="border-b border-gray-3 rounded-t-[10px] py-5 px-4 sm:px-8.5 bg-black text-white">
+                      <h2 className="font-medium text-xl">
+                        {t("order_summary")}
+                      </h2>
+                    </div>
+
+                    <div className="pt-2.5 pb-8.5 px-4 sm:px-8.5">
+                      <div className="flex items-center justify-between py-5 border-b border-gray-3">
+                        <h4 className="font-medium text-dark">
+                          {t("product")}
+                        </h4>
+                        <h4 className="font-medium text-dark text-right">
+                          {t("price")}
+                        </h4>
+                      </div>
+                      {cartItems.map((item) => (
+                        <div
+                          key={item.id}
+                          className="flex items-center justify-between py-5 border-b border-gray-3"
+                        >
+                          <div>
+                            <p className="text-dark">{item.title}</p>
+                            <p className="text-sm text-gray-600">
+                              {t("quantity")} : {item.quantity}
+                            </p>
+                          </div>
+                          <div className="flex items-center gap-3">
+                            <p className="text-dark text-right">
+                              JD{" "}
+                              {(item.discountedPrice * item.quantity).toFixed(
+                                2
+                              )}
+                            </p>
+                            <button
+                              type="button"
+                              onClick={() =>
+                                dispatch(
+                                  removeItemFromCart({
+                                    id: item.id,
+                                    color: item.color,
+                                  })
+                                )
+                              }
+                              aria-label={t("remove_item")}
+                              className="text-red-light hover:text-red-800"
+                            >
+                              <FaTrashAlt size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                      <div className="flex items-center justify-between border-b border-gray-3 py-3">
+                        <p className="font-medium text-md text-dark">
+                          {t("subtotal")}
+                        </p>
+                        <p className="font-medium text-md text-dark text-right">
+                          JD {totalPrice.toFixed(2)}
+                        </p>
+                      </div>{" "}
+                      <div className="flex flex-col border-b border-gray-3 pb-5 pt-5">
+                        <div className="flex justify-between">
+                          <p className="font-medium text-md text-dark">
+                            {t("shipping")}
+                          </p>
+                          <p className="font-medium text-md text-dark text-right">
+                            JD {deliveryPrice.toFixed(2)}
+                          </p>
+                        </div>
+                        {message && (
+                          <Alert
+                            icon={<LuBadgeAlert size={24} />}
+                            title={t("note")}
+                            color="yellow"
+                            radius="md"
+                            mt="sm"
+                            variant="light"
+                            className="text-sm"
+                          >
+                            <div>{message}</div>
+
+                            <Badge
+                              component="button"
+                              onClick={() =>
+                                (window.location.href = "/products")
+                              }
+                              className="mx-1 text-white"
+                              style={{
+                                backgroundImage:
+                                  "linear-gradient(to right, #FFA726, #FB8C00, #F57C00)",
+                                cursor: "pointer",
+                                marginTop: "1rem",
+                              }}
+                              variant="filled"
+                              size="md"
+                              radius="lg"
+                            >
+                              {t("add_more")}
+                            </Badge>
+                          </Alert>
+                        )}
+                      </div>
+                      <div className="flex flex-col justify-between border-b border-gray-3 pb-5 pt-5">
+                        <Alert
+                          icon={<MdOutlineDiscount size={22} />}
+                          title={
+                            <span className="text-md font-semibold text-blue-700">
+                              {t("promo_code")}
+                            </span>
+                          }
+                          color="blue"
+                          radius="md"
+                          variant="light"
+                          className="text-sm"
+                        >
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <TextInput
+                              radius="md"
+                              variant="filled"
+                              placeholder={t("enter_promo_code")}
+                              value={promoCode}
+                              onChange={(e) => setPromoCode(e.target.value)}
+                              disabled={!!appliedCode}
+                              classNames={{
+                                input: "bg-white text-dark",
+                              }}
+                              className="w-full sm:w-[200px]"
+                            />
+
+                            {appliedCode && (
+                              <Badge
+                                className="text-white"
+                                style={{
+                                  backgroundImage:
+                                    "linear-gradient(to right, #3B82F6, #2563EB, #1D4ED8)",
+                                }}
+                                variant="filled"
+                                size="lg"
+                                radius="lg"
+                              >
+                                {t("save")}{" "}
+                                {codePercentage !== null ? codePercentage : 0}%
+                              </Badge>
+                            )}
+                          </div>
+                        </Alert>
+                      </div>
+                      {discountAmount > 0 && (
+                        <div className="flex items-center justify-between border-b border-gray-3 py-3">
+                          <p className="font-medium text-md text-dark">
+                            {t("discount")}
+                          </p>
+                          <p className="font-medium text-md text-dark text-right">
+                            JD - {discountAmount.toFixed(2)}
+                          </p>
+                        </div>
+                      )}
+                      <div className="flex items-center justify-between  border-b border-gray-3 pb-5 pt-5">
+                        <p className="font-medium text-lg text-dark">
+                          {t("total")}
+                        </p>
+                        <p className="font-medium text-lg text-dark text-right">
+                          JD {grandTotal.toFixed(2)}
+                        </p>
+                      </div>
+                      <div className="flex flex-col pt-5">
+                        <p className="font-medium text-md text-dark mb-2">
+                          {t("payment_methods")}
+                        </p>
+
+                        <Radio.Group
+                          name="paymentMethod"
+                          value={paymentMethod}
+                          onChange={setPaymentMethod}
+                          className="mb-4"
+                        >
+                          <Grid gutter="xs">
+                            <Grid.Col span={6}>
+                              <Radio
+                                value="cod"
+                                label={t("cash_on_delivery")}
+                                className="text-sm"
+                              />
+                            </Grid.Col>
+                            <Grid.Col span={6}>
+                              <Radio
+                                value="click"
+                                label={t("click_payment")}
+                                className="text-sm"
+                              />
+                            </Grid.Col>
+                          </Grid>
+                        </Radio.Group>
+
+                        {paymentMethod === "click" && (
+                          <Alert
+                            icon={<LuBadgeAlert size={20} />}
+                            title={
+                              <span className="font-semibold text-base">
+                                {t("important_note")}
+                              </span>
+                            }
+                            color="green"
+                            radius="md"
+                            variant="light"
+                            className="text-sm leading-relaxed space-y-2"
+                          >
+                            <div>
+                              {t("click_payment_instructions1")}{" "}
+                              <Badge
+                                radius="lg"
+                                variant="filled"
+                                className="mx-1 text-gray-1 bg-gradient-to-r from-green-light-4 via-green-500 to-green-dark"
+                                style={{
+                                  backgroundImage:
+                                    "linear-gradient(to right, #68D391, #38A169, #2F855A)",
+                                }}
+                              >
+                                albasheer9
+                              </Badge>
+                              {t("click_payment_instructions2")}
+                            </div>
+
+                            <a
+                              href="https://wa.me/962796855578"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-block text-green-700 hover:text-green-900 underline font-medium"
+                            >
+                              {t("contact_on_whatsapp")}
+                            </a>
+                          </Alert>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={isLoading || isOrdered}
+                    className="w-full flex justify-center items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md ease-out duration-200 mt-7.5 disabled:opacity-70 disabled:cursor-not-allowed"
+                  >
+                    {isLoading ? (
+                      <>
+                        <FaSpinner className="animate-spin" />
+                        {t("processing_checkout")}
+                      </>
+                    ) : (
+                      t("order_now")
+                    )}
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        ) : isOrdered ? (
+          <MailSuccess />
+        ) : (
+          <div className="text-center mt-8">
+            <div className="mx-auto pb-7.5 flex flex-col items-center gap-4">
+              <div className="bg-black rounded-full p-4 inline-flex items-center justify-center">
+                <MdOutlineShoppingCart size={48} className="text-white" />
+              </div>
+              <p className="py-8">{t("Your_cart_is_empty")}</p>
+            </div>
+            <Link
               href={{ pathname: "/", query: { focus: "categories" } }}
-              color="dark"
+              className="inline-flex items-center gap-2 font-medium text-white bg-black py-3 px-6 rounded-md ease-out duration-200 hover:bg-blue-dark"
             >
               {t("continue_shopping")}
-            </Button>
-          </Stack>
-        </Center>
-      )}
+            </Link>
+          </div>
+        )}
+      </section>
     </>
   );
 };
