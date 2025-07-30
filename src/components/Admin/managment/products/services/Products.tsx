@@ -15,7 +15,12 @@ export async function addProduct(product: Product) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(product),
   });
-  if (!res.ok) throw new Error("Failed to add product");
+
+  if (!res.ok) {
+    const data = await res.json();
+    throw new Error(data.error || "Failed to add product");
+  }
+
   return await res.json();
 }
 
@@ -25,9 +30,21 @@ export async function updateProduct(id: number, product: Product) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(product),
   });
-  if (!res.ok) throw new Error("Failed to update product");
+
+  if (!res.ok) {
+    let message = "Failed to update product";
+    try {
+      const data = await res.json();
+      message = data.error || message;
+    } catch (err) {
+      console.error("Error parsing error response", err);
+    }
+    throw new Error(message);
+  }
+
   return await res.json();
 }
+
 export async function deleteProduct(id: number) {
   const response = await fetch(`${API_URL}/${id}`, {
     method: "DELETE",

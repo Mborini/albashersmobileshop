@@ -79,7 +79,6 @@ function ProductsCard() {
     setEditingProduct(product);
     open();
   };
-
   const handleFormSubmit = async (formData) => {
     try {
       if (editingProduct) {
@@ -87,12 +86,14 @@ function ProductsCard() {
       } else {
         await addProduct(formData);
       }
+
       const newList = await fetchProducts();
       setProducts(newList);
+      toast.success("Product saved successfully");
       close();
     } catch (error) {
       console.error(error);
-      toast.error("Something went wrong");
+      toast.error(error.message || "Something went wrong");
     }
   };
 
@@ -144,7 +145,7 @@ function ProductsCard() {
       ) &&
       (!filters.category || p.category_name === filters.category) &&
       (!filters.subcategory || p.subcategory_name === filters.subcategory) &&
-      (!filters.brand || p.brand_name === filters.brand)&&
+      (!filters.brand || p.brand_name === filters.brand) &&
       (filters.inStock === undefined || p.in_stock === filters.inStock)
     );
   });
@@ -158,7 +159,13 @@ function ProductsCard() {
 
   // Reset filters handler
   const resetFilters = () => {
-    setFilters({ name: "", category: "", subcategory: "", brand: "", inStock: true });
+    setFilters({
+      name: "",
+      category: "",
+      subcategory: "",
+      brand: "",
+      inStock: true,
+    });
     setCurrentPage(1);
   };
 

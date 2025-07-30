@@ -23,17 +23,57 @@ export async function PUT(
     is_new_arrival,
     is_best_offer,
     in_stock,
+    is_advertised,
   } = body;
+
   const client = await pool.connect();
+
   try {
     await client.query("BEGIN");
+// ✅ تحقق من حالة المنتج الحالي
+const currentProductRes = await client.query(
+  `SELECT is_advertised FROM products WHERE id = $1`,
+  [id]
+);
 
+if (currentProductRes.rows.length === 0) {
+  return new Response(JSON.stringify({ error: "Product not found." }), {
+    status: 404,
+    headers: { "Content-Type": "application/json" },
+  });
+}
+
+const currentProduct = currentProductRes.rows[0];
+
+// ✅ التحقق: إذا كان المنتج الحالي غير مُعلَن وتريد جعله مُعلَن
+if (!currentProduct.is_advertised && is_advertised === true) {
+  const countQuery = `
+    SELECT COUNT(*) FROM products WHERE "is_advertised" = true;
+  `;
+  const countResult = await client.query(countQuery);
+  const currentCount = parseInt(countResult.rows[0].count, 10);
+
+  // ✅ إذا كان العدد الحالي 8 أو أكثر، ارفض
+  if (currentCount >= 8) {
+    await client.query("ROLLBACK");
+    return new Response(
+      JSON.stringify({
+        error: "Cannot advertise product. Maximum of 8 advertised products allowed.",
+      }),
+      { status: 400, headers: { "Content-Type": "application/json" } }
+    );
+  }
+}
+
+    // ✅ التحديث بعد التحقق
     const updateProductQuery = `
       UPDATE products
-      SET title = $1, brand_id = $2, description = $3, price = $4, "discountedPrice" = $5, "is_new_arrival" = $6, "is_best_offer" = $7,"in_stock" = $8
-      WHERE id = $9
+      SET title = $1, brand_id = $2, description = $3, price = $4, "discountedPrice" = $5,
+          "is_new_arrival" = $6, "is_best_offer" = $7, "in_stock" = $8, "is_advertised" = $9
+      WHERE id = $10
       RETURNING *;
     `;
+
     const result = await client.query(updateProductQuery, [
       title,
       brand_id,
@@ -43,17 +83,12 @@ export async function PUT(
       is_new_arrival,
       is_best_offer,
       in_stock,
+      is_advertised,
       id,
     ]);
 
-    if (result.rows.length === 0) {
-      return new Response(JSON.stringify({ error: "Product not found." }), {
-        status: 404,
-        headers: { "Content-Type": "application/json" },
-      });
-    }
-
     await client.query("COMMIT");
+
     return new Response(JSON.stringify(result.rows[0]), {
       status: 200,
       headers: { "Content-Type": "application/json" },
@@ -72,6 +107,7 @@ export async function PUT(
     client.release();
   }
 }
+
 
 function extractPublicId(imageUrl: string) {
   const parts = imageUrl.split("/");

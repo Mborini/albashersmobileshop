@@ -13,6 +13,7 @@ export async function GET() {
     p."discountedPrice",
     p."is_new_arrival" AS is_new_arrival,
     p."is_best_offer" AS is_best_offer,
+    p."is_advertised" AS is_advertised,
     p."in_stock" AS in_stock,
     b.name AS brand_name,
     sc.name AS subcategory_name,
@@ -77,11 +78,12 @@ export async function POST(req: Request) {
       price,
       discountedPrice,
       attributes,
-      is_new_arrival,
-      is_best_offer,
-      in_stock = true, // Default to true if not provided
+      is_new_arrival = false,
+      is_best_offer = false,
+      in_stock = true,
+      is_advertised = false,
     } = body;
-    
+
     if (
       !title ||
       !brand_id ||
@@ -93,15 +95,35 @@ export async function POST(req: Request) {
       return new Response("Missing required fields", { status: 400 });
     }
 
+    // ✅ تحقق من عدد المنتجات المعلنة
+    const countQuery = `
+      SELECT COUNT(*) FROM products
+      WHERE "is_advertised" = true ;
+    `;
+    const countResult = await client.query(countQuery);
+    const currentCount = parseInt(countResult.rows[0].count, 10);
+
+    const willIncreaseCount =
+      is_advertised;
+
+    if (willIncreaseCount && currentCount >= 8) {
+      return new Response(
+        JSON.stringify({
+          error: "Cannot add product. Maximum of 8 advertised products allowed.",
+        }),
+        { status: 400, headers: { "Content-Type": "application/json" } }
+      );
+    }
+
     await client.query("BEGIN");
 
-    // Insert product using IDs
     const insertProductQuery = `
       INSERT INTO products (
         title, brand_id, subcategory_id,
-        description, price, "discountedPrice","is_new_arrival", "is_best_offer", "in_stock"
+        description, price, "discountedPrice",
+        "is_new_arrival", "is_best_offer", "in_stock", "is_advertised"
       )
-      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
       RETURNING *;
     `;
 
@@ -114,12 +136,12 @@ export async function POST(req: Request) {
       discountedPrice,
       is_new_arrival,
       is_best_offer,
-      in_stock, 
+      in_stock,
+      is_advertised,
     ]);
 
     const product = productResult.rows[0];
 
-    // ✅ Insert attributes if provided
     if (Array.isArray(attributes) && attributes.length > 0) {
       const insertAttrQuery = `
         INSERT INTO product_attributes (product_id, attribute_id, value)

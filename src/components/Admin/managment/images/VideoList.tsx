@@ -8,7 +8,7 @@ export default function VideoList({ videos, onEditImage }) {
 
   return (
     <Box mt="xl">
-      <Title order={3} mb="md">الفيديوهات</Title>
+      <Title order={3} mb="md">Video</Title>
       <Grid>
         {videos.map((vid) => (
           <Grid.Col key={vid.id} span={{ base: 12 }}>

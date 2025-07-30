@@ -96,6 +96,7 @@
   "image": "صورة المنتج",
 
   "add_amount_to_get_delivery_price": "أضف  {{diff}}  دينار لتحصل على توصيل بقيمة  {{price_between}}  دينار",
+  "super_sales": "فرصة لا تفوّت",
 
   "add_amount_to_get_free_delivery": "أضف  {{diff}}  دينار لتحصل على توصيل مجاني",
   "cash_on_delivery": "الدفع عند الاستلام",
@@ -134,7 +135,7 @@
   "subtotal": "المجموع الفرعي",
   "save": "وفر",
   "promo_code_not_applicable_for_cart_brand": "كود الخصم غير قابل للتطبيق على سلتك",
-   "added_to_cart": "{{itemName}} تم إضافته إلى السلة ",
+  "added_to_cart": "{{itemName}} تم إضافته إلى السلة ",
   "added_to_wishlist": "{{itemName}} تمت إضافته إلى المفضلة ",
   "billing.confirmSend": "استلام طلبي عبر البريد الإلكتروني؟"
 }

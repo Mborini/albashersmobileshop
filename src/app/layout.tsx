@@ -1,15 +1,19 @@
 "use client";
 
 import { MantineProvider } from '@mantine/core';
-import './css/style.css'; // Tailwind or custom CSS
+import { ModalsProvider } from '@mantine/modals';
+import './css/style.css';
 import '@mantine/core/styles.css';
+import '@mantine/notifications/styles.css';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
         <MantineProvider defaultColorScheme="light">
-          {children}
+          <ModalsProvider>
+            {children}
+          </ModalsProvider>
         </MantineProvider>
       </body>
     </html>

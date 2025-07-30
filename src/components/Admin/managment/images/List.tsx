@@ -144,18 +144,6 @@ export default function GridImages({ onEditImage }) {
   return (
     <>
       <Grid gutter="md">
-        <Grid.Col span={{ base: 12, md: 8 }}>
-          <SliderSection title="Slider Images" images={sliderImages} />
-        </Grid.Col>
-
-        <Grid.Col span={{ base: 12, md: 4 }}>
-          <Stack gap="md">
-            {otherImages.map((img) => (
-              <ImageCard key={img.id} item={img} />
-            ))}
-          </Stack>
-        </Grid.Col>
-
         <Grid.Col span={12}>
           <Grid.Col span={12}>
             <Grid>

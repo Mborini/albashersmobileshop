@@ -1,3 +1,4 @@
+'use client';
 import React, { useState } from "react";
 import {
   Card,
@@ -11,6 +12,7 @@ import {
 } from "@mantine/core";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import BorderColorIcon from "@mui/icons-material/BorderColor";
+import { useModals } from "@mantine/modals";
 import {
   FaEye,
   FaMinusCircle,
@@ -28,6 +30,7 @@ import { IoColorPaletteOutline } from "react-icons/io5";
 export default function List({ product, onEdit, onDelete, onProductUpdate }) {
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [modalType, setModalType] = useState(null);
+  const modals = useModals();
 
   const handleView = (product) => {
     setSelectedProduct(product);
@@ -60,6 +63,26 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
     setSelectedProduct(null);
   };
   
+
+// Inside the component
+
+
+const handleDeleteConfirm = (productId) => {
+  modals.openConfirmModal({
+    title: "Confirm Deletion",
+    centered: true,
+    children: (
+      <Text size="sm">
+        Are you sure you want to delete this product? This action is
+        irreversible.
+      </Text>
+    ),
+    labels: { confirm: "Delete", cancel: "Cancel" },
+    confirmProps: { color: "red" },
+    onConfirm: () => onDelete(productId),
+  });
+};
+
   return (
     <>
       {product.map((product) => (
@@ -217,7 +240,7 @@ export default function List({ product, onEdit, onDelete, onProductUpdate }) {
                   alignItems: "center",
                   justifyContent: "center",
                 }}
-                onClick={() => onDelete(product.product_id)}
+onClick={() => handleDeleteConfirm(product.product_id)}
               >
                 <DeleteForeverIcon style={{ fontSize: 22 }} />
               </ActionIcon>

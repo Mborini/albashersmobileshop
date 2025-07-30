@@ -27,7 +27,9 @@ export default function ProductForm({
   onCancel,
   subcategories,
   brands,
+  
 }: ProductFormProps) {
+  console.log("ProductForm rendered with product:", product);
   const [productName, setProductName] = useState("");
   const [description, setDescription] = useState("");
   const [attributes, setAttributes] = useState<any[]>([]);
@@ -42,6 +44,7 @@ export default function ProductForm({
   const [discountedPrice, setDiscountedPrice] = useState<number | null>(0);
   const [isArrival, setIsArrival] = useState(false);
   const [isBestOffer, setIsBestOffer] = useState(false);
+  const [isAdvertised, setIsAdvertised] = useState(false);
   const [inStock, setInStock] = useState(true);
 
   useEffect(() => {
@@ -57,6 +60,7 @@ export default function ProductForm({
       const brand = brands.find((b) => b.name === product.brand_name);
       setIsArrival(product.is_new_arrival || false);
       setIsBestOffer(product.is_best_offer || false);
+      setIsAdvertised(product.is_advertised || false);
       setSelectedSubcategoryId(subcat?.id?.toString() || null);
       setSelectedBrandId(brand?.id?.toString() || null);
       setInStock(product.in_stock ?? true);
@@ -69,6 +73,7 @@ export default function ProductForm({
       setSelectedBrandId(null);
       setIsArrival(false);
       setIsBestOffer(false);
+      setIsAdvertised(false);
     }
   }, [product, brands, subcategories]);
   useEffect(() => {
@@ -109,6 +114,7 @@ export default function ProductForm({
       is_new_arrival: isArrival,
       is_best_offer: isBestOffer,
       in_stock: inStock,
+      is_advertised: isAdvertised,
     };
 
     if (!product) {
@@ -129,7 +135,6 @@ export default function ProductForm({
 
     try {
       await onSubmit(formData);
-      toast.success(product ? "Product updated" : "Product added");
     } catch (error) {
       console.error(error);
       toast.error("Failed to submit product");
@@ -257,6 +262,16 @@ export default function ProductForm({
           checked={isBestOffer}
           onChange={(e) => setIsBestOffer(e.currentTarget.checked)}
         />
+        <Checkbox
+          label="Is Addvertised?"
+          radius="lg"
+          mb="sm"
+          size="sm"
+          color="blue"
+          style={{ color: "blue" }}
+          checked={isAdvertised}
+          onChange={(e) => setIsAdvertised(e.currentTarget.checked)}
+        />
 
         {!product && attributes.length > 0 && (
           <Box mt="md">
@@ -322,7 +337,7 @@ export default function ProductForm({
           <Button variant="light" color="gray" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">
+          <Button type="submit" color="blue" radius="xl">
             {product ? "Update Product" : "Add Product"}
           </Button>
         </Group>

@@ -1,6 +1,12 @@
 
 const API_URL = "/api/Admin/adsImages";
 
+export async function fetchProducts() {
+  const res = await fetch("/api/products/adds");
+  if (!res.ok) throw new Error("Failed to fetch products");
+  return await res.json();
+  
+}
 export async function fetchAdsImages() {
   const res = await fetch(API_URL);
   if (!res.ok) throw new Error("Failed to fetch ads images");

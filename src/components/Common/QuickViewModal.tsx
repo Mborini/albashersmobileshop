@@ -161,43 +161,42 @@ const QuickViewModal = () => {
           >
             {/* الصور المصغرة */}
             {/* الصور المصغرة بشكل أفقي وتعمل Scroll عند العرض على الموبايل */}
-            <Flex
-              gap="sm"
-              direction="row"
-              style={{
-                overflowX: "auto",
-                padding: 8,
-                flexWrap: "nowrap",
-                maxWidth: "100%",
-              }}
-            >
-              {product.images
-                ?.filter(
-                  (img) => typeof img === "string" && img.startsWith("http")
-                )
-                .map((image, index) => (
-                  <div
-                    key={index}
-                    className={`relative min-w-[60px] min-h-[60px] cursor-pointer rounded-md overflow-hidden border-2 ${
-                      activePreview === index
-                        ? "border-black scale-110"
-                        : "border-transparent"
-                    } transition-transform duration-200`}
-                    onClick={() => setActivePreview(index)}
-                    onMouseOver={() => setActivePreview(index)}
-                    title={`Thumbnail ${index + 1}`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`thumbnail-${index}`}
-                      fill
-                      style={{ objectFit: "cover" }}
-                      sizes="60px"
-                      priority={activePreview === index}
-                    />
-                  </div>
-                ))}
-            </Flex>
+          <div
+  style={{
+    display: "grid",
+    gridTemplateColumns: "repeat(4, 1fr)",
+    gap: "8px",
+    maxWidth: 300,
+  }}
+>
+  {product.images
+    ?.filter(
+      (img) => typeof img === "string" && img.startsWith("http")
+    )
+    .map((image, index) => (
+      <div
+        key={index}
+        className={`relative w-[60px] h-[60px] cursor-pointer rounded-md overflow-hidden border-2 ${
+          activePreview === index
+            ? "border-black scale-110"
+            : "border-transparent"
+        } transition-transform duration-200`}
+        onClick={() => setActivePreview(index)}
+        onMouseOver={() => setActivePreview(index)}
+        title={`Thumbnail ${index + 1}`}
+      >
+        <Image
+          src={image}
+          alt={`thumbnail-${index}`}
+          fill
+          style={{ objectFit: "cover" }}
+          sizes="60px"
+          priority={activePreview === index}
+        />
+      </div>
+    ))}
+</div>
+
 
             {/* الصورة الرئيسية بحجم أكبر */}
             <Box
