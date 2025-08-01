@@ -25,6 +25,7 @@ export interface PromoCode {
   brand_name?: string; // Optional for displaying brand name
   discount: number;
   created_at?: string;
+  expiry_date?: string | null; // Optional for expiry date
 }
 interface Brand {
   id: string;
@@ -38,6 +39,7 @@ export default function PromoCodeTable() {
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [brands, setBrands] = useState<Brand[]>([]);
   const [brandId, setBrandId] = useState<string | null>(null);
+  const [expiry_date, setExpiryDate] = useState<string | null>(null);
 
   const [name, setName] = useState("");
   const [discount, setDiscount] = useState<number | undefined>(undefined);
@@ -49,7 +51,7 @@ export default function PromoCodeTable() {
 
   const fetchBrands = async () => {
     try {
-      const res = await fetch("/api/Admin/brands");
+      const res = await fetch("/api/Admin/promocode_brands");
       const data = await res.json();
       setBrands(data);
     } catch (err) {
@@ -71,6 +73,7 @@ export default function PromoCodeTable() {
     setName("");
     setDiscount(undefined);
     setEditing(null);
+    setExpiryDate(null);
   };
 
   const handleSubmit = async () => {
@@ -84,7 +87,7 @@ export default function PromoCodeTable() {
       return;
     }
 
-    const promoData = { name, discount, brandId };
+    const promoData = { name, discount, brandId, expiry_date };
 
     try {
       const method = editing ? "PUT" : "POST";
@@ -115,6 +118,8 @@ export default function PromoCodeTable() {
     setName(code.name);
     setDiscount(code.discount);
     setBrandId(code.brandId ? String(code.brandId) : null);
+    setExpiryDate(code.expiry_date ? code.expiry_date.substring(0, 10) : null);
+
     open();
   };
 
@@ -179,6 +184,7 @@ export default function PromoCodeTable() {
               <th className="text-center px-4 py-3">Brand</th>
 
               <th className="text-center px-4 py-3">Created</th>
+              <th className="text-center px-4 py-3">Expires</th>
               <th className="text-center px-4 py-3">Actions</th>
             </tr>
           </thead>
@@ -202,6 +208,19 @@ export default function PromoCodeTable() {
                       ? new Date(code.created_at).toLocaleDateString()
                       : "-"}
                   </td>
+                  <td
+                    className={`px-4 py-3 ${
+                      code.expiry_date &&
+                      new Date(code.expiry_date) < new Date()
+                        ? "text-red-light font-bold p-2 bg-red-light-4 rounded"
+                        : "text-green-dark font-bold p-2 bg-green-light-4 rounded"
+                    }`}
+                  >
+                    {code.expiry_date
+                      ? new Date(code.expiry_date).toLocaleDateString()
+                      : "-"}
+                  </td>
+
                   <td className="px-4 py-3">
                     <Group gap="xs" justify="center">
                       <Tooltip label="Edit">
@@ -290,6 +309,16 @@ export default function PromoCodeTable() {
           onChange={(value) => setBrandId(value)} // value هي دائمًا string
           searchable
           required
+          mb="sm"
+        />
+        <TextInput
+          label="Expiry Date"
+          placeholder="YYYY-MM-DD"
+          variant="filled"
+          radius="xl"
+          value={expiry_date ?? ""}
+          onChange={(e) => setExpiryDate(e.currentTarget.value)}
+          type="date"
           mb="sm"
         />
 

@@ -16,11 +16,11 @@ INNER JOIN brands as b ON "promo_codes"."brandId" = b.id
 }
 
 export async function POST(req: NextRequest) {
-  const { name, discount, brandId } = await req.json();
+  const { name, discount, brandId, expiry_date } = await req.json();
 
-  if (!name || discount === undefined || !brandId) {
+  if (!name || discount === undefined || !brandId || !expiry_date) {
     return new Response(
-      JSON.stringify({ error: "Name and discount are required" }),
+      JSON.stringify({ error: "Name, discount, brandId, and expiry_date are required" }),
       {
         status: 400,
         headers: { "Content-Type": "application/json" },
@@ -30,8 +30,8 @@ export async function POST(req: NextRequest) {
 
   const client = await pool.connect();
   const result = await client.query(
-    `INSERT INTO promo_codes (name, discount, "brandId") VALUES ($1, $2, $3) RETURNING *`,
-    [name, discount, brandId]
+    `INSERT INTO promo_codes (name, discount, "brandId", expiry_date) VALUES ($1, $2, $3, $4) RETURNING *`,
+    [name, discount, brandId, expiry_date]
   );
   client.release();
 
@@ -43,11 +43,11 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   try {
-    const { id, name, discount, brandId } = await req.json();
+    const { id, name, discount, brandId, expiry_date } = await req.json();
 
-    if (!id || !name || discount === undefined || !brandId) {
+    if (!id || !name || discount === undefined || !brandId || !expiry_date) {
       return new Response(
-        JSON.stringify({ error: "ID, name, discount, and brandId are required" }),
+        JSON.stringify({ error: "ID, name, discount, brandId, and expiry_date are required" }),
         { status: 400, headers: { "Content-Type": "application/json" } }
       );
     }
@@ -56,10 +56,10 @@ export async function PUT(req: NextRequest) {
 
     const result = await client.query(
       `UPDATE promo_codes 
-       SET name = $1, discount = $2, "brandId" = $3 
-       WHERE id = $4 
+       SET name = $1, discount = $2, "brandId" = $3, expiry_date = $4
+       WHERE id = $5 
        RETURNING *`,
-      [name, discount, brandId, id]
+      [name, discount, brandId, expiry_date, id]
     );
 
     client.release();

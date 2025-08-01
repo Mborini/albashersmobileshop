@@ -65,6 +65,7 @@ const QuickViewModal = () => {
         color: selectedColor,
         images: product.images ?? [],
         brandId: product.brand_id,
+        brandName: product.brand_name,
       })
     );
 

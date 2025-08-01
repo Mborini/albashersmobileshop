@@ -29,6 +29,8 @@ const SingleItem = ({ item }: { item: Product }) => {
       quantity: 1,
       color: item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
       images: item.images ?? [],
+      brandName: item.brand_name,
+      brandId: item.brand_id,
     })
   };
 

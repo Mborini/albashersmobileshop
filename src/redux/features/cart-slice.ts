@@ -10,6 +10,7 @@ export type CartItem = {
   images: string[];
   color: string; 
    brandId?: number; 
+   brandName?: string;
   
 };
 

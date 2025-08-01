@@ -10,6 +10,8 @@ import { updateQuickView } from "@/redux/features/quickView-slice";
 import { useDispatch } from "react-redux";
 import type { AppDispatch } from "@/redux/store";
 import { useTranslation } from "react-i18next";
+import { Badge } from "@mantine/core";
+import { motion } from "framer-motion";
 
 const Hero = () => {
   const { openModal } = useModalContext();
@@ -18,6 +20,15 @@ const { t } = useTranslation();
   const [loading, setLoading] = useState(true);
   const [ads, setAds] = useState([]);
 
+const shake = {
+  animate: {
+    x: [0, -3, 3, -3, 3, 0],
+    transition: {
+      duration: 0.4,
+      repeat: Infinity,
+    },
+  },
+};
   useEffect(() => {
     const loadAds = async () => {
       try {
@@ -47,10 +58,19 @@ const { t } = useTranslation();
 
   return (
     <section className="py-10 bg-white">
-      <h1 className="text-center text-4xl sm:text-6xl text-red font-bold my-12">
-        {t("super_sales")}
-      </h1>
+     <div className="max-w-[1170px] mx-auto px-4 mb-6 flex justify-center">
+<motion.div {...shake}>
+  <Badge
+    size="xl"
+    radius="xl"
+    variant="gradient"
+    gradient={{ from: "red", to: "orange" }}
+  >
+    {t("super_sales")}
+  </Badge>
+</motion.div>
 
+  </div>
       <div className="max-w-[1170px] mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-5">
         {ads.map((item) => (
           <div

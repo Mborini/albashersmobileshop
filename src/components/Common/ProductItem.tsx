@@ -63,6 +63,7 @@ const ProductItem = ({ item }: { item: Product }) => {
         color: selectedColor ?? item.colors?.[0]?.hex_code ?? "",
         images: item.images ?? [],
         brandId: item.brand_id,
+        brandName: item.brand_name,
       })
     );
     toast.success(t("added_to_cart", { itemName: item.title }), {

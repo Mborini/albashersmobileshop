@@ -18,6 +18,8 @@ import { useTranslation } from "react-i18next";
 import { MdOutlineDiscount, MdOutlineShoppingCart } from "react-icons/md";
 import { Radio, Grid, Alert, Badge, TextInput } from "@mantine/core";
 import { LuBadgeAlert } from "react-icons/lu";
+import Image from "next/image";
+import { CiNoWaitingSign } from "react-icons/ci";
 
 const Checkout = () => {
   const cartItems = useSelector(selectCartItems);
@@ -32,10 +34,24 @@ const Checkout = () => {
   const [message, setMessage] = useState<string | null>(null);
   const [promoCode, setPromoCode] = useState("");
   const [discountAmount, setDiscountAmount] = useState(0);
-  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const [promoCodesError, setPromoCodesError] = useState<string | null>(null);
+  const [appliedCode, setAppliedCode] = useState<{
+    name: string;
+    brandId: string;
+    discount: number;
+  } | null>(null);
   const [codePercentage, setCodePercentage] = useState<number | null>(null);
+  const [appliedCodesDetails, setAppliedCodesDetails] = useState<
+    { brandId: string; brandName: string; discount: number }[] | null
+  >(null);
+
   const isRTL = i18n.language === "ar";
-  console.log("cartItems", cartItems);
+  useEffect(() => {
+    if (promoCode) {
+      setPromoCodesError(null);
+    }
+  }, [promoCode]);
+
   useEffect(() => {
     const fetchDeliveryConditions = async () => {
       try {
@@ -99,36 +115,61 @@ const Checkout = () => {
     }
 
     try {
-      const res = await fetch("/api/Admin/promoCode");
+      const res = await fetch("/api/billing_promoCode");
       const data = await res.json();
 
-      // ابحث عن الكود
-      const matchedCode = data.find(
+      // فلتر الأكواد حسب اسم البروموكود
+      const matchedCodes = data.filter(
         (code: { name: string }) => code.name === promoCode
       );
 
-      if (!matchedCode) {
+      if (!matchedCodes.length) {
+        setPromoCodesError(t("invalid_promo_code"));
         toast.error(t("invalid_promo_code"));
         return;
       }
 
-      // احسب المجموع الخاص بالبراند فقط
-      const brandId = matchedCode.brandId;
-      const brandTotal = cartItems
-        .filter((item) => item.brandId === brandId)
-        .reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
+      // احسب الخصم الإجمالي
+      let totalDiscount = 0;
+      matchedCodes.forEach((code) => {
+        const brandTotal = cartItems
+          .filter((item) => item.brandId === code.brandId)
+          .reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
 
-      if (brandTotal === 0) {
+        const discountForBrand = (brandTotal * code.discount) / 100;
+        totalDiscount += discountForBrand;
+      });
+
+      if (totalDiscount === 0) {
         toast.error(t("promo_code_not_applicable_for_cart_brand"));
         return;
       }
 
-      // احسب قيمة الخصم
-      const discount = (brandTotal * matchedCode.discount) / 100;
+      setDiscountAmount(totalDiscount);
+      setCodePercentage(null);
+      setAppliedCode({
+        name: promoCode,
+        brandId: matchedCodes.map((c) => c.brandId).join(","),
+        discount: -1,
+      });
+      const getBrandNameById = (brandId: number) => {
+        const item = cartItems.find((i) => i.brandId === brandId);
+        return item?.brandName || "Brand";
+      };
 
-      setDiscountAmount(discount);
-      setCodePercentage(parseInt(matchedCode.discount));
-      setAppliedCode(promoCode);
+      // خزّن التفاصيل لكل براند
+      const appliedCodes = matchedCodes
+        .filter((code) =>
+          cartItems.some((item) => item.brandId === code.brandId)
+        )
+        .map((code) => ({
+          brandId: code.brandId,
+          brandName: getBrandNameById(code.brandId),
+          discount: code.discount,
+        }));
+
+      setAppliedCodesDetails(appliedCodes);
+
       toast.success(t("promo_code_applied"));
     } catch (err) {
       console.error("Failed to apply promo code", err);
@@ -204,12 +245,11 @@ const Checkout = () => {
       paymentMethod,
       grandTotal,
       discountAmount,
-      promoCode: appliedCode,
+      promoCode: appliedCode?.name,
     };
 
     await sender(data);
   };
-
   return (
     <>
       <Breadcrumb title={t("checkout")} pages={["checkout"]} />
@@ -248,11 +288,41 @@ const Checkout = () => {
                           key={item.id}
                           className="flex items-center justify-between py-5 border-b border-gray-3"
                         >
-                          <div>
-                            <p className="text-dark">{item.title}</p>
-                            <p className="text-sm text-gray-600">
-                              {t("quantity")} : {item.quantity}
-                            </p>
+                          <div className="flex items-center gap-3">
+                            <Image
+                              src={item.images?.[0]}
+                              alt={item.title}
+                              width={50}
+                              height={50}
+                              className="w-12 h-12 object-cover rounded"
+                            />
+                            <div className="flex flex-col">
+                              <div className="flex flex-row items-center gap-2">
+                                <p className="text-dark">{item.title}</p>
+                                <Badge size="sm">{item.brandName}</Badge>
+                              </div>
+                              <div className="flex items-center gap-2">
+                                <p className="text-sm font-medium text-gray-700">
+                                  Color:
+                                </p>
+                                {item.color ? (
+                                  <span
+                                    style={{ backgroundColor: item.color }}
+                                    className="w-3 h-3 border border-black rounded-full cursor-pointer hover:scale-110 transition-transform"
+                                    title={item.color} // لو حابب يظهر لون عند المرور عليه بالفأرة
+                                  />
+                                ) : (
+                                  <CiNoWaitingSign
+                                    size={20}
+                                    className="text-gray-400"
+                                  />
+                                )}
+                              </div>
+
+                              <p className="text-sm text-gray-600">
+                                {t("quantity")} : {item.quantity}
+                              </p>
+                            </div>
                           </div>
                           <div className="flex items-center gap-3">
                             <p className="text-dark text-right">
@@ -263,14 +333,18 @@ const Checkout = () => {
                             </p>
                             <button
                               type="button"
-                              onClick={() =>
+                              onClick={() => {
                                 dispatch(
                                   removeItemFromCart({
                                     id: item.id,
                                     color: item.color,
                                   })
-                                )
-                              }
+                                );
+                                setAppliedCode(null);
+                                setPromoCode("");
+                                setDiscountAmount(0);
+                                setCodePercentage(null);
+                              }}
                               aria-label={t("remove_item")}
                               className="text-red-light hover:text-red-800"
                             >
@@ -355,21 +429,34 @@ const Checkout = () => {
                               }}
                               className="w-full sm:w-[200px]"
                             />
+                            {promoCodesError && (
+                              <div className="text-red-light text-sm font-semibold">
+                                {promoCodesError}
+                              </div>
+                            )}
 
-                            {appliedCode && (
-                              <Badge
-                                className="text-white"
-                                style={{
-                                  backgroundImage:
-                                    "linear-gradient(to right, #3B82F6, #2563EB, #1D4ED8)",
-                                }}
-                                variant="filled"
-                                size="lg"
-                                radius="lg"
-                              >
-                                {t("save")}{" "}
-                                {codePercentage !== null ? codePercentage : 0}%
-                              </Badge>
+                            {appliedCodesDetails && (
+                              <div className="flex flex-col gap-1">
+                                <span className="text-blue-light font-semibold">
+                                  {t("save")}:
+                                </span>
+                                {appliedCodesDetails.map((code) => (
+                                  <Badge
+                                    key={code.brandId}
+                                    className="text-white"
+                                    style={{
+                                      backgroundImage:
+                                        "linear-gradient(to right, #3B82F6, #2563EB, #1D4ED8)",
+                                    }}
+                                    variant="filled"
+                                    size="sm"
+                                    radius="lg"
+                                  >
+                                    {code.brandName}:{" "}
+                                    {Math.round(code.discount)}%
+                                  </Badge>
+                                ))}
+                              </div>
                             )}
                           </div>
                         </Alert>

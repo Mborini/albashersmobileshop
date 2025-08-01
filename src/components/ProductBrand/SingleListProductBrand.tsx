@@ -45,6 +45,7 @@ const SingleListProductBrand = ({ item }: { item: Product }) => {
           item.colors && item.colors.length > 0 ? item.colors[0].hex_code : "",
         images: item.images ?? [],
         brandId: item.brand_id,
+        brandName: item.brand_name,
       })
     );
   };
