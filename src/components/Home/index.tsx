@@ -32,10 +32,9 @@ const Home = () => {
       <div ref={categoriesRef}>
         <Categories />
       </div>
-   <ProductHighlights />
+      <ProductHighlights />
       <Video />
       <PromoBanner />
-    
     </main>
   );
 };

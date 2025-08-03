@@ -382,24 +382,23 @@ const Checkout = () => {
                           >
                             <div>{message}</div>
 
-                            <Badge
-                              component="button"
-                              onClick={() =>
-                                (window.location.href = "/products")
-                              }
-                              className="mx-1 text-white"
-                              style={{
-                                backgroundImage:
-                                  "linear-gradient(to right, #FFA726, #FB8C00, #F57C00)",
-                                cursor: "pointer",
-                                marginTop: "1rem",
-                              }}
-                              variant="filled"
-                              size="md"
-                              radius="lg"
-                            >
-                              {t("add_more")}
-                            </Badge>
+                            <Link href="/?focus=categories" passHref>
+                              <Badge
+                                component="a"
+                                className="mx-1 text-white"
+                                style={{
+                                  backgroundImage:
+                                    "linear-gradient(to right, #FFA726, #FB8C00, #F57C00)",
+                                  cursor: "pointer",
+                                  marginTop: "1rem",
+                                }}
+                                variant="filled"
+                                size="md"
+                                radius="lg"
+                              >
+                                {t("add_more")}
+                              </Badge>
+                            </Link>
                           </Alert>
                         )}
                       </div>
