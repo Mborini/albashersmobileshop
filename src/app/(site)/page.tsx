@@ -1,3 +1,4 @@
+import PromoModal from "@/components/ads";
 import ChatPopup from "@/components/Header/ChatPopup";
 import Home from "@/components/Home";
 import { Metadata } from "next";
@@ -173,6 +174,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <>
+    <PromoModal/>
       <Home />
       <ChatPopup />
 

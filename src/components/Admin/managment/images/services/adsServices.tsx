@@ -22,6 +22,15 @@ export async function updateAdsImages(id, AdsImages) {
   if (!res.ok) throw new Error("Failed to update ads images");
   return await res.json();
 }
+export async function activatePromo(id, is_active) {
+  const res = await fetch(`${API_URL}/promoActivation/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ is_active }),
+  });
+  if (!res.ok) throw new Error("Failed to update ads images");
+  return await res.json();
+}
 export async function uploadImage(file: File, oldImageUrl?: string): Promise<string> {
   const formData = new FormData();
   formData.append("file", file);

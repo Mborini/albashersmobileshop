@@ -15,32 +15,21 @@ import {
 } from "@mantine/core";
 import { Carousel } from "@mantine/carousel";
 import "@mantine/carousel/styles.css";
-import { fetchAdsImages } from "./services/adsServices";
-import { useEffect, useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import MainSliderImages from "./MainSliderImages";
 import VideoList from "./VideoList";
+import PromoList from "./Promolist";
 
-export default function GridImages({ onEditImage }) {
-  const [adsImages, setAdsImages] = useState([]);
-  const [loading, setLoading] = useState(true);
+export default function GridImages({
+  images,
+  loading,
+  onEditImage,
+  onActivate,
+}) {
+  // نستخدم البيانات القادمة من الأعلى
+  const adsImages = images;
 
-  useEffect(() => {
-    loadAdsImages();
-  }, []);
-
-  async function loadAdsImages() {
-    setLoading(true);
-    try {
-      const data = await fetchAdsImages();
-      setAdsImages(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
+  // تصنيفات الصور
   const mainSliderImages = adsImages.filter(
     (img) => img.is_slider && img.is_main
   );
@@ -51,6 +40,7 @@ export default function GridImages({ onEditImage }) {
     (img) => !img.is_slider && !img.is_main && !img.is_video
   );
   const videoImages = adsImages.filter((img) => img.is_video);
+  const promoImage = adsImages.filter((img) => img.is_promo);
 
   if (loading) {
     return (
@@ -60,6 +50,7 @@ export default function GridImages({ onEditImage }) {
     );
   }
 
+  // كرت الصورة
   const ImageCard = ({ item }) => (
     <Card
       withBorder
@@ -84,7 +75,7 @@ export default function GridImages({ onEditImage }) {
             {Math.floor(
               ((item.price - item.discounted_Price) / item.price) * 100
             )}
-            % Sale Off
+            % خصم
           </Text>
           <Title order={4} mt="xs">
             {item.title}
@@ -116,6 +107,7 @@ export default function GridImages({ onEditImage }) {
     </Card>
   );
 
+  // قسم السلايدر
   const SliderSection = ({ title, images }) =>
     images.length > 0 ? (
       <Box mt="xl">
@@ -124,12 +116,7 @@ export default function GridImages({ onEditImage }) {
             {title}
           </Title>
         )}
-        <Carousel
-          withIndicators
-          slideSize="100%"
-          slideGap="md"
-          
-        >
+        <Carousel withIndicators slideSize="100%" slideGap="md">
           {images.map((item, index) => (
             <Carousel.Slide key={index}>
               <ImageCard item={item} />
@@ -138,7 +125,7 @@ export default function GridImages({ onEditImage }) {
         </Carousel>
       </Box>
     ) : (
-      <Text>No {title?.toLowerCase()} available</Text>
+      <Text>لا يوجد {title?.toLowerCase()}</Text>
     );
 
   return (
@@ -147,15 +134,23 @@ export default function GridImages({ onEditImage }) {
         <Grid.Col span={12}>
           <Grid.Col span={12}>
             <Grid>
-              <Grid.Col span={{ base: 12, md: 6 }}>
+              <Grid.Col span={{ base: 12, md: 4 }}>
                 <MainSliderImages
                   images={mainSliderImages}
                   onEditImage={onEditImage}
                 />
               </Grid.Col>
 
-              <Grid.Col span={{ base: 12, md: 6 }}>
+              <Grid.Col span={{ base: 12, md: 4 }}>
                 <VideoList videos={videoImages} onEditImage={onEditImage} />
+              </Grid.Col>
+
+              <Grid.Col span={{ base: 12, md: 4 }}>
+                <PromoList
+                  promo={promoImage}
+                  onEditImage={onEditImage}
+                  onActivate={onActivate}
+                />
               </Grid.Col>
             </Grid>
           </Grid.Col>
