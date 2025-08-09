@@ -9,6 +9,9 @@ export async function GET() {
         p.*, 
         b.name AS brand_name,
     
+        -- جلب البروموكود وقيمة الخصم إن وجد
+        pcodes.name AS promo_code,
+        pcodes.discount As discount_value,
         -- تجميع الصفات ككائن JSON
         COALESCE(
           jsonb_object_agg(a.name, pa.value) 
@@ -36,11 +39,13 @@ export async function GET() {
       LEFT JOIN product_attributes pa ON p.id = pa.product_id
       LEFT JOIN attributes a ON pa.attribute_id = a.id
       LEFT JOIN product_colors pc ON pc.product_id = p.id
-      LEFT JOIN colors clr ON pc.color_id = clr.id
-    
+ LEFT JOIN colors clr ON pc.color_id = clr.id
+      LEFT JOIN promo_codes pcodes 
+        ON p.brand_id = pcodes."brandId" 
+        AND pcodes.expiry_date >= CURRENT_DATE    
       WHERE p.is_best_offer = true
     
-      GROUP BY p.id, b.name
+      GROUP BY p.id, b.name, pcodes.name, pcodes.discount
     
       LIMIT 10
     `);

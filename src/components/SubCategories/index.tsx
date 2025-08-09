@@ -72,88 +72,61 @@ const SubCategories = () => {
     fetchSubCategories();
   }, [categoryId]);
 
-  return (
-    <>
-      <Breadcrumb
-        title={`${t("explore_subcategories_of")} ${selectedName}`}
-        pages={["categories", "/", selectedName]}
-      />
-      <section
-        className="overflow-hidden pt-4"
-        dir={i18n.language === "ar" ? "rtl" : "ltr"}
-      >
-        <div className="max-w-[1170px] w-full mt-2 mx-auto px-4 sm:px-8 xl:px-0 pb-15 ">
-          <div className="swiper categories-carousel common-carousel">
-            {!loading && !isMobile ? (
-              <div className="mb-10 flex items-end justify-end">
-                <div className="flex items-center gap-3" dir="ltr">
-                <button
-                  onClick={handlePrev}
-                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-black border border-black rounded-md text-white transition-all duration-300 hover:bg-white hover:text-black"
-                >
-                  <FaChevronLeft className="text-xs sm:text-sm" />
-                </button>
+ 
 
-                <button
-                  onClick={handleNext}
-                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-black border border-black rounded-md text-white transition-all duration-300 hover:bg-white hover:text-black"
+return (
+  <>
+    <Breadcrumb
+      title={`${t("explore_subcategories_of")} ${selectedName}`}
+      pages={["categories", "/", selectedName]}
+    />
+    <section
+      className="overflow-hidden pt-4"
+      dir={i18n.language === "ar" ? "rtl" : "ltr"}
+    >
+      <div className="max-w-[1170px] w-full mt-2 mx-auto px-4 sm:px-8 xl:px-0 pb-15 ">
+        <div className="categories-carousel common-carousel">
+
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-6 mt-5">
+              {Array.from({ length: 6 }).map((_, idx) => (
+                <div
+                  key={idx}
+                  className="flex flex-col items-center gap-3 animate-pulse"
                 >
-                  <FaChevronRight className="text-xs sm:text-sm" />
-                </button>
+                  <div className="w-[130px] h-[130px] rounded-full bg-gray-300 overflow-hidden">
+                    <Skeleton
+                      circle={true}
+                      width="100%"
+                      height="100%"
+                      baseColor="#d1d5db"
+                      highlightColor="#f3f4f6"
+                    />
+                  </div>
+                  <Skeleton
+                    width={80}
+                    height={16}
+                    borderRadius={6}
+                    baseColor="#d1d5db"
+                    highlightColor="#f3f4f6"
+                  />
                 </div>
-              </div>
-            ) : null}
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-6 mt-5">
+              {SubCategory.map((item, key) => (
+                <SingleSubCategory key={key} item={item} />
+              ))}
+            </div>
+          )}
 
-            {loading ? (
-              <div className="grid grid-cols-2 sm:grid-cols-4 mt-5 xl:grid-cols-6 gap-4">
-                {Array.from({ length: 5 }).map((_, idx) => (
-                  <div key={idx} className="flex flex-col items-center gap-3">
-                    <Skeleton
-                      width={130}
-                      height={130}
-                      baseColor="#d1d5db"
-                      highlightColor="#f3f4f6"
-                    />
-                    <Skeleton
-                      width={80}
-                      height={12}
-                      borderRadius={4}
-                      baseColor="#d1d5db"
-                      highlightColor="#f3f4f6"
-                    />
-                  </div>
-                ))}
-              </div>
-            ) : isMobile ? (
-              <div className="grid grid-cols-2 gap-4">
-                {SubCategory.map((item, key) => (
-                  <div key={key}>
-                    <SingleSubCategory item={item} />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <Swiper
-                ref={sliderRef}
-                slidesPerView={5}
-                breakpoints={{
-                  0: { slidesPerView: 3 },
-                  1000: { slidesPerView: 4 },
-                  1200: { slidesPerView: 6 },
-                }}
-              >
-                {SubCategory.map((item, key) => (
-                  <SwiperSlide key={key}>
-                    <SingleSubCategory item={item} />
-                  </SwiperSlide>
-                ))}
-              </Swiper>
-            )}
-          </div>
         </div>
-      </section>
-    </>
-  );
+      </div>
+    </section>
+  </>
+);
+
 };
 
 export default SubCategories;

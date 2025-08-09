@@ -1,14 +1,17 @@
-import pool from '../../../lib/db'; // if using relative path
+import pool from '../../../lib/db';
 
 export async function GET() {
   try {
     const client = await pool.connect();
 
-
     const res = await client.query(`
       SELECT 
         p.*, 
         b.name AS brand_name,
+
+        -- جلب البروموكود وقيمة الخصم إن وجد
+        pcodes.name AS promo_code,
+        pcodes.discount As discount_value,
 
         -- تجميع الصفات ككائن JSON
         COALESCE(
@@ -38,17 +41,20 @@ export async function GET() {
       LEFT JOIN product_attributes pa ON p.id = pa.product_id
       LEFT JOIN attributes a ON pa.attribute_id = a.id
       LEFT JOIN product_colors pc ON pc.product_id = p.id 
-            LEFT JOIN colors clr ON pc.color_id = clr.id     
+      LEFT JOIN colors clr ON pc.color_id = clr.id
+      LEFT JOIN promo_codes pcodes 
+        ON p.brand_id = pcodes."brandId" 
+        AND pcodes.expiry_date >= CURRENT_DATE
 
       WHERE p.is_new_arrival = true
 
-      GROUP BY p.id, b.name
+      GROUP BY p.id, b.name, pcodes.name, pcodes.discount
 
       LIMIT 10
     `);
 
     client.release();
-
+console.log("New Arrival Products:", res.rows);
     return new Response(JSON.stringify(res.rows), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

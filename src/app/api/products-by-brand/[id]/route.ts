@@ -13,6 +13,9 @@ export async function GET(
     const productRes = await client.query(
       `SELECT 
         p.*, 
+        pcodes.name AS promo_code,
+        pcodes.discount AS discount_value,
+        
         b.name AS brand_name,
         COALESCE(
           jsonb_object_agg(a.name, pa.value) 
@@ -36,10 +39,13 @@ export async function GET(
       LEFT JOIN product_attributes pa ON p.id = pa.product_id
       LEFT JOIN attributes a ON pa.attribute_id = a.id
       LEFT JOIN product_colors pc ON pc.product_id = p.id
-      LEFT JOIN colors clr ON pc.color_id = clr.id
+ LEFT JOIN colors clr ON pc.color_id = clr.id
+      LEFT JOIN promo_codes pcodes 
+        ON p.brand_id = pcodes."brandId" 
+        AND pcodes.expiry_date >= CURRENT_DATE
       WHERE p.is_new_arrival = true AND p.brand_id = $1
-      GROUP BY p.id, b.name`,
-      [id]
+      GROUP BY p.id, b.name, pcodes.name, pcodes.discount
+    `, [id]
     );
 
     const products = productRes.rows;

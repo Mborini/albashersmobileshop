@@ -23,22 +23,36 @@ const SingleSubCategory = ({ item }: { item: subCategory }) => {
         onClick={() => dispatch(setSelectedSubCategoryName(item.name))}
         className="group flex flex-col items-center"
       >
-        <div className="flex flex-col items-center justify-center text-center">
-        <div className="w-[200px] h-[200px] sm:w-[180px] sm:h-[180px] flex items-center justify-center">
-            <Image
-              src={item.image}
-              alt="Category"
-              width={110}
-              height={110}
-              className="sm:w-[110px] sm:h-[110px]"
-            />
-          </div>
+<div
+  className="
+    w-[100px] h-[100px] md:w-[130px] md:h-[130px] 
+    lg:w-[150px] lg:h-[150px] xl:w-[180px] xl:h-[180px] 
+    rounded-full bg-gray-3 shadow-md overflow-hidden
+    relative
+    flex items-center justify-center
+    transition-colors duration-300
+    group-hover:bg-gray-4
+  "
+>
+  <div className="w-[80%] h-[80%] relative">
+    <Image
+      src={item.image}
+      alt="Category"
+      fill
+      style={{ objectFit: "contain", backgroundColor: "transparent" }}
+      sizes="(max-width: 640px) 80px, (max-width: 768px) 104px, (max-width: 1024px) 120px, 144px"
+      priority
+    />
+  </div>
+</div>
 
-          <div className="flex justify-center">
-          <h3 className="inline-block text-lg sm:text-xl font-semibold text-center text-dark bg-gradient-to-r from-gray-7 to-gary-7 bg-[length:0px_1px] bg-left-bottom bg-no-repeat transition-[background-size] duration-500 hover:bg-[length:100%_3px] group-hover:bg-[length:100%_1px] group-hover:text-gray-6">
-          {item.name}
-            </h3>
-          </div>
+
+
+        {/* اسم التصنيف */}
+        <div className="flex justify-center mt-3">
+          <h3 className="inline-block text-base sm:text-lg md:text-xl font-semibold text-center">
+            {item.name}
+          </h3>
         </div>
       </Link>
     </motion.div>

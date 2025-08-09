@@ -39,5 +39,8 @@ export type Product = {
   value: string;
   colors:Colors[];
   product_id?: number;
+  promo_code?: string;
+  discount_value?: number;
+  created_at?: string;
   
 };

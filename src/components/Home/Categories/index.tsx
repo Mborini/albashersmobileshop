@@ -96,66 +96,44 @@ const Categories = () => {
                 </motion.p>
               </span>
             </div>
-            {loading ? (
-              ""
-            ) : (
-              <div className="flex items-center gap-2" dir="ltr">
-                <button
-                  onClick={handlePrev}
-                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-black border border-black rounded-md text-white transition-all duration-300 hover:bg-white hover:text-black"
-                >
-                  <FaChevronLeft className="text-xs sm:text-sm" />
-                </button>
-
-                <button
-                  onClick={handleNext}
-                  className="w-7 h-7 sm:w-8 sm:h-8 flex items-center justify-center bg-black border border-black rounded-md text-white transition-all duration-300 hover:bg-white hover:text-black"
-                >
-                  <FaChevronRight className="text-xs sm:text-sm" />
-                </button>
-              </div>
-            )}
+            
           </div>
 
-          {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-4">
-              {Array.from({ length: 5 }).map((_, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-3">
-                  <Skeleton
-                    width={130}
-                    height={130}
-                    baseColor="#d1d5db"
-                    highlightColor="#f3f4f6"
-                  />
-                  <Skeleton
-                    width={80}
-                    height={12}
-                    borderRadius={4}
-                    baseColor="#d1d5db"
-                    highlightColor="#f3f4f6"
-                  />
-                </div>
-              ))}
-            </div>
-          ) : (
-            <Swiper
-              ref={sliderRef}
-              slidesPerView={3}
-              modules={[Autoplay]}
-              breakpoints={{
-                0: { slidesPerView: 3 }, // ✅ موبايل: 3 عناصر
-                640: { slidesPerView: 3 }, // تابلت صغير
-                1000: { slidesPerView: 4 }, // شاشات متوسطة
-                1200: { slidesPerView: 5 }, // شاشات كبيرة
-              }}
-            >
-              {sortedCategories.map((item, key) => (
-                <SwiperSlide key={key}>
-                  <SingleItem item={item} />
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          )}
+   {loading ? (
+  <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-6 gap-6">
+    {Array.from({ length: 6 }).map((_, idx) => (
+      <div
+        key={idx}
+        className="flex flex-col items-center gap-3 animate-pulse"
+      >
+        <div className="w-[130px] h-[130px] rounded-full bg-gray-300 overflow-hidden">
+          <Skeleton
+            circle={true}
+            width="100%"
+            height="100%"
+            baseColor="#d1d5db"
+            highlightColor="#f3f4f6"
+          />
+        </div>
+        <Skeleton
+          width={80}
+          height={16}
+          borderRadius={6}
+          baseColor="#d1d5db"
+          highlightColor="#f3f4f6"
+        />
+      </div>
+    ))}
+  </div>
+) : (
+  <div className="grid grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-6">
+    {sortedCategories.map((item, key) => (
+      <SingleItem key={key} item={item} />
+    ))}
+  </div>
+)}
+
+
         </div>
       </div>
       <HeroFeature />

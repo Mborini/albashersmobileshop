@@ -130,8 +130,8 @@ const NewArrivalProduct = () => {
   return (
     <>
       <Breadcrumb
-        title={`Explore New Arrivals Products`}
-        pages={["New Arrivals Products"]}
+        title={`Explore Best Offers Products`}
+        pages={["Best Offers Products"]}
       />
       <section className="overflow-hidden relative pb-20 pt-5 lg:pt-5 xl:pt-5 bg-[#f3f4f6]">
         <div className="max-w-[1170px] w-full mx-auto px-4 sm:px-8 xl:px-0">

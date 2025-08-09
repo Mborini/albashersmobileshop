@@ -152,6 +152,20 @@ const SingleListItem = ({ item }: { item: Product }) => {
               >
                 {item.brand_name}
               </Badge>
+              {item.promo_code && item.discount_value ? (
+               <Badge
+  size="md"
+  variant="gradient"
+  gradient={{ from: "blue", to: "navy", deg: 45 }}
+>
+  {`Use '${item.promo_code}' to get offer ${
+    Number.isInteger(Number(item.discount_value))
+      ? Number(item.discount_value)
+      : Number(item.discount_value).toFixed(2)
+  }%`}
+</Badge>
+
+              ) : null}
             </div>
 
             <span className="text-sm sm:text-base text-gray-700 leading-relaxed block mb-2">

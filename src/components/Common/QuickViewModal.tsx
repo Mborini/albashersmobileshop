@@ -143,7 +143,9 @@ const QuickViewModal = () => {
                 >
             {t("new_arrivals")}
           </Badge>
+          
         )}
+       
       </Flex>
       <Flex justify="center" align="center" mt="xs">
         <Flex
@@ -264,6 +266,7 @@ const QuickViewModal = () => {
             </Text>
 
             <Box mt="md" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+               
               <Title order={5} mb="xs">
                 {t("colors")}
               </Title>
@@ -384,15 +387,38 @@ const QuickViewModal = () => {
                   >
                     <FiPlus />
                   </Button>
+                  
                 </Flex>
               </Box>
             </Flex>
 
             <Flex
+            mb="md"
               gap="sm"
               wrap="nowrap"
               direction={i18n.language === "ar" ? "row-reverse" : "row"}
             >
+              {product.promo_code && product.discount_value ? (
+  <Badge
+    size="md"
+    variant="gradient"
+    gradient={{ from: "blue", to: "navy", deg: 45 }}
+  >
+    {`Use '${product.promo_code}' to get offer ${
+      Number.isInteger(Number(product.discount_value))
+        ? Number(product.discount_value)
+        : Number(product.discount_value).toFixed(2)
+    }%`}
+  </Badge>
+) : null}
+
+              </Flex>
+            <Flex
+              gap="sm"
+              wrap="nowrap"
+              direction={i18n.language === "ar" ? "row-reverse" : "row"}
+            >
+              
               <Button
                 radius="xl"
                 disabled={!product.in_stock || quantity === 0}

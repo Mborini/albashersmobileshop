@@ -182,11 +182,24 @@ const SingleGridItem = ({ item }: { item: Product }) => {
       </div>
 
       {/* Title */}
-      <div className="flex items-center justify-between gap-2 mb-1.5">
-        <h3 className="flex-1 text-sm font-medium text-black truncate hover:text-gray-6 duration-200 ease-out">
-          {item.title}
-        </h3>
-      </div>
+     
+             <div className="flex flex-col items-start justify-between gap-2 mb-1.5">
+               <Badge
+  size="md"
+  variant="gradient"
+  gradient={{ from: "blue", to: "navy", deg: 45 }}
+>
+  {`Use '${item.promo_code}' to get offer ${
+    Number.isInteger(Number(item.discount_value))
+      ? Number(item.discount_value)
+      : Number(item.discount_value).toFixed(2)
+  }%`}
+</Badge>
+
+               <h3 className="text-sm font-medium text-black truncate hover:text-gray-600 duration-200 ease-out">
+                 {item.title}
+               </h3>
+             </div>
 
       {/* Colors */}
       <div className="flex items-center gap-2.5 mb-2">
