@@ -52,10 +52,10 @@ const SingleItem: React.FC<Props> = React.memo(({ item, onRemove }) => {
             {t("quantity")} : {item.quantity}
           </p>
           <p className="text-custom-sm">
-            {t("price")} : JD {item.discountedPrice.toFixed(2)}
+            {t("price")} : JD {Number(item.discountedPrice || 0).toFixed(2)}
           </p>
           <p className="text-custom-sm">
-            {t("total")} : JD {(item.discountedPrice * item.quantity).toFixed(2)}
+            {t("total")} : JD {(Number(item.discountedPrice || 0) * item.quantity).toFixed(2)}
           </p>
         </div>
       </div>
