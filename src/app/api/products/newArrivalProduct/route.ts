@@ -49,7 +49,7 @@ export async function GET() {
       WHERE p.is_new_arrival = true
 
       GROUP BY p.id, b.name, pcodes.name, pcodes.discount
-
+ORDER BY RANDOM()
       LIMIT 10
     `);
 

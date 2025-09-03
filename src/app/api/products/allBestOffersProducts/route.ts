@@ -38,6 +38,7 @@ export async function GET() {
         AND pcodes.expiry_date >= CURRENT_DATE
       WHERE p.is_best_offer = true
       GROUP BY p.id, b.name, pcodes.name, pcodes.discount
+      ORDER BY RANDOM()
     `);
 
     const products = productRes.rows;

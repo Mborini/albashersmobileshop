@@ -46,7 +46,7 @@ export async function GET() {
       WHERE p.is_best_offer = true
     
       GROUP BY p.id, b.name, pcodes.name, pcodes.discount
-    
+    ORDER BY RANDOM()
       LIMIT 10
     `);
     

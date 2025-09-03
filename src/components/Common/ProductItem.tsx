@@ -191,7 +191,7 @@ const ProductItem = ({ item }: { item: Product }) => {
 ) : null}
 
 
-          <h3 className="text-sm font-medium text-black truncate hover:text-gray-600 duration-200 ease-out">
+          <h3 className="text-sm font-medium max-w-50 text-black truncate hover:text-gray-600 duration-200 ease-out">
             {item.title}
           </h3>
         </div>
