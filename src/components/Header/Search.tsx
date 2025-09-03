@@ -25,6 +25,7 @@ import { useDispatch } from "react-redux";
 import { updateQuickView } from "@/redux/features/quickView-slice";
 import { useModalContext } from "@/app/context/QuickViewModalContext";
 import { LuLoader } from "react-icons/lu";
+import Link from "next/link";
 
 export default function Search() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -143,6 +144,10 @@ export default function Search() {
                           exit={{ opacity: 0, y: 10, scale: 0.98 }}
                           transition={{ duration: 0.3, ease: "easeOut" }}
                         >
+                           <Link
+                                  onClick={handelClose}
+                                  href={`/products/${product.id}`}
+                                >
                           <Box
                             p="xs"
                             mb="xs"
@@ -153,20 +158,17 @@ export default function Search() {
                             }}
                             className="cursor-pointer hover:bg-gray-2"
                             dir="ltr"
-                            onClick={() => {
-                              dispatch(updateQuickView(product));
-                              openModal();
-                              handelClose();
-                            }}
                           >
                             <Group align="center">
                               {product.images[0] && (
-                                <Image
-                                  src={product.images[0]}
-                                  width={50}
-                                  height={50}
-                                  alt="Product image"
-                                />
+                               
+                                  <Image
+                                    src={product.images[0]}
+                                    width={50}
+                                    height={50}
+                                    alt="Product image"
+                                  />
+                                
                               )}
 
                               <Stack style={{ flex: 1 }}>
@@ -203,6 +205,7 @@ export default function Search() {
                               </Stack>
                             </Group>
                           </Box>
+                          </Link>
                         </motion.div>
                       ))}
                     </AnimatePresence>
