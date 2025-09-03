@@ -1,8 +1,9 @@
 import pool from "@/app/lib/db";
 import { NextRequest } from "next/server";
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
-  const { id } = params;
+export async function GET(request: NextRequest,
+  context: { params: Promise<{ id: string }> }) {
+  const { id } = await context.params;
   const client = await pool.connect();
 
   try {
