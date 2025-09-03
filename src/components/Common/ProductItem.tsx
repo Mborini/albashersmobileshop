@@ -14,6 +14,7 @@ import { IoEyeOutline } from "react-icons/io5";
 import { MdFavoriteBorder } from "react-icons/md";
 import { Badge } from "@mantine/core";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 const ProductItem = ({ item }: { item: Product }) => {
   const { t, i18n } = useTranslation();
@@ -117,17 +118,16 @@ const ProductItem = ({ item }: { item: Product }) => {
           </div>
 
           {item.images[currentImageIndex] && (
-            <Image
-              src={item.images[currentImageIndex]}
-              alt="Product image"
-              fill
-              className="object-cover transition-opacity duration-500 ease-in-out"
-              onClick={() => {
-                openModal();
-                handleQuickViewUpdate();
-              }}
-              style={{ cursor: "pointer" }}
-            />
+
+              <Link href={`/products/${item.id}`}>
+                      <Image
+                        src={item.images[currentImageIndex]}
+                        alt="Product image"
+                        fill
+                        className="object-cover transition-opacity duration-500 ease-in-out"
+                       
+                        style={{ cursor: "pointer" }}
+                      /></Link>
           )}
 
           {/* Image indicators */}

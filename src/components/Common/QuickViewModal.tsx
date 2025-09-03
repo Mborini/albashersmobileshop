@@ -129,23 +129,15 @@ const QuickViewModal = () => {
     >
       <Flex wrap="wrap" gap="sm" mb="md">
         {product.is_best_offer && (
-                <Badge
-                  variant="gradient"
-                  gradient={{ from: "red", to: "yellow" }}
-                >
+          <Badge variant="gradient" gradient={{ from: "red", to: "yellow" }}>
             {t("best_offers")}
           </Badge>
         )}
         {product.is_new_arrival && (
-                <Badge
-                  variant="gradient"
-                  gradient={{ from: "blue", to: "cyan" }}
-                >
+          <Badge variant="gradient" gradient={{ from: "blue", to: "cyan" }}>
             {t("new_arrivals")}
           </Badge>
-          
         )}
-       
       </Flex>
       <Flex justify="center" align="center" mt="xs">
         <Flex
@@ -164,42 +156,41 @@ const QuickViewModal = () => {
           >
             {/* الصور المصغرة */}
             {/* الصور المصغرة بشكل أفقي وتعمل Scroll عند العرض على الموبايل */}
-          <div
-  style={{
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "8px",
-    maxWidth: 300,
-  }}
->
-  {product.images
-    ?.filter(
-      (img) => typeof img === "string" && img.startsWith("http")
-    )
-    .map((image, index) => (
-      <div
-        key={index}
-        className={`relative w-[60px] h-[60px] cursor-pointer rounded-md overflow-hidden border-2 ${
-          activePreview === index
-            ? "border-black scale-110"
-            : "border-transparent"
-        } transition-transform duration-200`}
-        onClick={() => setActivePreview(index)}
-        onMouseOver={() => setActivePreview(index)}
-        title={`Thumbnail ${index + 1}`}
-      >
-        <Image
-          src={image}
-          alt={`thumbnail-${index}`}
-          fill
-          style={{ objectFit: "cover" }}
-          sizes="60px"
-          priority={activePreview === index}
-        />
-      </div>
-    ))}
-</div>
-
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(4, 1fr)",
+                gap: "8px",
+                maxWidth: 300,
+              }}
+            >
+              {product.images
+                ?.filter(
+                  (img) => typeof img === "string" && img.startsWith("http")
+                )
+                .map((image, index) => (
+                  <div
+                    key={index}
+                    className={`relative w-[60px] h-[60px] cursor-pointer rounded-md overflow-hidden border-2 ${
+                      activePreview === index
+                        ? "border-black scale-110"
+                        : "border-transparent"
+                    } transition-transform duration-200`}
+                    onClick={() => setActivePreview(index)}
+                    onMouseOver={() => setActivePreview(index)}
+                    title={`Thumbnail ${index + 1}`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`thumbnail-${index}`}
+                      fill
+                      style={{ objectFit: "cover" }}
+                      sizes="60px"
+                      priority={activePreview === index}
+                    />
+                  </div>
+                ))}
+            </div>
 
             {/* الصورة الرئيسية بحجم أكبر */}
             <Box
@@ -266,7 +257,6 @@ const QuickViewModal = () => {
             </Text>
 
             <Box mt="md" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
-               
               <Title order={5} mb="xs">
                 {t("colors")}
               </Title>
@@ -387,38 +377,35 @@ const QuickViewModal = () => {
                   >
                     <FiPlus />
                   </Button>
-                  
                 </Flex>
               </Box>
             </Flex>
 
             <Flex
-            mb="md"
+              mb="md"
               gap="sm"
               wrap="nowrap"
               direction={i18n.language === "ar" ? "row-reverse" : "row"}
             >
               {product.promo_code && product.discount_value ? (
-  <Badge
-    size="md"
-    variant="gradient"
-    gradient={{ from: "blue", to: "navy", deg: 45 }}
-  >
-    {`Use '${product.promo_code}' to get offer ${
-      Number.isInteger(Number(product.discount_value))
-        ? Number(product.discount_value)
-        : Number(product.discount_value).toFixed(2)
-    }%`}
-  </Badge>
-) : null}
-
-              </Flex>
+                <Badge
+                  size="md"
+                  variant="gradient"
+                  gradient={{ from: "blue", to: "navy", deg: 45 }}
+                >
+                  {`Use '${product.promo_code}' to get offer ${
+                    Number.isInteger(Number(product.discount_value))
+                      ? Number(product.discount_value)
+                      : Number(product.discount_value).toFixed(2)
+                  }%`}
+                </Badge>
+              ) : null}
+            </Flex>
             <Flex
               gap="sm"
               wrap="nowrap"
               direction={i18n.language === "ar" ? "row-reverse" : "row"}
             >
-              
               <Button
                 radius="xl"
                 disabled={!product.in_stock || quantity === 0}

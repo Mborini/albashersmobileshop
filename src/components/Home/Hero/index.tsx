@@ -12,6 +12,7 @@ import type { AppDispatch } from "@/redux/store";
 import { useTranslation } from "react-i18next";
 import { Badge } from "@mantine/core";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const Hero = () => {
   const { openModal } = useModalContext();
@@ -73,12 +74,9 @@ const shake = {
   </div>
       <div className="max-w-[1170px] mx-auto px-4 grid grid-cols-2 lg:grid-cols-4 gap-5">
         {ads.map((item) => (
+          <Link href={`/products/${item.id}`} key={item.id}>
           <div
-            key={item.id}
-            onClick={() => {
-              openModal();
-              dispatch(updateQuickView({ ...item }));
-            }}
+
             className="aspect-square cursor-pointer rounded-[10px] bg-[#F5F5F7] p-4 flex flex-col justify-between items-center text-center hover:shadow-md transition"
           >
             {/* العنوان */}
@@ -110,7 +108,7 @@ const shake = {
                 )}
               </span>
             </div>
-          </div>
+          </div></Link>
         ))}
       </div>
     </section>

@@ -15,6 +15,7 @@ import { MdFavoriteBorder } from "react-icons/md";
 import { useTranslation } from "react-i18next";
 import FlyingImage from "../Common/FlyingImage";
 import toast from "react-hot-toast";
+import Link from "next/link";
 
 const SingleListItem = ({ item }: { item: Product }) => {
   const { openModal } = useModalContext();
@@ -92,6 +93,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
   return (
     <div className="group rounded-lg bg-white shadow-1 relative">
       <div dir="ltr" className="flex flex-col sm:flex-row">
+        <Link href={`/products/${item.id}`}>
         {/* Image Section */}
         <div
           className="shadow-list relative overflow-hidden flex items-center justify-center w-full sm:max-w-[270px] sm:min-h-[270px] h-[270px] bg-gray-100"
@@ -212,6 +214,7 @@ const SingleListItem = ({ item }: { item: Product }) => {
             )}
           </div>
         </div>
+        </Link>
       </div>
     </div>
   );
