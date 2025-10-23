@@ -29,6 +29,7 @@ interface Product {
   discountedPrice?: number;
   images?: string[];
   brand_name?: string;
+  brand_id?: number;
   in_stock: boolean;
   is_best_offer?: boolean;
   is_new_arrival?: boolean;
@@ -87,15 +88,16 @@ const ProductPage = () => {
     toast.success("تمت إضافة المنتج إلى السلة");
     dispatch(
       addItemToCart({
-        id: product.id,
-        title: product.title,
-        price: product.price,
-        discountedPrice: product.discountedPrice ?? product.price,
-        quantity,
-        color: selectedColor,
-        images: product.images ?? [],
-        brandName: product.brand_name,
-      })
+             id: product.id,
+             title: product.title,
+             price: product.price,
+             discountedPrice: product.discountedPrice ?? product.price,
+             quantity: quantity,
+             color: selectedColor,
+             images: product.images ?? [],
+             brandId: product.brand_id,
+             brandName: product.brand_name,
+           })
     );
   };
 
@@ -115,6 +117,7 @@ const ProductPage = () => {
         color: selectedColor,
         images: product.images ?? [],
         status: "available",
+
       })
     );
   };
