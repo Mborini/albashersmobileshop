@@ -8,6 +8,9 @@ import PromoBanner from "./PromoBanner";
 import Video from "./Countdown";
 import SliderImages from "./sliderImages";
 import ProductHighlights from "./ProductHighlights";
+import BrandsCard from "../Admin/managment/brands/Card";
+import AllCommonBrandsGrid from "../AllCommonBrand";
+import HomeCommonBrandsGrid from "./AllCommonBrand";
 
 const Home = () => {
   const categoriesRef = useRef(null);
@@ -27,11 +30,12 @@ const Home = () => {
 
   return (
     <main>
-      <SliderImages />
+      <SliderImages /> <HomeCommonBrandsGrid />
       <Hero />
       <div ref={categoriesRef}>
         <Categories />
       </div>
+     
       <ProductHighlights />
       <Video />
       <PromoBanner />

@@ -60,7 +60,7 @@ const shake = {
   return (
     <section className="py-10 bg-white">
      <div className="max-w-[1170px] mx-auto px-4 mb-6 flex justify-center">
-<motion.div {...shake}>
+<motion.div>
   <Badge
     size="xl"
     radius="xl"
