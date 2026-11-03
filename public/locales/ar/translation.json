@@ -137,5 +137,9 @@
   "promo_code_not_applicable_for_cart_brand": "كود الخصم غير قابل للتطبيق على سلتك",
   "added_to_cart": "{{itemName}} تم إضافته إلى السلة ",
   "added_to_wishlist": "{{itemName}} تمت إضافته إلى المفضلة ",
-  "billing.confirmSend": "استلام طلبي عبر البريد الإلكتروني؟"
+  "billing.confirmSend": "استلام طلبي عبر البريد الإلكتروني؟",
+  "Basheer_Shop_Opposite_Oppo": "البشير شوب - دوار القبة - مقابل شركة Oppo",
+  "Basheer_3": "البشير 3 - دوار القبة ",
+  "Basheer_1_University_Circle": "البشير 1 - دوار الجامعة"
+
 }

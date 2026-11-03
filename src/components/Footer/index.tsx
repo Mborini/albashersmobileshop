@@ -10,6 +10,24 @@ import { useTranslation } from "react-i18next";
 import { CiMail } from "react-icons/ci";
 import { MdLocationPin } from "react-icons/md";
 
+const branches = [
+  {
+    nameKey: "Basheer_Shop_Opposite_Oppo",
+    phone: "+962796855578",
+    phoneDisplay: "(+962) 796 855 578",
+  },
+  {
+    nameKey: "Basheer_3",
+    phone: "0796161536",
+    phoneDisplay: "0796161536",
+  },
+  {
+    nameKey: "Basheer_1_University_Circle",
+    phone: "0790459191",
+    phoneDisplay: "0790459191",
+  },
+];
+
 const Footer = () => {
   const year = new Date().getFullYear();
   const { t, i18n } = useTranslation();
@@ -35,13 +53,25 @@ const Footer = () => {
                 {t("Qupa_Circle_Irbid_Jordan")}
               </li>
 
-              <li>
-                <div className="flex items-center gap-4.5">
-                  <FaPhoneAlt color="white" size={20} />
-
-                  <span dir="ltr">(+962) 796 855 578</span>
-                </div>
-              </li>
+              {branches.map((branch) => (
+                <li key={branch.nameKey}>
+                  <div className="flex items-start gap-4.5">
+                    <span className="flex-shrink-0 mt-1">
+                      <FaPhoneAlt color="white" size={20} />
+                    </span>
+                    <div className="flex flex-col">
+                      <span>{t(branch.nameKey)}</span>
+                      <a
+                        href={`tel:${branch.phone}`}
+                        dir="ltr"
+                        className="text-start"
+                      >
+                        {branch.phoneDisplay}
+                      </a>
+                    </div>
+                  </div>
+                </li>
+              ))}
 
               <li>
                 <div className="flex items-center gap-4.5">
@@ -148,7 +178,7 @@ const Footer = () => {
             <p className="text-gray-400 text-sm sm:text-base">
               Powered by{" "}
               <span className="text-white hover:text-primary font-semibold transition">
-                MBorini
+                Matrix C
               </span>
             </p>
           </div>
